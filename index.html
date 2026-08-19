@@ -1473,6 +1473,12 @@
             transition: border 0.3s;
         }
 
+        /* Status do pneu individual - cores para facilitar identificação */
+        .status-disponivel { color: #1b5e20; font-weight: 600; }
+        .status-instalado { color: #01579b; font-weight: 600; }
+        .status-recapagem { color: #bf360c; font-weight: 600; }
+        .status-vulcanizacao { color: #4a148c; font-weight: 600; }
+
         .manutencao-item {
             background: #f8f9fa;
             padding: 12px 15px;
@@ -1517,6 +1523,19 @@
         .manutencao-item .km {
             color: #666;
             font-size: 13px;
+        }
+
+        /* Estilo para o ID do pneu */
+        .pneu-id {
+            font-size: 11px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .pneu-dot {
+            font-size: 12px;
+            color: #555;
+            font-weight: 400;
         }
 
         @media (max-width: 768px) {
@@ -1768,6 +1787,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>ID</th>
                                     <th>Nome</th>
                                     <th>DOT/Fogo</th>
                                     <th>Tamanho</th>
@@ -1775,7 +1795,6 @@
                                     <th>Situação</th>
                                     <th>Status</th>
                                     <th>Valor (R$)</th>
-                                    <th>Qtd</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -2833,7 +2852,6 @@
                 valorVulcanizacao: 0,
                 valorRodizio: 0,
                 valorRemendo: 0,
-                quantidade: 1,
                 status: 'disponivel',
                 veiculoInstalado: null,
                 kmInstalacao: null,
@@ -3072,7 +3090,7 @@
         }
 
         // ============================================
-        //  RENDER ESTOQUE DE PNEUS COM FILTROS
+        //  RENDER ESTOQUE DE PNEUS - CADA PNEU INDIVIDUAL
         // ============================================
         let pneusFiltrados = [];
 
@@ -3100,49 +3118,32 @@
                 return;
             }
 
-            const grupos = {};
-            pneusFiltrados.forEach(p => {
-                const key = `${p.nome}-${p.tamanho}-${p.tipo}-${p.situacao}-${p.status}`;
-                if (!grupos[key]) {
-                    grupos[key] = {
-                        ...p,
-                        quantidade: 0,
-                        ids: []
-                    };
-                }
-                grupos[key].quantidade += 1;
-                grupos[key].ids.push(p.id);
-            });
-
-            let totalQtd = pneusFiltrados.length;
             let html = '';
-            let index = 0;
-            Object.values(grupos).forEach(g => {
-                index++;
+            pneusFiltrados.forEach((p, index) => {
                 const badgeSituacao = {
                     'novo': 'badge-novo',
                     'meia vida': 'badge-meia',
                     'recapado': 'badge-recap',
                     'carcaça': 'badge-carcaça',
                     'vulcanizado': 'badge-vulcanizado'
-                } [g.situacao] || '';
+                } [p.situacao] || '';
 
                 const badgeTipo = {
                     'liso': 'badge-liso',
                     'misto': 'badge-misto',
                     'borrachudo': 'badge-borrachudo'
-                } [g.tipo] || '';
+                } [p.tipo] || '';
 
                 const badgeStatus = {
                     'disponivel': 'badge-disponivel',
                     'instalado': 'badge-instalado',
                     'recapagem': 'badge-recap',
                     'vulcanizacao': 'badge-vulcanizado'
-                } [g.status] || '';
+                } [p.status] || 'badge-disponivel';
 
-                let statusLabel = g.status || 'disponivel';
-                if (statusLabel === 'instalado' && g.veiculoInstalado) {
-                    statusLabel = `Instalado (${g.veiculoInstalado})`;
+                let statusLabel = p.status || 'disponivel';
+                if (statusLabel === 'instalado' && p.veiculoInstalado) {
+                    statusLabel = `Instalado (${p.veiculoInstalado})`;
                 } else if (statusLabel === 'instalado') {
                     statusLabel = 'Instalado';
                 } else if (statusLabel === 'recapagem') {
@@ -3153,43 +3154,47 @@
                     statusLabel = 'Disponível';
                 }
 
-                const emUso = g.ids.some(id => {
+                // Verifica se o pneu está em uso
+                const emUso = (() => {
                     const veiculos = getVeiculos();
                     let usado = false;
                     veiculos.forEach(v => {
                         if (v.pneus) {
                             Object.values(v.pneus).forEach(pneuId => {
-                                if (pneuId === id) usado = true;
+                                if (pneuId === p.id) usado = true;
                             });
                         }
                     });
                     return usado;
-                });
+                })();
+
+                // ID curto para exibição
+                const shortId = p.id.toString().slice(-6);
 
                 html += `
-                        <tr>
-                            <td>${index}</td>
-                            <td><strong>${g.nome}</strong></td>
-                            <td>${g.dot || '-'}</td>
-                            <td>${g.tamanho}</td>
-                            <td><span class="badge ${badgeTipo}">${g.tipo}</span></td>
-                            <td><span class="badge ${badgeSituacao}">${g.situacao}</span></td>
-                            <td><span class="badge ${badgeStatus}">${statusLabel}</span></td>
-                            <td>R$ ${g.valor.toFixed(2)}</td>
-                            <td>${g.quantidade}</td>
-                            <td>
-                                <button class="btn-info" onclick="abrirModalEdicao('${g.ids.join(',')}')" title="Editar Pneu">✏️</button>
-                                <button class="btn-danger" onclick="excluirPneuGrupo('${g.ids.join(',')}')" ${emUso ? 'disabled style="opacity:0.5;"' : ''} title="${emUso ? 'Pneu em uso' : 'Excluir'}">
-                                    ${emUso ? '🔒' : '🗑️'}
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><span class="pneu-id">#${shortId}</span></td>
+                        <td><strong>${p.nome}</strong></td>
+                        <td><span class="pneu-dot">${p.dot || '-'}</span></td>
+                        <td>${p.tamanho}</td>
+                        <td><span class="badge ${badgeTipo}">${p.tipo}</span></td>
+                        <td><span class="badge ${badgeSituacao}">${p.situacao}</span></td>
+                        <td><span class="badge ${badgeStatus}">${statusLabel}</span></td>
+                        <td>R$ ${p.valor.toFixed(2)}</td>
+                        <td>
+                            <button class="btn-info" onclick="abrirModalEdicaoIndividual(${p.id})" title="Editar Pneu">✏️</button>
+                            <button class="btn-danger" onclick="excluirPneuIndividual(${p.id})" ${emUso ? 'disabled style="opacity:0.5;"' : ''} title="${emUso ? 'Pneu em uso' : 'Excluir'}">
+                                ${emUso ? '🔒' : '🗑️'}
+                            </button>
+                        </td>
+                    </tr>
+                `;
             });
 
             tbody.innerHTML = html;
             document.getElementById('totalPneus').textContent = `Total: ${pneus.length}`;
-            document.getElementById('totalItensPneus').textContent = `Itens: ${totalQtd}`;
+            document.getElementById('totalItensPneus').textContent = `Itens: ${pneusFiltrados.length}`;
         }
 
         function filtrarPneus() {
@@ -3204,14 +3209,174 @@
             renderEstoque();
         }
 
-        function excluirPneuGrupo(idsString) {
-            const ids = idsString.split(',').map(Number);
-            if (!confirm(`Tem certeza que deseja excluir ${ids.length} pneu(s)?`)) return;
+        // ============================================
+        //  EXCLUIR PNEU INDIVIDUAL
+        // ============================================
+        function excluirPneuIndividual(id) {
+            if (!confirm('Tem certeza que deseja excluir este pneu?')) return;
 
             let pneus = getPneus();
-            pneus = pneus.filter(p => !ids.includes(p.id));
+            pneus = pneus.filter(p => p.id !== id);
             setPneus(pneus);
             renderEstoque();
+        }
+
+        // ============================================
+        //  EDITAR PNEU INDIVIDUAL
+        // ============================================
+        function abrirModalEdicaoIndividual(id) {
+            const pneus = getPneus();
+            const pneu = pneus.find(p => p.id === id);
+            
+            if (!pneu) {
+                alert('Pneu não encontrado.');
+                return;
+            }
+
+            // Usamos o mesmo modal de edição, mas com um único pneu
+            idsEdicao = [id];
+            
+            const infoBox = document.getElementById('pneuEdicaoInfo');
+            infoBox.innerHTML = `
+                <div class="info-row"><span class="label">ID:</span> <span>#${id.toString().slice(-6)}</span></div>
+                <div class="info-row"><span class="label">Pneu:</span> <span>${pneu.nome}</span></div>
+                <div class="info-row"><span class="label">DOT/Fogo:</span> <span>${pneu.dot || 'Não informado'}</span></div>
+                <div class="info-row"><span class="label">Tamanho:</span> <span>${pneu.tamanho}</span></div>
+                <div class="info-row"><span class="label">Situação:</span> <span>${pneu.situacao}</span></div>
+                <div class="info-row"><span class="label">Status:</span> <span>${pneu.status || 'Disponível'}</span></div>
+                <div class="info-row"><span class="label">Valor:</span> <span>R$ ${pneu.valor.toFixed(2)}</span></div>
+                <div class="info-row"><span class="label">Rodízios:</span> <span>R$ ${(pneu.valorRodizio || 0).toFixed(2)}</span></div>
+                <div class="info-row"><span class="label">Remendos:</span> <span>R$ ${(pneu.valorRemendo || 0).toFixed(2)}</span></div>
+            `;
+
+            document.getElementById('valorRecapagem').value = pneu.valorRecapagem || '';
+            document.getElementById('valorVulcanizacao').value = pneu.valorVulcanizacao || '';
+            document.getElementById('acaoEdicao').value = '';
+
+            document.getElementById('modalEdicao').classList.add('show');
+        }
+
+        // ============================================
+        //  EDIÇÃO DE PNEU (adaptado para individual e múltiplo)
+        // ============================================
+        let idsEdicao = [];
+
+        function abrirModalEdicao(idsString) {
+            // Mantido para compatibilidade, mas agora usamos abrirModalEdicaoIndividual
+            idsEdicao = idsString.split(',').map(Number);
+            if (idsEdicao.length === 1) {
+                abrirModalEdicaoIndividual(idsEdicao[0]);
+                return;
+            }
+            
+            const pneus = getPneus();
+            const primeiroPneu = pneus.find(p => p.id === idsEdicao[0]);
+            
+            if (!primeiroPneu) {
+                alert('Pneu não encontrado.');
+                return;
+            }
+
+            const infoBox = document.getElementById('pneuEdicaoInfo');
+            infoBox.innerHTML = `
+                    <div class="info-row"><span class="label">Pneu:</span> <span>${primeiroPneu.nome}</span></div>
+                    <div class="info-row"><span class="label">Tamanho:</span> <span>${primeiroPneu.tamanho}</span></div>
+                    <div class="info-row"><span class="label">Situação:</span> <span>${primeiroPneu.situacao}</span></div>
+                    <div class="info-row"><span class="label">Status:</span> <span>${primeiroPneu.status || 'Disponível'}</span></div>
+                    <div class="info-row"><span class="label">Valor:</span> <span>R$ ${primeiroPneu.valor.toFixed(2)}</span></div>
+                    <div class="info-row"><span class="label">Quantidade:</span> <span>${idsEdicao.length}</span></div>
+                `;
+
+            document.getElementById('valorRecapagem').value = primeiroPneu.valorRecapagem || '';
+            document.getElementById('valorVulcanizacao').value = primeiroPneu.valorVulcanizacao || '';
+            document.getElementById('acaoEdicao').value = '';
+
+            document.getElementById('modalEdicao').classList.add('show');
+        }
+
+        function fecharModalEdicao() {
+            document.getElementById('modalEdicao').classList.remove('show');
+            idsEdicao = [];
+        }
+
+        function confirmarEdicao() {
+            const valorRecapagem = parseFloat(document.getElementById('valorRecapagem').value) || 0;
+            const valorVulcanizacao = parseFloat(document.getElementById('valorVulcanizacao').value) || 0;
+            const acao = document.getElementById('acaoEdicao').value;
+
+            if (!acao && valorRecapagem === 0 && valorVulcanizacao === 0) {
+                alert('Selecione uma ação ou adicione um valor.');
+                return;
+            }
+
+            const pneus = getPneus();
+            let pneusAtualizados = 0;
+
+            idsEdicao.forEach(id => {
+                const pneu = pneus.find(p => p.id === id);
+                if (!pneu) return;
+
+                if (valorRecapagem > 0) {
+                    pneu.valorRecapagem = valorRecapagem;
+                    pneu.valor += valorRecapagem;
+                }
+                if (valorVulcanizacao > 0) {
+                    pneu.valorVulcanizacao = valorVulcanizacao;
+                    pneu.valor += valorVulcanizacao;
+                }
+
+                if (acao === 'recapagem') {
+                    pneu.situacao = 'recapado';
+                    pneu.status = 'disponivel';
+                    pneu.veiculoInstalado = null;
+                    pneu.kmInstalacao = null;
+                    pneu.historico = pneu.historico || [];
+                    pneu.historico.push({
+                        data: new Date().toLocaleString('pt-BR'),
+                        acao: 'Recapagem',
+                        detalhes: `Pneu recapado com valor de R$ ${valorRecapagem.toFixed(2)}`
+                    });
+                    pneusAtualizados++;
+                } else if (acao === 'vulcanizacao') {
+                    pneu.situacao = 'vulcanizado';
+                    pneu.status = 'disponivel';
+                    pneu.veiculoInstalado = null;
+                    pneu.kmInstalacao = null;
+                    pneu.historico = pneu.historico || [];
+                    pneu.historico.push({
+                        data: new Date().toLocaleString('pt-BR'),
+                        acao: 'Vulcanização',
+                        detalhes: `Pneu vulcanizado com valor de R$ ${valorVulcanizacao.toFixed(2)}`
+                    });
+                    pneusAtualizados++;
+                } else if (acao === 'descarte') {
+                    const descartados = getDescartados();
+                    pneu.motivoDescarte = 'Descartado via edição';
+                    pneu.dataDescarte = new Date().toLocaleDateString('pt-BR');
+                    descartados.push({...pneu});
+                    setDescartados(descartados);
+                    
+                    const idxPneu = pneus.findIndex(p => p.id === id);
+                    if (idxPneu !== -1) {
+                        pneus.splice(idxPneu, 1);
+                    }
+                    pneusAtualizados++;
+                }
+            });
+
+            setPneus(pneus);
+            fecharModalEdicao();
+            renderEstoque();
+            renderDescartados();
+            renderRelatorios();
+            
+            if (acao === 'descarte') {
+                alert(`✅ ${pneusAtualizados} pneu(s) descartado(s) com sucesso!`);
+            } else if (acao) {
+                alert(`✅ ${pneusAtualizados} pneu(s) atualizado(s) com sucesso!`);
+            } else {
+                alert('✅ Valores atualizados com sucesso!');
+            }
         }
 
         // ============================================
@@ -4883,7 +5048,7 @@
         }
 
         // ============================================
-        //  EDIÇÃO DE PNEU
+        //  EDIÇÃO DE PNEU (individual)
         // ============================================
         function abrirModalEdicaoPneu(veiculoId, slotId) {
             const veiculos = getVeiculos();
@@ -4897,12 +5062,18 @@
             const pneu = pneus.find(p => p.id === pneuId);
             if (!pneu) return;
 
+            // Usamos o modal de edição existente
+            idsEdicao = [pneuId];
+            
             const infoBox = document.getElementById('pneuEdicaoInfo');
             infoBox.innerHTML = `
+                    <div class="info-row"><span class="label">ID:</span> <span>#${pneuId.toString().slice(-6)}</span></div>
                     <div class="info-row"><span class="label">Pneu:</span> <span>${pneu.nome}</span></div>
+                    <div class="info-row"><span class="label">DOT/Fogo:</span> <span>${pneu.dot || 'Não informado'}</span></div>
                     <div class="info-row"><span class="label">Tamanho:</span> <span>${pneu.tamanho}</span></div>
                     <div class="info-row"><span class="label">Situação:</span> <span>${pneu.situacao}</span></div>
-                    <div class="info-row"><span class="label">Valor Total:</span> <span>R$ ${pneu.valor.toFixed(2)}</span></div>
+                    <div class="info-row"><span class="label">Status:</span> <span>${pneu.status || 'Disponível'}</span></div>
+                    <div class="info-row"><span class="label">Valor:</span> <span>R$ ${pneu.valor.toFixed(2)}</span></div>
                     <div class="info-row"><span class="label">Rodízios:</span> <span>R$ ${(pneu.valorRodizio || 0).toFixed(2)}</span></div>
                     <div class="info-row"><span class="label">Remendos:</span> <span>R$ ${(pneu.valorRemendo || 0).toFixed(2)}</span></div>
                 `;
@@ -4912,271 +5083,6 @@
             document.getElementById('acaoEdicao').value = '';
 
             document.getElementById('modalEdicao').classList.add('show');
-        }
-
-        let idsEdicao = [];
-
-        function abrirModalEdicao(idsString) {
-            idsEdicao = idsString.split(',').map(Number);
-            const pneus = getPneus();
-            const primeiroPneu = pneus.find(p => p.id === idsEdicao[0]);
-            
-            if (!primeiroPneu) {
-                alert('Pneu não encontrado.');
-                return;
-            }
-
-            const infoBox = document.getElementById('pneuEdicaoInfo');
-            infoBox.innerHTML = `
-                    <div class="info-row"><span class="label">Pneu:</span> <span>${primeiroPneu.nome}</span></div>
-                    <div class="info-row"><span class="label">Tamanho:</span> <span>${primeiroPneu.tamanho}</span></div>
-                    <div class="info-row"><span class="label">Situação:</span> <span>${primeiroPneu.situacao}</span></div>
-                    <div class="info-row"><span class="label">Status:</span> <span>${primeiroPneu.status || 'Disponível'}</span></div>
-                    <div class="info-row"><span class="label">Valor:</span> <span>R$ ${primeiroPneu.valor.toFixed(2)}</span></div>
-                    <div class="info-row"><span class="label">Quantidade:</span> <span>${idsEdicao.length}</span></div>
-                `;
-
-            document.getElementById('valorRecapagem').value = primeiroPneu.valorRecapagem || '';
-            document.getElementById('valorVulcanizacao').value = primeiroPneu.valorVulcanizacao || '';
-            document.getElementById('acaoEdicao').value = '';
-
-            document.getElementById('modalEdicao').classList.add('show');
-        }
-
-        function fecharModalEdicao() {
-            document.getElementById('modalEdicao').classList.remove('show');
-            idsEdicao = [];
-        }
-
-        function confirmarEdicao() {
-            const valorRecapagem = parseFloat(document.getElementById('valorRecapagem').value) || 0;
-            const valorVulcanizacao = parseFloat(document.getElementById('valorVulcanizacao').value) || 0;
-            const acao = document.getElementById('acaoEdicao').value;
-
-            if (!acao && valorRecapagem === 0 && valorVulcanizacao === 0) {
-                alert('Selecione uma ação ou adicione um valor.');
-                return;
-            }
-
-            const pneus = getPneus();
-            let pneusAtualizados = 0;
-
-            idsEdicao.forEach(id => {
-                const pneu = pneus.find(p => p.id === id);
-                if (!pneu) return;
-
-                if (valorRecapagem > 0) {
-                    pneu.valorRecapagem = valorRecapagem;
-                    pneu.valor += valorRecapagem;
-                }
-                if (valorVulcanizacao > 0) {
-                    pneu.valorVulcanizacao = valorVulcanizacao;
-                    pneu.valor += valorVulcanizacao;
-                }
-
-                if (acao === 'recapagem') {
-                    pneu.situacao = 'recapado';
-                    pneu.status = 'disponivel';
-                    pneu.veiculoInstalado = null;
-                    pneu.kmInstalacao = null;
-                    pneu.historico = pneu.historico || [];
-                    pneu.historico.push({
-                        data: new Date().toLocaleString('pt-BR'),
-                        acao: 'Recapagem',
-                        detalhes: `Pneu recapado com valor de R$ ${valorRecapagem.toFixed(2)}`
-                    });
-                    pneusAtualizados++;
-                } else if (acao === 'vulcanizacao') {
-                    pneu.situacao = 'vulcanizado';
-                    pneu.status = 'disponivel';
-                    pneu.veiculoInstalado = null;
-                    pneu.kmInstalacao = null;
-                    pneu.historico = pneu.historico || [];
-                    pneu.historico.push({
-                        data: new Date().toLocaleString('pt-BR'),
-                        acao: 'Vulcanização',
-                        detalhes: `Pneu vulcanizado com valor de R$ ${valorVulcanizacao.toFixed(2)}`
-                    });
-                    pneusAtualizados++;
-                } else if (acao === 'descarte') {
-                    const descartados = getDescartados();
-                    pneu.motivoDescarte = 'Descartado via edição';
-                    pneu.dataDescarte = new Date().toLocaleDateString('pt-BR');
-                    descartados.push({...pneu});
-                    setDescartados(descartados);
-                    
-                    const idxPneu = pneus.findIndex(p => p.id === id);
-                    if (idxPneu !== -1) {
-                        pneus.splice(idxPneu, 1);
-                    }
-                    pneusAtualizados++;
-                }
-            });
-
-            setPneus(pneus);
-            fecharModalEdicao();
-            renderEstoque();
-            renderDescartados();
-            renderRelatorios();
-            
-            if (acao === 'descarte') {
-                alert(`✅ ${pneusAtualizados} pneu(s) descartado(s) com sucesso!`);
-            } else if (acao) {
-                alert(`✅ ${pneusAtualizados} pneu(s) atualizado(s) com sucesso!`);
-            } else {
-                alert('✅ Valores atualizados com sucesso!');
-            }
-        }
-
-        // ============================================
-        //  SELEÇÃO DE PEÇA PARA INSTALAÇÃO
-        // ============================================
-        let veiculoPecaId = null;
-        let pecaSelecionadoId = null;
-
-        function abrirModalSelecaoPeca(veiculoId) {
-            const veiculos = getVeiculos();
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo) return;
-
-            veiculoPecaId = veiculoId;
-
-            const pecas = getPecas();
-            const pecasDisponiveis = pecas.filter(p => p.status === 'disponivel' || !p.status);
-
-            if (pecasDisponiveis.length === 0) {
-                alert('Não há peças disponíveis no estoque para instalação.');
-                return;
-            }
-
-            const modal = document.getElementById('modalSelecaoPeca');
-            const lista = document.getElementById('listaPecasDisponiveis');
-            const info = document.getElementById('infoPecaSelecao');
-
-            info.textContent = `Selecione uma peça para instalar no veículo: ${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
-
-            lista.innerHTML = pecasDisponiveis.map(p => `
-                    <div class="item-disponivel" onclick="abrirModalInstalacaoPeca(${p.id})">
-                        <div class="info">
-                            <span class="nome">${p.nome}</span>
-                            <span class="detalhes">${p.categoria} • R$ ${p.valor.toFixed(2)} • ${p.fornecedor || 'Sem fornecedor'}</span>
-                        </div>
-                        <span class="qtd">1</span>
-                    </div>
-                `).join('');
-
-            modal.classList.add('show');
-        }
-
-        function fecharModalSelecaoPeca() {
-            document.getElementById('modalSelecaoPeca').classList.remove('show');
-        }
-
-        function abrirModalInstalacaoPeca(pecaId) {
-            pecaSelecionadoId = pecaId;
-
-            const veiculos = getVeiculos();
-            const veiculo = veiculos.find(v => v.id === veiculoPecaId);
-            if (!veiculo) {
-                alert('Veículo não encontrado.');
-                return;
-            }
-            veiculoAtual = veiculo;
-
-            const pecas = getPecas();
-            const peca = pecas.find(p => p.id === pecaId);
-            if (!peca) {
-                alert('Peça não encontrada.');
-                return;
-            }
-
-            document.getElementById('infoInstalacaoPeca').textContent = 
-                `Instalando peça: ${peca.nome} - Veículo: ${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
-            
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('dataInstalacaoPeca').value = hoje;
-            document.getElementById('kmInstalacaoPeca').value = veiculo.km;
-            document.getElementById('kmInstalacaoPeca').min = veiculo.km;
-
-            fecharModalSelecaoPeca();
-            document.getElementById('modalInstalacaoPeca').classList.add('show');
-        }
-
-        function fecharModalInstalacaoPeca() {
-            document.getElementById('modalInstalacaoPeca').classList.remove('show');
-            pecaSelecionadoId = null;
-        }
-
-        function confirmarInstalacaoPeca() {
-            if (!veiculoAtual || !pecaSelecionadoId) {
-                alert('Erro: Dados incompletos para instalação.');
-                fecharModalInstalacaoPeca();
-                return;
-            }
-
-            const dataInstalacao = document.getElementById('dataInstalacaoPeca').value;
-            const km = parseInt(document.getElementById('kmInstalacaoPeca').value);
-
-            if (!dataInstalacao) {
-                alert('Por favor, informe a data da instalação.');
-                return;
-            }
-
-            if (!km || km < 0) {
-                alert('Por favor, informe uma quilometragem válida.');
-                return;
-            }
-
-            if (km < veiculoAtual.km) {
-                alert('A quilometragem não pode ser menor que a atual do veículo.');
-                return;
-            }
-
-            const veiculos = getVeiculos();
-            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
-            if (idx !== -1) {
-                veiculos[idx].km = km;
-                veiculoAtual.km = km;
-                setVeiculos(veiculos);
-            }
-
-            const pecas = getPecas();
-            const peca = pecas.find(p => p.id === pecaSelecionadoId);
-            if (!peca) {
-                alert('Peça não encontrada no estoque.');
-                fecharModalInstalacaoPeca();
-                return;
-            }
-
-            peca.status = 'instalado';
-            peca.veiculoInstalado = veiculoAtual.placa;
-            peca.dataInstalacao = dataInstalacao;
-            peca.kmInstalacao = km;
-
-            if (!veiculoAtual.pecas) veiculoAtual.pecas = {};
-            veiculoAtual.pecas[Date.now()] = pecaSelecionadoId;
-
-            peca.historico = peca.historico || [];
-            peca.historico.push({
-                data: new Date().toLocaleString('pt-BR'),
-                acao: 'Instalação',
-                detalhes: `Instalado no veículo ${veiculoAtual.placa} - ${veiculoAtual.marca} ${veiculoAtual.modelo} em ${dataInstalacao} com KM ${km}`
-            });
-
-            setPecas(pecas);
-
-            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
-            if (idxVeiculo !== -1) {
-                veiculos[idxVeiculo] = veiculoAtual;
-                setVeiculos(veiculos);
-            }
-
-            fecharModalInstalacaoPeca();
-            renderVeiculos();
-            renderPecas();
-            renderRelatorios();
-            
-            alert(`✅ Peça ${peca.nome} instalada com sucesso!`);
         }
 
         // ============================================
