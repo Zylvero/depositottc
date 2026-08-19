@@ -12,7 +12,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Linha vermelha no topo */
         .top-bar {
             background: #c62828;
             height: 4px;
@@ -222,6 +221,7 @@
             padding: 5px 20px 0 20px;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
             overflow-x: auto;
+            flex-wrap: nowrap;
         }
 
         .tabs button {
@@ -268,6 +268,10 @@
             gap: 20px 30px;
         }
 
+        .form-grid-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
         .form-group {
             display: flex;
             flex-direction: column;
@@ -285,7 +289,8 @@
         }
 
         .form-group input,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
             padding: 10px 14px;
             border: 2px solid #dce0e5;
             border-radius: 8px;
@@ -294,7 +299,8 @@
         }
 
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: #2a5f7a;
         }
@@ -388,6 +394,21 @@
 
         .btn-warning:hover {
             background: #e65100;
+        }
+
+        .btn-purple {
+            background: #7b1fa2;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 13px;
+        }
+
+        .btn-purple:hover {
+            background: #4a148c;
         }
 
         .estoque-header,
@@ -486,6 +507,18 @@
         .badge-instalado {
             background: #b3e5fc;
             color: #01579b;
+        }
+        .badge-disponivel {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+        .badge-instalado-peca {
+            background: #b3e5fc;
+            color: #01579b;
+        }
+        .badge-em-uso {
+            background: #ffccbc;
+            color: #bf360c;
         }
 
         .badge-liso {
@@ -787,6 +820,65 @@
             font-size: 14px;
         }
 
+        /* Estilos para Peças */
+        .pecas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .peca-card {
+            background: white;
+            border: 2px solid #e8ecf0;
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .peca-card:hover {
+            border-color: #7b1fa2;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .peca-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .peca-card-header h4 {
+            color: #1a3a5c;
+            font-size: 16px;
+        }
+
+        .peca-card-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 12px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .peca-card-info span {
+            display: flex;
+            gap: 4px;
+        }
+
+        .peca-card-info .label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .peca-card-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            justify-content: flex-end;
+        }
+
         .modal-selecao {
             display: none;
             position: fixed;
@@ -819,7 +911,7 @@
             margin-bottom: 15px;
         }
 
-        .lista-pneus-disponiveis {
+        .lista-itens-disponiveis {
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -827,7 +919,7 @@
             overflow-y: auto;
         }
 
-        .item-pneu-disponivel {
+        .item-disponivel {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -839,29 +931,29 @@
             background: white;
         }
 
-        .item-pneu-disponivel:hover {
+        .item-disponivel:hover {
             background: #f0f2f5;
-            border-color: #2a5f7a;
+            border-color: #7b1fa2;
         }
 
-        .item-pneu-disponivel .info {
+        .item-disponivel .info {
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
 
-        .item-pneu-disponivel .info .nome {
+        .item-disponivel .info .nome {
             font-weight: 600;
             color: #333;
         }
 
-        .item-pneu-disponivel .info .detalhes {
+        .item-disponivel .info .detalhes {
             font-size: 12px;
             color: #666;
         }
 
-        .item-pneu-disponivel .qtd {
-            background: #2a5f7a;
+        .item-disponivel .qtd {
+            background: #7b1fa2;
             color: white;
             padding: 2px 12px;
             border-radius: 12px;
@@ -885,7 +977,7 @@
             background: #d0d4d9;
         }
 
-        .modal-instalacao {
+        .modal-instalacao-peca {
             display: none;
             position: fixed;
             top: 0;
@@ -898,11 +990,11 @@
             align-items: center;
         }
 
-        .modal-instalacao.show {
+        .modal-instalacao-peca.show {
             display: flex;
         }
 
-        .modal-instalacao-content {
+        .modal-instalacao-peca-content {
             background: white;
             border-radius: 16px;
             max-width: 500px;
@@ -910,22 +1002,22 @@
             padding: 30px;
         }
 
-        .modal-instalacao-content h3 {
+        .modal-instalacao-peca-content h3 {
             color: #1a3a5c;
             margin-bottom: 10px;
         }
 
-        .modal-instalacao-content .subtitle {
+        .modal-instalacao-peca-content .subtitle {
             color: #666;
             font-size: 14px;
             margin-bottom: 20px;
         }
 
-        .modal-instalacao-content .form-group {
+        .modal-instalacao-peca-content .form-group {
             margin-bottom: 15px;
         }
 
-        .modal-instalacao-content label {
+        .modal-instalacao-peca-content label {
             font-weight: 600;
             color: #333;
             font-size: 14px;
@@ -933,7 +1025,7 @@
             margin-bottom: 5px;
         }
 
-        .modal-instalacao-content input {
+        .modal-instalacao-peca-content input {
             width: 100%;
             padding: 10px 14px;
             border: 2px solid #dce0e5;
@@ -941,18 +1033,18 @@
             font-size: 14px;
         }
 
-        .modal-instalacao-content input:focus {
+        .modal-instalacao-peca-content input:focus {
             outline: none;
-            border-color: #2a5f7a;
+            border-color: #7b1fa2;
         }
 
-        .modal-instalacao-actions {
+        .modal-instalacao-peca-actions {
             display: flex;
             gap: 10px;
             margin-top: 20px;
         }
 
-        .modal-instalacao-actions button {
+        .modal-instalacao-peca-actions button {
             flex: 1;
             padding: 10px;
             border: none;
@@ -960,103 +1052,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-        }
-
-        .modal-remocao {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1200;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-remocao.show {
-            display: flex;
-        }
-
-        .modal-remocao-content {
-            background: white;
-            border-radius: 16px;
-            max-width: 500px;
-            width: 90%;
-            padding: 30px;
-        }
-
-        .modal-remocao-content h3 {
-            color: #1a3a5c;
-            margin-bottom: 10px;
-        }
-
-        .modal-remocao-content .subtitle {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .modal-remocao-content .form-group {
-            margin-bottom: 15px;
-        }
-
-        .modal-remocao-content label {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .modal-remocao-content input,
-        .modal-remocao-content select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 2px solid #dce0e5;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .modal-remocao-content input:focus,
-        .modal-remocao-content select:focus {
-            outline: none;
-            border-color: #2a5f7a;
-        }
-
-        .modal-remocao-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .modal-remocao-actions button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-confirmar {
-            background: #2e7d32;
-            color: white;
-        }
-
-        .btn-confirmar:hover {
-            background: #1b5e20;
-        }
-
-        .btn-cancelar {
-            background: #e8ecf0;
-            color: #333;
-        }
-
-        .btn-cancelar:hover {
-            background: #d0d4d9;
         }
 
         .pneu-info-box {
@@ -1209,8 +1204,29 @@
             transition: all 0.3s;
         }
 
+        .btn-confirmar {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-confirmar:hover {
+            background: #1b5e20;
+        }
+
+        .btn-cancelar {
+            background: #e8ecf0;
+            color: #333;
+        }
+
+        .btn-cancelar:hover {
+            background: #d0d4d9;
+        }
+
         @media (max-width: 768px) {
             .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-grid-3 {
                 grid-template-columns: 1fr;
             }
             .header {
@@ -1234,6 +1250,9 @@
                 padding: 25px;
             }
             .veiculos-grid {
+                grid-template-columns: 1fr;
+            }
+            .pecas-grid {
                 grid-template-columns: 1fr;
             }
             .eixos-row {
@@ -1273,7 +1292,7 @@
 
         <div id="authContainer" class="auth-container">
             <h2>Bem-vindo</h2>
-            <p class="subtitle">Gerencie seu estoque de pneus e frota de veículos</p>
+            <p class="subtitle">Gerencie seu estoque de pneus, peças e frota de veículos</p>
 
             <div class="auth-tabs">
                 <button class="active" data-tab="login" onclick="switchAuthTab('login')">Login</button>
@@ -1307,13 +1326,15 @@
 
             <div class="tabs">
                 <button class="active" data-tab="tab-cadastro" onclick="switchTab('tab-cadastro')">📦 Cadastrar Pneu</button>
-                <button data-tab="tab-estoque" onclick="switchTab('tab-estoque')">📋 Estoque</button>
+                <button data-tab="tab-estoque" onclick="switchTab('tab-estoque')">📋 Estoque de Pneus</button>
+                <button data-tab="tab-pecas" onclick="switchTab('tab-pecas')">🔧 Estoque de Peças</button>
                 <button data-tab="tab-veiculos" onclick="switchTab('tab-veiculos')">🚗 Veículos</button>
                 <button data-tab="tab-descartados" onclick="switchTab('tab-descartados')">🗑️ Descartados</button>
             </div>
 
             <div class="tab-content">
 
+                <!-- TAB CADASTRO PNEU -->
                 <div id="tab-cadastro" class="tab-pane active">
                     <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Novo Pneu</h3>
                     <form id="pneuForm" onsubmit="cadastrarPneu(event)">
@@ -1384,12 +1405,13 @@
                     </form>
                 </div>
 
+                <!-- TAB ESTOQUE DE PNEUS -->
                 <div id="tab-estoque" class="tab-pane">
                     <div class="estoque-header">
                         <h2>Estoque de Pneus</h2>
                         <div class="estoque-stats">
                             <span id="totalPneus">Total: 0</span>
-                            <span id="totalItens">Itens: 0</span>
+                            <span id="totalItensPneus">Itens: 0</span>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -1415,6 +1437,59 @@
                     </div>
                 </div>
 
+                <!-- TAB ESTOQUE DE PEÇAS -->
+                <div id="tab-pecas" class="tab-pane">
+                    <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Nova Peça/Item</h3>
+                    <form id="pecaForm" onsubmit="cadastrarPeca(event)">
+                        <div class="form-grid">
+                            <div class="form-group full">
+                                <label>Nome do Item/Peça</label>
+                                <input type="text" id="pecaNome" placeholder="Ex: Filtro de Óleo, Pastilha de Freio, Óleo Motor..." required>
+                            </div>
+                            <div class="form-group">
+                                <label>Valor (R$)</label>
+                                <input type="number" id="pecaValor" value="0" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input type="number" id="pecaQuantidade" value="1" min="1" step="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Categoria</label>
+                                <select id="pecaCategoria">
+                                    <option value="filtro">Filtro</option>
+                                    <option value="freio">Freio</option>
+                                    <option value="oleo">Óleo</option>
+                                    <option value="suspensao">Suspensão</option>
+                                    <option value="motor">Motor</option>
+                                    <option value="eletrica">Elétrica</option>
+                                    <option value="outros">Outros</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Fornecedor (opcional)</label>
+                                <input type="text" id="pecaFornecedor" placeholder="Nome do fornecedor">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-success">Cadastrar Peça</button>
+                                <button type="reset" class="btn-secondary">Limpar</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <hr style="margin: 30px 0; border-color: #e8ecf0;">
+
+                    <div class="estoque-header">
+                        <h2>Peças em Estoque</h2>
+                        <div class="estoque-stats">
+                            <span id="totalPecas">Total: 0</span>
+                            <span id="totalItensPecas">Itens: 0</span>
+                        </div>
+                    </div>
+                    <div id="pecasGrid" class="pecas-grid"></div>
+                </div>
+
+                <!-- TAB VEÍCULOS -->
                 <div id="tab-veiculos" class="tab-pane">
                     <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Veículo</h3>
                     <form id="veiculoForm" onsubmit="cadastrarVeiculo(event)">
@@ -1477,6 +1552,7 @@
                     <div id="veiculosGrid" class="veiculos-grid"></div>
                 </div>
 
+                <!-- TAB DESCARTADOS -->
                 <div id="tab-descartados" class="tab-pane">
                     <div class="estoque-header">
                         <h2>Pneus Descartados</h2>
@@ -1526,14 +1602,14 @@
         <div class="modal-selecao-content">
             <h3>Selecionar Pneu</h3>
             <div id="infoPneuSelecao" style="margin-bottom:15px; color:#666; font-size:14px;"></div>
-            <div id="listaPneusDisponiveis" class="lista-pneus-disponiveis"></div>
+            <div id="listaPneusDisponiveis" class="lista-itens-disponiveis"></div>
             <button class="modal-selecao-close" onclick="fecharModalSelecao()">Cancelar</button>
         </div>
     </div>
 
-    <!-- Modal de Instalação (KM) -->
-    <div id="modalInstalacao" class="modal-instalacao">
-        <div class="modal-instalacao-content">
+    <!-- Modal de Instalação de Pneu (KM) -->
+    <div id="modalInstalacao" class="modal-instalacao-peca">
+        <div class="modal-instalacao-peca-content">
             <h3>Instalar Pneu</h3>
             <p class="subtitle">Informe a quilometragem atual do veículo</p>
             <div id="infoInstalacao" style="margin-bottom:15px; color:#666; font-size:14px;"></div>
@@ -1541,18 +1617,49 @@
                 <label>Quilometragem Atual do Veículo (KM)</label>
                 <input type="number" id="kmInstalacao" placeholder="Digite a KM atual" min="0" required>
             </div>
-            <div class="modal-instalacao-actions">
+            <div class="modal-instalacao-peca-actions">
                 <button class="btn-confirmar" onclick="confirmarInstalacao()">Confirmar Instalação</button>
                 <button class="btn-cancelar" onclick="fecharModalInstalacao()">Cancelar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Remoção -->
-    <div id="modalRemocao" class="modal-remocao">
-        <div class="modal-remocao-content">
+    <!-- Modal de Seleção de Peças -->
+    <div id="modalSelecaoPeca" class="modal-selecao">
+        <div class="modal-selecao-content">
+            <h3>Selecionar Peça para Instalar</h3>
+            <div id="infoPecaSelecao" style="margin-bottom:15px; color:#666; font-size:14px;"></div>
+            <div id="listaPecasDisponiveis" class="lista-itens-disponiveis"></div>
+            <button class="modal-selecao-close" onclick="fecharModalSelecaoPeca()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Instalação de Peça -->
+    <div id="modalInstalacaoPeca" class="modal-instalacao-peca">
+        <div class="modal-instalacao-peca-content">
+            <h3>Instalar Peça no Veículo</h3>
+            <p class="subtitle">Informe os detalhes da instalação</p>
+            <div id="infoInstalacaoPeca" style="margin-bottom:15px; color:#666; font-size:14px;"></div>
+            <div class="form-group">
+                <label>Data da Instalação</label>
+                <input type="date" id="dataInstalacaoPeca" required>
+            </div>
+            <div class="form-group">
+                <label>Quilometragem Atual (KM)</label>
+                <input type="number" id="kmInstalacaoPeca" placeholder="Digite a KM atual" min="0" required>
+            </div>
+            <div class="modal-instalacao-peca-actions">
+                <button class="btn-confirmar" onclick="confirmarInstalacaoPeca()">Confirmar Instalação</button>
+                <button class="btn-cancelar" onclick="fecharModalInstalacaoPeca()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Remoção de Pneu -->
+    <div id="modalRemocao" class="modal-selecao" style="z-index:1200;">
+        <div class="modal-selecao-content">
             <h3>Remover Pneu</h3>
-            <p class="subtitle">Informe os detalhes da remoção deste pneu</p>
+            <p class="subtitle" style="color:#666; font-size:14px; margin-bottom:15px;">Informe os detalhes da remoção deste pneu</p>
             
             <div id="pneuRemocaoInfo" class="pneu-info-box"></div>
             
@@ -1572,9 +1679,9 @@
                 </select>
             </div>
             
-            <div class="modal-remocao-actions">
-                <button class="btn-confirmar" onclick="confirmarRemocao()">Confirmar Remoção</button>
-                <button class="btn-cancelar" onclick="fecharModalRemocao()">Cancelar</button>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn-confirmar" onclick="confirmarRemocao()" style="flex:1;">Confirmar Remoção</button>
+                <button class="btn-cancelar" onclick="fecharModalRemocao()" style="flex:1;">Cancelar</button>
             </div>
         </div>
     </div>
@@ -1661,6 +1768,14 @@
 
         function setPneus(pneus) {
             localStorage.setItem('estoque_pneus', JSON.stringify(pneus));
+        }
+
+        function getPecas() {
+            return JSON.parse(localStorage.getItem('estoque_pecas')) || [];
+        }
+
+        function setPecas(pecas) {
+            localStorage.setItem('estoque_pecas', JSON.stringify(pecas));
         }
 
         function getVeiculos() {
@@ -1783,6 +1898,7 @@
             document.getElementById('userDisplay').textContent = `👤 ${user.name}`;
 
             renderEstoque();
+            renderPecas();
             renderVeiculos();
             renderDescartados();
             switchTab('tab-cadastro');
@@ -1830,6 +1946,9 @@
 
             if (tabId === 'tab-estoque') {
                 renderEstoque();
+            }
+            if (tabId === 'tab-pecas') {
+                renderPecas();
             }
             if (tabId === 'tab-veiculos') {
                 renderVeiculos();
@@ -1947,7 +2066,59 @@
         }
 
         // ============================================
-        //  RENDER ESTOQUE
+        //  CADASTRAR PEÇA
+        // ============================================
+        function cadastrarPeca(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('pecaNome').value.trim();
+            const valor = parseFloat(document.getElementById('pecaValor').value) || 0;
+            const quantidade = parseInt(document.getElementById('pecaQuantidade').value) || 1;
+            const categoria = document.getElementById('pecaCategoria').value;
+            const fornecedor = document.getElementById('pecaFornecedor').value.trim();
+
+            if (!nome) {
+                alert('Por favor, digite o nome da peça.');
+                return;
+            }
+
+            const pecas = getPecas();
+            for (let i = 0; i < quantidade; i++) {
+                const peca = {
+                    id: Date.now() + i + Math.random() * 1000,
+                    nome,
+                    valor,
+                    categoria,
+                    fornecedor,
+                    quantidade: 1,
+                    status: 'disponivel',
+                    veiculoInstalado: null,
+                    dataInstalacao: null,
+                    kmInstalacao: null,
+                    dataCadastro: new Date().toLocaleDateString('pt-BR'),
+                    historico: [{
+                        data: new Date().toLocaleString('pt-BR'),
+                        acao: 'Cadastro',
+                        detalhes: `Peça cadastrada como ${categoria}`
+                    }]
+                };
+                pecas.push(peca);
+            }
+
+            setPecas(pecas);
+
+            document.getElementById('pecaNome').value = '';
+            document.getElementById('pecaValor').value = '0';
+            document.getElementById('pecaQuantidade').value = '1';
+            document.getElementById('pecaCategoria').value = 'filtro';
+            document.getElementById('pecaFornecedor').value = '';
+
+            renderPecas();
+            alert(`✅ ${quantidade} peça(s) cadastrada(s) com sucesso!`);
+        }
+
+        // ============================================
+        //  RENDER ESTOQUE DE PNEUS
         // ============================================
         function renderEstoque() {
             const pneus = getPneus();
@@ -1956,7 +2127,7 @@
             if (pneus.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="10" class="empty-state"><p>Nenhum pneu cadastrado ainda.</p></td></tr>`;
                 document.getElementById('totalPneus').textContent = 'Total: 0';
-                document.getElementById('totalItens').textContent = 'Itens: 0';
+                document.getElementById('totalItensPneus').textContent = 'Itens: 0';
                 return;
             }
 
@@ -1994,7 +2165,7 @@
                 } [g.tipo] || '';
 
                 const badgeStatus = {
-                    'disponivel': 'badge-novo',
+                    'disponivel': 'badge-disponivel',
                     'instalado': 'badge-instalado',
                     'recapagem': 'badge-recap',
                     'vulcanizacao': 'badge-vulcanizado'
@@ -2049,7 +2220,7 @@
 
             tbody.innerHTML = html;
             document.getElementById('totalPneus').textContent = `Total: ${Object.keys(grupos).length}`;
-            document.getElementById('totalItens').textContent = `Itens: ${totalQtd}`;
+            document.getElementById('totalItensPneus').textContent = `Itens: ${totalQtd}`;
         }
 
         function excluirPneuGrupo(idsString) {
@@ -2060,6 +2231,106 @@
             pneus = pneus.filter(p => !ids.includes(p.id));
             setPneus(pneus);
             renderEstoque();
+        }
+
+        // ============================================
+        //  RENDER ESTOQUE DE PEÇAS
+        // ============================================
+        function renderPecas() {
+            const pecas = getPecas();
+            const grid = document.getElementById('pecasGrid');
+
+            if (pecas.length === 0) {
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>Nenhuma peça cadastrada ainda.</p></div>`;
+                document.getElementById('totalPecas').textContent = 'Total: 0';
+                document.getElementById('totalItensPecas').textContent = 'Itens: 0';
+                return;
+            }
+
+            const grupos = {};
+            pecas.forEach(p => {
+                const key = `${p.nome}-${p.categoria}-${p.status}`;
+                if (!grupos[key]) {
+                    grupos[key] = {
+                        ...p,
+                        quantidade: 0,
+                        ids: []
+                    };
+                }
+                grupos[key].quantidade += 1;
+                grupos[key].ids.push(p.id);
+            });
+
+            let totalQtd = pecas.length;
+            let html = '';
+            Object.values(grupos).forEach(g => {
+                const badgeStatus = {
+                    'disponivel': 'badge-disponivel',
+                    'instalado': 'badge-instalado-peca'
+                } [g.status] || 'badge-disponivel';
+
+                let statusLabel = g.status || 'disponivel';
+                if (statusLabel === 'instalado' && g.veiculoInstalado) {
+                    statusLabel = `Instalado (${g.veiculoInstalado})`;
+                    if (g.dataInstalacao) {
+                        statusLabel += ` - ${g.dataInstalacao}`;
+                    }
+                    if (g.kmInstalacao) {
+                        statusLabel += ` - ${g.kmInstalacao}km`;
+                    }
+                } else if (statusLabel === 'instalado') {
+                    statusLabel = 'Instalado';
+                } else {
+                    statusLabel = 'Disponível';
+                }
+
+                const emUso = g.ids.some(id => {
+                    const veiculos = getVeiculos();
+                    let usado = false;
+                    veiculos.forEach(v => {
+                        if (v.pecas) {
+                            Object.values(v.pecas).forEach(pecaId => {
+                                if (pecaId === id) usado = true;
+                            });
+                        }
+                    });
+                    return usado;
+                });
+
+                html += `
+                        <div class="peca-card">
+                            <div class="peca-card-header">
+                                <h4>${g.nome}</h4>
+                                <span class="badge ${badgeStatus}">${statusLabel}</span>
+                            </div>
+                            <div class="peca-card-info">
+                                <span><span class="label">Categoria:</span> ${g.categoria}</span>
+                                <span><span class="label">Valor:</span> R$ ${g.valor.toFixed(2)}</span>
+                                <span><span class="label">Fornecedor:</span> ${g.fornecedor || 'Não informado'}</span>
+                                <span><span class="label">Qtd:</span> ${g.quantidade}</span>
+                            </div>
+                            <div class="peca-card-actions">
+                                <button class="btn-danger" onclick="excluirPecaGrupo('${g.ids.join(',')}')" ${emUso ? 'disabled style="opacity:0.5;"' : ''} title="${emUso ? 'Peça em uso' : 'Excluir'}">
+                                    ${emUso ? '🔒' : '🗑️'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+            });
+
+            grid.innerHTML = html;
+            document.getElementById('totalPecas').textContent = `Total: ${Object.keys(grupos).length}`;
+            document.getElementById('totalItensPecas').textContent = `Itens: ${totalQtd}`;
+        }
+
+        function excluirPecaGrupo(idsString) {
+            const ids = idsString.split(',').map(Number);
+            if (!confirm(`Tem certeza que deseja excluir ${ids.length} peça(s)?`)) return;
+
+            let pecas = getPecas();
+            pecas = pecas.filter(p => !ids.includes(p.id));
+            setPecas(pecas);
+            renderPecas();
         }
 
         // ============================================
@@ -2136,6 +2407,7 @@
                 eixos,
                 status,
                 pneus: {},
+                pecas: {},
                 dataCadastro: new Date().toLocaleDateString('pt-BR')
             };
 
@@ -2167,6 +2439,7 @@
                 const statusBadge = v.status === 'ativo' ? 'badge-ativo' : 'badge-inativo';
                 const totalPneus = (v.eixos - 1) * 4 + 2 + 4;
                 const pneusInstalados = v.pneus ? Object.keys(v.pneus).length : 0;
+                const pecasInstaladas = v.pecas ? Object.keys(v.pecas).length : 0;
 
                 html += `
                         <div class="veiculo-card" onclick="abrirModalCaminhao(${v.id})">
@@ -2180,8 +2453,10 @@
                                 <span><span class="label">KM:</span> ${v.km.toLocaleString('pt-BR')}</span>
                                 <span><span class="label">Eixos:</span> ${v.eixos}</span>
                                 <span style="grid-column:1/-1;"><span class="label">Pneus:</span> ${pneusInstalados} / ${totalPneus}</span>
+                                <span style="grid-column:1/-1;"><span class="label">Peças:</span> ${pecasInstaladas}</span>
                             </div>
                             <div class="veiculo-card-actions">
+                                <button class="btn-purple" onclick="event.stopPropagation(); abrirModalSelecaoPeca(${v.id})" title="Instalar Peça">🔧</button>
                                 <button class="btn-danger" onclick="event.stopPropagation(); excluirVeiculo(${v.id})">🗑️</button>
                                 <button class="btn-info" onclick="event.stopPropagation(); toggleStatusVeiculo(${v.id})">${v.status === 'ativo' ? '🔄' : '✅'}</button>
                             </div>
@@ -2195,33 +2470,58 @@
         }
 
         function excluirVeiculo(id) {
-            if (!confirm('Tem certeza que deseja excluir este veículo? Isso devolverá todos os pneus ao estoque.')) return;
+            if (!confirm('Tem certeza que deseja excluir este veículo? Isso devolverá todos os pneus e peças ao estoque.')) return;
 
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === id);
 
-            if (veiculo && veiculo.pneus) {
-                const pneus = getPneus();
-                Object.values(veiculo.pneus).forEach(pneuId => {
-                    const pneu = pneus.find(p => p.id === pneuId);
-                    if (pneu) {
-                        pneu.status = 'disponivel';
-                        pneu.veiculoInstalado = null;
-                        pneu.historico = pneu.historico || [];
-                        pneu.historico.push({
-                            data: new Date().toLocaleString('pt-BR'),
-                            acao: 'Remoção (Exclusão Veículo)',
-                            detalhes: `Pneu removido do veículo ${veiculo.placa} - ${veiculo.marca} ${veiculo.modelo}`
-                        });
-                    }
-                });
-                setPneus(pneus);
+            if (veiculo) {
+                // Devolve pneus
+                if (veiculo.pneus) {
+                    const pneus = getPneus();
+                    Object.values(veiculo.pneus).forEach(pneuId => {
+                        const pneu = pneus.find(p => p.id === pneuId);
+                        if (pneu) {
+                            pneu.status = 'disponivel';
+                            pneu.veiculoInstalado = null;
+                            pneu.historico = pneu.historico || [];
+                            pneu.historico.push({
+                                data: new Date().toLocaleString('pt-BR'),
+                                acao: 'Remoção (Exclusão Veículo)',
+                                detalhes: `Pneu removido do veículo ${veiculo.placa} - ${veiculo.marca} ${veiculo.modelo}`
+                            });
+                        }
+                    });
+                    setPneus(pneus);
+                }
+
+                // Devolve peças
+                if (veiculo.pecas) {
+                    const pecas = getPecas();
+                    Object.values(veiculo.pecas).forEach(pecaId => {
+                        const peca = pecas.find(p => p.id === pecaId);
+                        if (peca) {
+                            peca.status = 'disponivel';
+                            peca.veiculoInstalado = null;
+                            peca.dataInstalacao = null;
+                            peca.kmInstalacao = null;
+                            peca.historico = peca.historico || [];
+                            peca.historico.push({
+                                data: new Date().toLocaleString('pt-BR'),
+                                acao: 'Remoção (Exclusão Veículo)',
+                                detalhes: `Peça removida do veículo ${veiculo.placa} - ${veiculo.marca} ${veiculo.modelo}`
+                            });
+                        }
+                    });
+                    setPecas(pecas);
+                }
             }
 
             const novosVeiculos = veiculos.filter(v => v.id !== id);
             setVeiculos(novosVeiculos);
             renderVeiculos();
             renderEstoque();
+            renderPecas();
         }
 
         function toggleStatusVeiculo(id) {
@@ -2235,7 +2535,7 @@
         }
 
         // ============================================
-        //  FUNÇÕES DE DRAG AND DROP
+        //  DRAG AND DROP
         // ============================================
         let dragData = null;
 
@@ -2329,16 +2629,13 @@
         }
 
         // ============================================
-        //  VARIÁVEIS GLOBAIS PARA INSTALAÇÃO
+        //  MODAL DO CAMINHÃO
         // ============================================
         let veiculoAtual = null;
         let slotSelecionado = null;
         let pneuSelecionadoId = null;
         let veiculoInstalacaoId = null;
 
-        // ============================================
-        //  MODAL DO CAMINHÃO
-        // ============================================
         function abrirModalCaminhao(id) {
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === id);
@@ -2482,18 +2779,16 @@
         }
 
         // ============================================
-        //  MODAL DE SELEÇÃO (INSTALAÇÃO) - CORRIGIDO
+        //  SELEÇÃO DE PNEU PARA INSTALAÇÃO
         // ============================================
         function abrirModalSelecao(veiculoId, slotId) {
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === veiculoId);
             if (!veiculo) return;
 
-            // Salva o ID do veículo e o slot para uso posterior
             veiculoInstalacaoId = veiculoId;
             slotSelecionado = slotId;
 
-            // Busca pneus disponíveis
             const pneus = getPneus();
             const pneusDisponiveis = pneus.filter(p => p.status === 'disponivel' || !p.status);
 
@@ -2510,7 +2805,7 @@
             info.textContent = `Selecione um pneu para instalar em: ${nomeSlot}`;
 
             lista.innerHTML = pneusDisponiveis.map(p => `
-                    <div class="item-pneu-disponivel" onclick="abrirModalInstalacao(${p.id})">
+                    <div class="item-disponivel" onclick="abrirModalInstalacao(${p.id})">
                         <div class="info">
                             <span class="nome">${p.nome}</span>
                             <span class="detalhes">${p.tamanho} • ${p.tipo} • ${p.situacao} • R$ ${p.valor.toFixed(2)}</span>
@@ -2526,13 +2821,9 @@
             document.getElementById('modalSelecao').classList.remove('show');
         }
 
-        // ============================================
-        //  MODAL DE INSTALAÇÃO (KM) - CORRIGIDO
-        // ============================================
         function abrirModalInstalacao(pneuId) {
             pneuSelecionadoId = pneuId;
 
-            // Recupera o veículo usando o ID salvo
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === veiculoInstalacaoId);
             if (!veiculo) {
@@ -2556,7 +2847,6 @@
         }
 
         function confirmarInstalacao() {
-            // Verifica se temos todos os dados necessários
             if (!veiculoAtual || !slotSelecionado || !pneuSelecionadoId) {
                 alert('Erro: Dados incompletos para instalação.');
                 fecharModalInstalacao();
@@ -2574,7 +2864,6 @@
                 return;
             }
 
-            // Atualiza KM do veículo
             const veiculos = getVeiculos();
             const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
             if (idx !== -1) {
@@ -2583,7 +2872,6 @@
                 setVeiculos(veiculos);
             }
 
-            // Instala o pneu
             const pneus = getPneus();
             const pneu = pneus.find(p => p.id === pneuSelecionadoId);
             if (!pneu) {
@@ -2592,15 +2880,12 @@
                 return;
             }
 
-            // Atualiza status do pneu
             pneu.status = 'instalado';
             pneu.veiculoInstalado = veiculoAtual.placa;
 
-            // Adiciona ao veículo
             if (!veiculoAtual.pneus) veiculoAtual.pneus = {};
             veiculoAtual.pneus[slotSelecionado] = pneuSelecionadoId;
 
-            // Registra histórico do pneu
             pneu.historico = pneu.historico || [];
             pneu.historico.push({
                 data: new Date().toLocaleString('pt-BR'),
@@ -2610,20 +2895,17 @@
 
             setPneus(pneus);
 
-            // Atualiza veículo
             const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
             if (idxVeiculo !== -1) {
                 veiculos[idxVeiculo] = veiculoAtual;
                 setVeiculos(veiculos);
             }
 
-            // Limpa variáveis temporárias
             const slotTemp = slotSelecionado;
             const veiculoTemp = veiculoAtual;
 
             fecharModalInstalacao();
             
-            // Recarrega a visualização
             renderCaminhao(veiculoTemp);
             renderVeiculos();
             renderEstoque();
@@ -2632,7 +2914,7 @@
         }
 
         // ============================================
-        //  MODAL DE REMOÇÃO
+        //  REMOÇÃO DE PNEU
         // ============================================
         let slotRemocao = null;
 
@@ -2691,7 +2973,6 @@
                 return;
             }
 
-            // Atualiza KM do veículo
             const veiculos = getVeiculos();
             const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
             if (idx !== -1) {
@@ -2700,7 +2981,6 @@
                 setVeiculos(veiculos);
             }
 
-            // Remove o pneu do veículo
             const pneuId = veiculoAtual.pneus[slotRemocao];
             if (!pneuId) {
                 alert('Erro: Pneu não encontrado.');
@@ -2710,14 +2990,12 @@
 
             delete veiculoAtual.pneus[slotRemocao];
 
-            // Atualiza o veículo
             const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
             if (idxVeiculo !== -1) {
                 veiculos[idxVeiculo] = veiculoAtual;
                 setVeiculos(veiculos);
             }
 
-            // Processa o pneu conforme destino
             const pneus = getPneus();
             const pneu = pneus.find(p => p.id === pneuId);
             if (!pneu) {
@@ -2740,7 +3018,6 @@
                 detalhes: `Removido do veículo ${veiculoAtual.placa} - ${veiculoAtual.marca} ${veiculoAtual.modelo} na posição ${slotRemocao} com KM ${km}. Destino: ${destinoLabels[destino] || destino}`
             });
 
-            // Ações conforme destino
             if (destino === 'estoque_meia_vida') {
                 pneu.situacao = 'meia vida';
                 pneu.status = 'disponivel';
@@ -2784,7 +3061,7 @@
         }
 
         // ============================================
-        //  MODAL DE SERVIÇO
+        //  SERVIÇOS
         // ============================================
         let slotServico = null;
 
@@ -2851,10 +3128,8 @@
                 return;
             }
 
-            // Adiciona o valor ao pneu
             pneu.valor += valor;
 
-            // Registra no histórico
             const servicoLabel = tipo === 'rodizio' ? 'Rodízio' : 'Remendo';
             pneu.historico = pneu.historico || [];
             pneu.historico.push({
@@ -2863,7 +3138,6 @@
                 detalhes: `${servicoLabel} realizado no valor de R$ ${valor.toFixed(2)} no veículo ${veiculoAtual.placa}`
             });
 
-            // Atualiza o valor específico
             if (tipo === 'rodizio') {
                 pneu.valorRodizio = (pneu.valorRodizio || 0) + valor;
             } else if (tipo === 'remendo') {
@@ -2880,7 +3154,7 @@
         }
 
         // ============================================
-        //  MODAL DE EDIÇÃO DO PNEU (VIA MENU)
+        //  EDIÇÃO DE PNEU
         // ============================================
         function abrirModalEdicaoPneu(veiculoId, slotId) {
             const veiculos = getVeiculos();
@@ -2911,9 +3185,6 @@
             document.getElementById('modalEdicao').classList.add('show');
         }
 
-        // ============================================
-        //  MODAL DE EDIÇÃO (ESTOQUE)
-        // ============================================
         let idsEdicao = [];
 
         function abrirModalEdicao(idsString) {
@@ -2965,7 +3236,6 @@
                 const pneu = pneus.find(p => p.id === id);
                 if (!pneu) return;
 
-                // Atualiza valores
                 if (valorRecapagem > 0) {
                     pneu.valorRecapagem = valorRecapagem;
                     pneu.valor += valorRecapagem;
@@ -2975,7 +3245,6 @@
                     pneu.valor += valorVulcanizacao;
                 }
 
-                // Executa ação
                 if (acao === 'recapagem') {
                     pneu.situacao = 'recapado';
                     pneu.status = 'disponivel';
@@ -3028,6 +3297,157 @@
         }
 
         // ============================================
+        //  SELEÇÃO DE PEÇA PARA INSTALAÇÃO
+        // ============================================
+        let veiculoPecaId = null;
+        let pecaSelecionadoId = null;
+
+        function abrirModalSelecaoPeca(veiculoId) {
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo) return;
+
+            veiculoPecaId = veiculoId;
+
+            const pecas = getPecas();
+            const pecasDisponiveis = pecas.filter(p => p.status === 'disponivel' || !p.status);
+
+            if (pecasDisponiveis.length === 0) {
+                alert('Não há peças disponíveis no estoque para instalação.');
+                return;
+            }
+
+            const modal = document.getElementById('modalSelecaoPeca');
+            const lista = document.getElementById('listaPecasDisponiveis');
+            const info = document.getElementById('infoPecaSelecao');
+
+            info.textContent = `Selecione uma peça para instalar no veículo: ${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
+
+            lista.innerHTML = pecasDisponiveis.map(p => `
+                    <div class="item-disponivel" onclick="abrirModalInstalacaoPeca(${p.id})">
+                        <div class="info">
+                            <span class="nome">${p.nome}</span>
+                            <span class="detalhes">${p.categoria} • R$ ${p.valor.toFixed(2)} • ${p.fornecedor || 'Sem fornecedor'}</span>
+                        </div>
+                        <span class="qtd">1</span>
+                    </div>
+                `).join('');
+
+            modal.classList.add('show');
+        }
+
+        function fecharModalSelecaoPeca() {
+            document.getElementById('modalSelecaoPeca').classList.remove('show');
+        }
+
+        function abrirModalInstalacaoPeca(pecaId) {
+            pecaSelecionadoId = pecaId;
+
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoPecaId);
+            if (!veiculo) {
+                alert('Veículo não encontrado.');
+                return;
+            }
+            veiculoAtual = veiculo;
+
+            const pecas = getPecas();
+            const peca = pecas.find(p => p.id === pecaId);
+            if (!peca) {
+                alert('Peça não encontrada.');
+                return;
+            }
+
+            document.getElementById('infoInstalacaoPeca').textContent = 
+                `Instalando peça: ${peca.nome} - Veículo: ${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
+            
+            // Data atual como padrão
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('dataInstalacaoPeca').value = hoje;
+            document.getElementById('kmInstalacaoPeca').value = veiculo.km;
+            document.getElementById('kmInstalacaoPeca').min = veiculo.km;
+
+            fecharModalSelecaoPeca();
+            document.getElementById('modalInstalacaoPeca').classList.add('show');
+        }
+
+        function fecharModalInstalacaoPeca() {
+            document.getElementById('modalInstalacaoPeca').classList.remove('show');
+            pecaSelecionadoId = null;
+        }
+
+        function confirmarInstalacaoPeca() {
+            if (!veiculoAtual || !pecaSelecionadoId) {
+                alert('Erro: Dados incompletos para instalação.');
+                fecharModalInstalacaoPeca();
+                return;
+            }
+
+            const dataInstalacao = document.getElementById('dataInstalacaoPeca').value;
+            const km = parseInt(document.getElementById('kmInstalacaoPeca').value);
+
+            if (!dataInstalacao) {
+                alert('Por favor, informe a data da instalação.');
+                return;
+            }
+
+            if (!km || km < 0) {
+                alert('Por favor, informe uma quilometragem válida.');
+                return;
+            }
+
+            if (km < veiculoAtual.km) {
+                alert('A quilometragem não pode ser menor que a atual do veículo.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx !== -1) {
+                veiculos[idx].km = km;
+                veiculoAtual.km = km;
+                setVeiculos(veiculos);
+            }
+
+            const pecas = getPecas();
+            const peca = pecas.find(p => p.id === pecaSelecionadoId);
+            if (!peca) {
+                alert('Peça não encontrada no estoque.');
+                fecharModalInstalacaoPeca();
+                return;
+            }
+
+            peca.status = 'instalado';
+            peca.veiculoInstalado = veiculoAtual.placa;
+            peca.dataInstalacao = dataInstalacao;
+            peca.kmInstalacao = km;
+
+            if (!veiculoAtual.pecas) veiculoAtual.pecas = {};
+            veiculoAtual.pecas[Date.now()] = pecaSelecionadoId;
+
+            peca.historico = peca.historico || [];
+            peca.historico.push({
+                data: new Date().toLocaleString('pt-BR'),
+                acao: 'Instalação',
+                detalhes: `Instalado no veículo ${veiculoAtual.placa} - ${veiculoAtual.marca} ${veiculoAtual.modelo} em ${dataInstalacao} com KM ${km}`
+            });
+
+            setPecas(pecas);
+
+            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idxVeiculo !== -1) {
+                veiculos[idxVeiculo] = veiculoAtual;
+                setVeiculos(veiculos);
+            }
+
+            fecharModalInstalacaoPeca();
+            renderVeiculos();
+            renderPecas();
+            
+            alert(`✅ Peça ${peca.nome} instalada com sucesso!`);
+        }
+
+        // ============================================
         //  INICIALIZAÇÃO
         // ============================================
         (function init() {
@@ -3060,6 +3480,8 @@
                 fecharModalRemocao();
                 fecharModalEdicao();
                 fecharModalServico();
+                fecharModalSelecaoPeca();
+                fecharModalInstalacaoPeca();
             }
         });
 
@@ -3080,6 +3502,12 @@
         });
         document.getElementById('modalServico').addEventListener('click', function(e) {
             if (e.target === this) fecharModalServico();
+        });
+        document.getElementById('modalSelecaoPeca').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalSelecaoPeca();
+        });
+        document.getElementById('modalInstalacaoPeca').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalInstalacaoPeca();
         });
     </script>
 </body>
