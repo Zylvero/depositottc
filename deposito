@@ -2314,12 +2314,16 @@
         }
 
         // ============================================
-        //  MODAL DO CAMINHÃO
+        //  VARIÁVEIS GLOBAIS
         // ============================================
         let veiculoAtual = null;
         let slotSelecionado = null;
         let pneuSelecionadoId = null;
+        let veiculoInstalacaoId = null;
 
+        // ============================================
+        //  MODAL DO CAMINHÃO
+        // ============================================
         function abrirModalCaminhao(id) {
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === id);
@@ -2336,6 +2340,7 @@
             veiculoAtual = null;
             slotSelecionado = null;
             pneuSelecionadoId = null;
+            veiculoInstalacaoId = null;
             dragData = null;
         }
 
@@ -2469,6 +2474,8 @@
             const veiculo = veiculos.find(v => v.id === veiculoId);
             if (!veiculo) return;
 
+            veiculoInstalacaoId = veiculoId;
+
             // Busca pneus disponíveis (status disponivel)
             const pneus = getPneus();
             const pneusDisponiveis = pneus.filter(p => p.status === 'disponivel' || !p.status);
@@ -2486,7 +2493,7 @@
             info.textContent = `Selecione um pneu para instalar em: ${nomeSlot}`;
 
             lista.innerHTML = pneusDisponiveis.map(p => `
-                    <div class="item-pneu-disponivel" onclick="abrirModalInstalacao(${veiculo.id}, '${slotId}', ${p.id})">
+                    <div class="item-pneu-disponivel" onclick="abrirModalInstalacao(${p.id}, '${slotId}')">
                         <div class="info">
                             <span class="nome">${p.nome}</span>
                             <span class="detalhes">${p.tamanho} • ${p.tipo} • ${p.situacao} • R$ ${p.valor.toFixed(2)}</span>
@@ -2508,13 +2515,13 @@
         // ============================================
         //  MODAL DE INSTALAÇÃO (KM) - CORRIGIDO
         // ============================================
-        function abrirModalInstalacao(veiculoId, slotId, pneuId) {
+        function abrirModalInstalacao(pneuId, slotId) {
             pneuSelecionadoId = pneuId;
             slotSelecionado = slotId;
 
-            // Recupera o veículo atual
+            // Recupera o veículo usando o ID salvo
             const veiculos = getVeiculos();
-            const veiculo = veiculos.find(v => v.id === veiculoId);
+            const veiculo = veiculos.find(v => v.id === veiculoInstalacaoId);
             if (!veiculo) {
                 alert('Veículo não encontrado.');
                 return;
@@ -2560,7 +2567,7 @@
             const pneus = getPneus();
             const pneu = pneus.find(p => p.id === pneuSelecionadoId);
             if (!pneu) {
-                alert('Pneu não encontrado.');
+                alert('Pneu não encontrado no estoque.');
                 fecharModalInstalacao();
                 return;
             }
