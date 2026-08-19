@@ -1621,6 +1621,7 @@
                 <button data-tab="tab-pecas" onclick="switchTab('tab-pecas')">🔧 Estoque de Peças</button>
                 <button data-tab="tab-veiculos" onclick="switchTab('tab-veiculos')">🚗 Veículos</button>
                 <button data-tab="tab-manutencao" onclick="switchTab('tab-manutencao')">🔧 Manutenção</button>
+                <button data-tab="tab-motoristas" onclick="switchTab('tab-motoristas')">👤 Motoristas</button>
                 <button data-tab="tab-descartados" onclick="switchTab('tab-descartados')">🗑️ Descartados</button>
                 <button data-tab="tab-relatorios" onclick="switchTab('tab-relatorios')">📊 Relatórios</button>
             </div>
@@ -1963,6 +1964,76 @@
                     <div id="manutencaoGrid" class="veiculos-grid"></div>
                 </div>
 
+                <!-- TAB MOTORISTAS -->
+                <div id="tab-motoristas" class="tab-pane">
+                    <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Motorista</h3>
+                    <form id="motoristaForm" onsubmit="cadastrarMotorista(event)">
+                        <div class="form-grid">
+                            <div class="form-group full">
+                                <label>Nome Completo</label>
+                                <input type="text" id="motoristaNome" placeholder="Ex: João Silva" required>
+                            </div>
+                            <div class="form-group">
+                                <label>CPF</label>
+                                <input type="text" id="motoristaCpf" placeholder="Ex: 123.456.789-00">
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo Sanguíneo</label>
+                                <select id="motoristaSangue">
+                                    <option value="">Não informado</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Telefone (Celular)</label>
+                                <input type="tel" id="motoristaCelular" placeholder="Ex: (11) 99999-9999">
+                            </div>
+                            <div class="form-group">
+                                <label>Telefone de Emergência</label>
+                                <input type="tel" id="motoristaEmergencia" placeholder="Ex: (11) 98888-8888">
+                            </div>
+                            <div class="form-group">
+                                <label>Observações</label>
+                                <input type="text" id="motoristaObs" placeholder="Observações adicionais">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-success">Cadastrar Motorista</button>
+                                <button type="reset" class="btn-secondary">Limpar</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <hr style="margin: 30px 0; border-color: #e8ecf0;">
+
+                    <div class="veiculos-header">
+                        <h2>Motoristas Cadastrados</h2>
+                        <div class="veiculos-stats">
+                            <span id="totalMotoristas">Total: 0</span>
+                        </div>
+                    </div>
+
+                    <div class="filtros-container" id="filtrosMotoristas">
+                        <div class="form-group">
+                            <label>Buscar por Nome</label>
+                            <input type="text" id="filtroMotoristaNome" placeholder="Digite o nome..." oninput="filtrarMotoristas()">
+                        </div>
+                        <div class="form-group">
+                            <label>Buscar por CPF</label>
+                            <input type="text" id="filtroMotoristaCpf" placeholder="Digite o CPF..." oninput="filtrarMotoristas()">
+                        </div>
+                        <button class="btn-limpar" onclick="limparFiltrosMotoristas()">Limpar Filtros</button>
+                    </div>
+
+                    <div id="motoristasGrid" class="veiculos-grid"></div>
+                </div>
+
                 <!-- TAB DESCARTADOS -->
                 <div id="tab-descartados" class="tab-pane">
                     <div class="estoque-header">
@@ -2018,6 +2089,37 @@
                 <!-- TAB RELATÓRIOS -->
                 <div id="tab-relatorios" class="tab-pane">
                     <h2 style="color:#1a3a5c; margin-bottom:20px;">📊 Relatórios</h2>
+
+                    <!-- FILTROS DOS RELATÓRIOS -->
+                    <div class="filtros-container" id="filtrosRelatorios">
+                        <div class="form-group">
+                            <label>Veículo (Placa)</label>
+                            <select id="filtroRelatorioVeiculo" onchange="renderRelatorios()">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Motorista</label>
+                            <select id="filtroRelatorioMotorista" onchange="renderRelatorios()">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Data Inicial</label>
+                            <input type="date" id="filtroRelatorioDataInicio" onchange="renderRelatorios()">
+                        </div>
+                        <div class="form-group">
+                            <label>Data Final</label>
+                            <input type="date" id="filtroRelatorioDataFim" onchange="renderRelatorios()">
+                        </div>
+                        <div class="form-group">
+                            <label>Pneu</label>
+                            <select id="filtroRelatorioPneu" onchange="renderRelatorios()">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <button class="btn-limpar" onclick="limparFiltrosRelatorios()">Limpar Filtros</button>
+                    </div>
 
                     <!-- Resumo Geral -->
                     <div class="relatorio-card">
@@ -2408,6 +2510,14 @@
             localStorage.setItem('estoque_manutencoes', JSON.stringify(manutencoes));
         }
 
+        function getMotoristas() {
+            return JSON.parse(localStorage.getItem('estoque_motoristas')) || [];
+        }
+
+        function setMotoristas(motoristas) {
+            localStorage.setItem('estoque_motoristas', JSON.stringify(motoristas));
+        }
+
         function getCurrentUser() {
             return JSON.parse(localStorage.getItem('estoque_current_user'));
         }
@@ -2515,7 +2625,9 @@
             renderPecas();
             renderVeiculos();
             renderManutencao();
+            renderMotoristas();
             renderDescartados();
+            atualizarFiltrosRelatorios();
             renderRelatorios();
             switchTab('tab-cadastro');
         }
@@ -2572,10 +2684,14 @@
             if (tabId === 'tab-manutencao') {
                 renderManutencao();
             }
+            if (tabId === 'tab-motoristas') {
+                renderMotoristas();
+            }
             if (tabId === 'tab-descartados') {
                 renderDescartados();
             }
             if (tabId === 'tab-relatorios') {
+                atualizarFiltrosRelatorios();
                 renderRelatorios();
             }
         }
@@ -2741,7 +2857,7 @@
         }
 
         // ============================================
-        //  CADASTRAR VEÍCULO - CORRIGIDO
+        //  CADASTRAR VEÍCULO
         // ============================================
         function cadastrarVeiculo(e) {
             e.preventDefault();
@@ -3138,77 +3254,72 @@
         // ============================================
         let manutencoesFiltradas = [];
 
-        // Substitua a função renderManutencao() pelo código abaixo:
+        function renderManutencao() {
+            const veiculos = getVeiculos();
+            const manutencoes = getManutencoes();
+            const filtroPlaca = document.getElementById('filtroManutencaoPlaca')?.value.toUpperCase() || '';
+            const filtroMotorista = document.getElementById('filtroManutencaoMotorista')?.value.toLowerCase() || '';
+            const filtroTipo = document.getElementById('filtroManutencaoTipo')?.value || '';
 
-function renderManutencao() {
-    const veiculos = getVeiculos();
-    const manutencoes = getManutencoes();
-    const filtroPlaca = document.getElementById('filtroManutencaoPlaca')?.value.toUpperCase() || '';
-    const filtroMotorista = document.getElementById('filtroManutencaoMotorista')?.value.toLowerCase() || '';
-    const filtroTipo = document.getElementById('filtroManutencaoTipo')?.value || '';
+            let veiculosFiltrados = veiculos.filter(v => {
+                const matchPlaca = v.placa.includes(filtroPlaca);
+                const matchMotorista = v.motorista.toLowerCase().includes(filtroMotorista);
+                return matchPlaca && matchMotorista;
+            });
 
-    // Filtra veículos - MOSTRA TODOS OS VEÍCULOS, não apenas os que têm manutenções
-    let veiculosFiltrados = veiculos.filter(v => {
-        const matchPlaca = v.placa.includes(filtroPlaca);
-        const matchMotorista = v.motorista.toLowerCase().includes(filtroMotorista);
-        return matchPlaca && matchMotorista;
-    });
+            if (filtroTipo) {
+                veiculosFiltrados = veiculosFiltrados.filter(v => {
+                    const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
+                    return manutencoesVeiculo.some(m => m.tipo === filtroTipo);
+                });
+            }
 
-    // Se houver filtro de tipo, mostra apenas veículos que têm manutenções daquele tipo
-    if (filtroTipo) {
-        veiculosFiltrados = veiculosFiltrados.filter(v => {
-            const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
-            return manutencoesVeiculo.some(m => m.tipo === filtroTipo);
-        });
-    }
+            const grid = document.getElementById('manutencaoGrid');
 
-    const grid = document.getElementById('manutencaoGrid');
+            if (veiculosFiltrados.length === 0) {
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>${veiculos.length === 0 ? 'Nenhum veículo cadastrado ainda.' : 'Nenhum veículo encontrado com os filtros aplicados.'}</p></div>`;
+                return;
+            }
 
-    if (veiculosFiltrados.length === 0) {
-        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>${veiculos.length === 0 ? 'Nenhum veículo cadastrado ainda.' : 'Nenhum veículo encontrado com os filtros aplicados.'}</p></div>`;
-        return;
-    }
+            let html = '';
+            veiculosFiltrados.forEach((v) => {
+                const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
+                const totalManutencoes = manutencoesVeiculo.length;
+                const valorTotal = manutencoesVeiculo.reduce((sum, m) => sum + m.valor, 0);
 
-    let html = '';
-    veiculosFiltrados.forEach((v) => {
-        const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
-        const totalManutencoes = manutencoesVeiculo.length;
-        const valorTotal = manutencoesVeiculo.reduce((sum, m) => sum + m.valor, 0);
+                const ultimaManutencao = manutencoesVeiculo.length > 0 ? 
+                    manutencoesVeiculo.sort((a, b) => new Date(b.data) - new Date(a.data))[0] : null;
 
-        // Pega a última manutenção para mostrar resumo
-        const ultimaManutencao = manutencoesVeiculo.length > 0 ? 
-            manutencoesVeiculo.sort((a, b) => new Date(b.data) - new Date(a.data))[0] : null;
+                html += `
+                        <div class="veiculo-card" onclick="abrirModalManutencaoDetalhes(${v.id})">
+                            <div class="veiculo-card-header">
+                                <h3>${v.marca} ${v.modelo}</h3>
+                                <span class="badge ${v.status === 'ativo' ? 'badge-ativo' : 'badge-inativo'}">${v.status}</span>
+                            </div>
+                            <div class="veiculo-card-info">
+                                <span><span class="label">Placa:</span> ${v.placa}</span>
+                                <span><span class="label">Motorista:</span> ${v.motorista}</span>
+                                <span><span class="label">KM:</span> ${v.km.toLocaleString('pt-BR')}</span>
+                                <span><span class="label">Manutenções:</span> ${totalManutencoes}</span>
+                                ${totalManutencoes > 0 ? `
+                                    <span style="grid-column:1/-1;"><span class="label">Valor Total:</span> R$ ${valorTotal.toFixed(2)}</span>
+                                    <span style="grid-column:1/-1; font-size:12px; color:#666;">
+                                        Última: ${ultimaManutencao ? `${ultimaManutencao.tipo} - ${ultimaManutencao.data}` : 'N/A'}
+                                    </span>
+                                ` : `
+                                    <span style="grid-column:1/-1; color:#999; font-style:italic;">Nenhuma manutenção registrada</span>
+                                `}
+                            </div>
+                            <div class="veiculo-card-actions">
+                                <button class="btn-orange" onclick="event.stopPropagation(); abrirModalManutencao(${v.id})" title="Adicionar Manutenção">➕ Manutenção</button>
+                                ${totalManutencoes > 0 ? `<button class="btn-info" onclick="event.stopPropagation(); abrirModalManutencaoDetalhes(${v.id})" title="Ver Detalhes">📋</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+            });
 
-        html += `
-                <div class="veiculo-card" onclick="abrirModalManutencaoDetalhes(${v.id})">
-                    <div class="veiculo-card-header">
-                        <h3>${v.marca} ${v.modelo}</h3>
-                        <span class="badge ${v.status === 'ativo' ? 'badge-ativo' : 'badge-inativo'}">${v.status}</span>
-                    </div>
-                    <div class="veiculo-card-info">
-                        <span><span class="label">Placa:</span> ${v.placa}</span>
-                        <span><span class="label">Motorista:</span> ${v.motorista}</span>
-                        <span><span class="label">KM:</span> ${v.km.toLocaleString('pt-BR')}</span>
-                        <span><span class="label">Manutenções:</span> ${totalManutencoes}</span>
-                        ${totalManutencoes > 0 ? `
-                            <span style="grid-column:1/-1;"><span class="label">Valor Total:</span> R$ ${valorTotal.toFixed(2)}</span>
-                            <span style="grid-column:1/-1; font-size:12px; color:#666;">
-                                Última: ${ultimaManutencao ? `${ultimaManutencao.tipo} - ${ultimaManutencao.data}` : 'N/A'}
-                            </span>
-                        ` : `
-                            <span style="grid-column:1/-1; color:#999; font-style:italic;">Nenhuma manutenção registrada</span>
-                        `}
-                    </div>
-                    <div class="veiculo-card-actions">
-                        <button class="btn-orange" onclick="event.stopPropagation(); abrirModalManutencao(${v.id})" title="Adicionar Manutenção">➕ Manutenção</button>
-                        ${totalManutencoes > 0 ? `<button class="btn-info" onclick="event.stopPropagation(); abrirModalManutencaoDetalhes(${v.id})" title="Ver Detalhes">📋</button>` : ''}
-                    </div>
-                </div>
-            `;
-    });
-
-    grid.innerHTML = html;
-}
+            grid.innerHTML = html;
+        }
 
         function filtrarManutencao() {
             renderManutencao();
@@ -3292,14 +3403,12 @@ function renderManutencao() {
                 return;
             }
 
-            // Atualiza KM do veículo
             const idx = veiculos.findIndex(v => v.id === veiculoManutencaoId);
             if (idx !== -1 && km > veiculo.km) {
                 veiculos[idx].km = km;
                 setVeiculos(veiculos);
             }
 
-            // Registra manutenção
             const manutencoes = getManutencoes();
             const manutencao = {
                 id: Date.now() + Math.random() * 1000,
@@ -3390,7 +3499,6 @@ function renderManutencao() {
             manutencoes = manutencoes.filter(m => m.id !== id);
             setManutencoes(manutencoes);
             
-            // Recarrega a visualização
             const modal = document.getElementById('modalCaminhao');
             if (modal.classList.contains('show') && manutencao) {
                 abrirModalManutencaoDetalhes(manutencao.veiculoId);
@@ -3399,6 +3507,129 @@ function renderManutencao() {
             renderManutencao();
             renderRelatorios();
             alert('✅ Manutenção excluída com sucesso!');
+        }
+
+        // ============================================
+        //  RENDER MOTORISTAS
+        // ============================================
+        let motoristasFiltrados = [];
+
+        function renderMotoristas() {
+            const motoristas = getMotoristas();
+            const filtroNome = document.getElementById('filtroMotoristaNome')?.value.toLowerCase() || '';
+            const filtroCpf = document.getElementById('filtroMotoristaCpf')?.value.replace(/[^0-9]/g, '') || '';
+
+            motoristasFiltrados = motoristas.filter(m => {
+                const matchNome = m.nome.toLowerCase().includes(filtroNome);
+                const matchCpf = !filtroCpf || m.cpf.replace(/[^0-9]/g, '').includes(filtroCpf);
+                return matchNome && matchCpf;
+            });
+
+            const grid = document.getElementById('motoristasGrid');
+
+            if (motoristasFiltrados.length === 0) {
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>${motoristas.length === 0 ? 'Nenhum motorista cadastrado ainda.' : 'Nenhum motorista encontrado com os filtros aplicados.'}</p></div>`;
+                document.getElementById('totalMotoristas').textContent = `Total: ${motoristas.length}`;
+                return;
+            }
+
+            let html = '';
+            motoristasFiltrados.forEach((m) => {
+                const veiculos = getVeiculos();
+                const veiculoVinculado = veiculos.find(v => v.motorista === m.nome);
+
+                html += `
+                    <div class="veiculo-card" style="cursor:default;">
+                        <div class="veiculo-card-header">
+                            <h3>${m.nome}</h3>
+                            ${veiculoVinculado ? `<span class="badge badge-ativo">🚗 ${veiculoVinculado.placa}</span>` : ''}
+                        </div>
+                        <div class="veiculo-card-info">
+                            <span><span class="label">CPF:</span> ${m.cpf}</span>
+                            <span><span class="label">Tipo Sanguíneo:</span> ${m.sangue}</span>
+                            <span><span class="label">Celular:</span> ${m.celular}</span>
+                            <span><span class="label">Emergência:</span> ${m.emergencia}</span>
+                            ${m.obs ? `<span style="grid-column:1/-1;"><span class="label">Obs:</span> ${m.obs}</span>` : ''}
+                            <span style="grid-column:1/-1; font-size:12px; color:#999;">Cadastro: ${m.dataCadastro}</span>
+                        </div>
+                        <div class="veiculo-card-actions">
+                            <button class="btn-danger" onclick="excluirMotorista(${m.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            document.getElementById('totalMotoristas').textContent = `Total: ${motoristas.length}`;
+        }
+
+        function filtrarMotoristas() {
+            renderMotoristas();
+        }
+
+        function limparFiltrosMotoristas() {
+            document.getElementById('filtroMotoristaNome').value = '';
+            document.getElementById('filtroMotoristaCpf').value = '';
+            renderMotoristas();
+        }
+
+        function excluirMotorista(id) {
+            if (!confirm('Tem certeza que deseja excluir este motorista?')) return;
+
+            let motoristas = getMotoristas();
+            motoristas = motoristas.filter(m => m.id !== id);
+            setMotoristas(motoristas);
+            renderMotoristas();
+        }
+
+        // ============================================
+        //  CADASTRAR MOTORISTA
+        // ============================================
+        function cadastrarMotorista(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('motoristaNome').value.trim();
+            const cpf = document.getElementById('motoristaCpf').value.trim();
+            const sangue = document.getElementById('motoristaSangue').value;
+            const celular = document.getElementById('motoristaCelular').value.trim();
+            const emergencia = document.getElementById('motoristaEmergencia').value.trim();
+            const obs = document.getElementById('motoristaObs').value.trim();
+
+            if (!nome) {
+                alert('Por favor, digite o nome do motorista.');
+                return;
+            }
+
+            if (cpf) {
+                const motoristas = getMotoristas();
+                if (motoristas.find(m => m.cpf === cpf)) {
+                    alert('Este CPF já está cadastrado.');
+                    return;
+                }
+            }
+
+            const motorista = {
+                id: Date.now() + Math.random() * 1000,
+                nome: nome,
+                cpf: cpf || 'Não informado',
+                sangue: sangue || 'Não informado',
+                celular: celular || 'Não informado',
+                emergencia: emergencia || 'Não informado',
+                obs: obs || '',
+                dataCadastro: new Date().toLocaleDateString('pt-BR'),
+                dataCadastroCompleta: new Date().toISOString()
+            };
+
+            const motoristas = getMotoristas();
+            motoristas.push(motorista);
+            setMotoristas(motoristas);
+
+            document.getElementById('motoristaForm').reset();
+            document.getElementById('motoristaSangue').value = '';
+
+            renderMotoristas();
+            atualizarFiltrosRelatorios();
+            alert('✅ Motorista cadastrado com sucesso!');
         }
 
         // ============================================
@@ -3465,15 +3696,88 @@ function renderManutencao() {
         }
 
         // ============================================
-        //  RELATÓRIOS
+        //  ATUALIZAR FILTROS DOS RELATÓRIOS
+        // ============================================
+        function atualizarFiltrosRelatorios() {
+            const veiculos = getVeiculos();
+            const motoristas = getMotoristas();
+            const pneus = getPneus();
+
+            const selectVeiculo = document.getElementById('filtroRelatorioVeiculo');
+            selectVeiculo.innerHTML = '<option value="">Todos</option>';
+            veiculos.forEach(v => {
+                selectVeiculo.innerHTML += `<option value="${v.placa}">${v.placa} - ${v.marca} ${v.modelo}</option>`;
+            });
+
+            const selectMotorista = document.getElementById('filtroRelatorioMotorista');
+            selectMotorista.innerHTML = '<option value="">Todos</option>';
+            motoristas.forEach(m => {
+                selectMotorista.innerHTML += `<option value="${m.nome}">${m.nome}</option>`;
+            });
+
+            const selectPneu = document.getElementById('filtroRelatorioPneu');
+            selectPneu.innerHTML = '<option value="">Todos</option>';
+            const pneusUnicos = {};
+            pneus.forEach(p => {
+                const key = `${p.nome} - ${p.tamanho}`;
+                if (!pneusUnicos[key]) {
+                    pneusUnicos[key] = true;
+                    selectPneu.innerHTML += `<option value="${p.nome}">${p.nome} (${p.tamanho})</option>`;
+                }
+            });
+        }
+
+        // ============================================
+        //  RELATÓRIOS COM FILTROS
         // ============================================
         function renderRelatorios() {
-            const pneus = getPneus();
+            let pneus = getPneus();
             const veiculos = getVeiculos();
             const pecas = getPecas();
-            const manutencoes = getManutencoes();
+            let manutencoes = getManutencoes();
 
-            // Resumo Geral
+            const filtroVeiculo = document.getElementById('filtroRelatorioVeiculo')?.value || '';
+            const filtroMotorista = document.getElementById('filtroRelatorioMotorista')?.value || '';
+            const filtroDataInicio = document.getElementById('filtroRelatorioDataInicio')?.value || '';
+            const filtroDataFim = document.getElementById('filtroRelatorioDataFim')?.value || '';
+            const filtroPneu = document.getElementById('filtroRelatorioPneu')?.value || '';
+
+            let veiculosFiltrados = veiculos;
+            if (filtroVeiculo) {
+                veiculosFiltrados = veiculosFiltrados.filter(v => v.placa === filtroVeiculo);
+            }
+            if (filtroMotorista) {
+                veiculosFiltrados = veiculosFiltrados.filter(v => v.motorista === filtroMotorista);
+            }
+
+            if (filtroPneu) {
+                pneus = pneus.filter(p => p.nome === filtroPneu);
+            }
+
+            if (filtroDataInicio) {
+                const dataInicio = new Date(filtroDataInicio);
+                manutencoes = manutencoes.filter(m => {
+                    const dataManutencao = new Date(m.data);
+                    return dataManutencao >= dataInicio;
+                });
+            }
+            if (filtroDataFim) {
+                const dataFim = new Date(filtroDataFim);
+                dataFim.setHours(23, 59, 59);
+                manutencoes = manutencoes.filter(m => {
+                    const dataManutencao = new Date(m.data);
+                    return dataManutencao <= dataFim;
+                });
+            }
+
+            const placasFiltradas = veiculosFiltrados.map(v => v.placa);
+            pneus = pneus.filter(p => {
+                if (p.status === 'instalado' && p.veiculoInstalado) {
+                    return placasFiltradas.length === 0 || placasFiltradas.includes(p.veiculoInstalado);
+                }
+                return true;
+            });
+
             const totalPneus = pneus.length;
             const pneusInstalados = pneus.filter(p => p.status === 'instalado').length;
             const pneusDisponiveis = pneus.filter(p => p.status === 'disponivel' || !p.status).length;
@@ -3484,7 +3788,6 @@ function renderManutencao() {
             document.getElementById('totalPneusDisponiveis').textContent = pneusDisponiveis;
             document.getElementById('valorTotalPneus').textContent = `R$ ${valorTotal.toFixed(2)}`;
 
-            // Custo por KM - Pneus Instalados
             const tbodyCusto = document.getElementById('relatorioCustoKmBody');
             const pneusInstaladosList = pneus.filter(p => p.status === 'instalado');
 
@@ -3496,7 +3799,7 @@ function renderManutencao() {
                 pneusInstaladosList.forEach(p => {
                     index++;
                     let veiculo = null;
-                    veiculos.forEach(v => {
+                    veiculosFiltrados.forEach(v => {
                         if (v.pneus) {
                             Object.keys(v.pneus).forEach(slot => {
                                 if (v.pneus[slot] === p.id) {
@@ -3544,9 +3847,15 @@ function renderManutencao() {
                 tbodyCusto.innerHTML = htmlCusto;
             }
 
-            // Custo de Peças por Veículo
             const tbodyPecas = document.getElementById('relatorioCustoPecasBody');
-            const pecasInstaladas = pecas.filter(p => p.status === 'instalado');
+            let pecasInstaladas = pecas.filter(p => p.status === 'instalado');
+
+            if (filtroVeiculo || filtroMotorista) {
+                const placas = veiculosFiltrados.map(v => v.placa);
+                pecasInstaladas = pecasInstaladas.filter(p => {
+                    return p.veiculoInstalado && placas.includes(p.veiculoInstalado);
+                });
+            }
 
             if (pecasInstaladas.length === 0) {
                 tbodyPecas.innerHTML = `<tr><td colspan="5" class="empty-state"><p>Nenhuma peça instalada em veículos.</p></td></tr>`;
@@ -3566,7 +3875,7 @@ function renderManutencao() {
                 Object.entries(custoPorVeiculo).forEach(([veiculo, dados]) => {
                     indexPecas++;
                     let veiculoInfo = veiculo;
-                    const veiculoEncontrado = veiculos.find(v => v.placa === veiculo || 
+                    const veiculoEncontrado = veiculosFiltrados.find(v => v.placa === veiculo || 
                         `${v.marca} ${v.modelo}` === veiculo);
                     if (veiculoEncontrado) {
                         veiculoInfo = `${veiculoEncontrado.marca} ${veiculoEncontrado.modelo}`;
@@ -3585,8 +3894,14 @@ function renderManutencao() {
                 tbodyPecas.innerHTML = htmlPecas;
             }
 
-            // Custos de Manutenção por Veículo
             const tbodyManutencao = document.getElementById('relatorioCustoManutencaoBody');
+
+            if (filtroVeiculo || filtroMotorista) {
+                const placas = veiculosFiltrados.map(v => v.placa);
+                manutencoes = manutencoes.filter(m => {
+                    return m.veiculoPlaca && placas.includes(m.veiculoPlaca);
+                });
+            }
 
             if (manutencoes.length === 0) {
                 tbodyManutencao.innerHTML = `<tr><td colspan="5" class="empty-state"><p>Nenhuma manutenção registrada.</p></td></tr>`;
@@ -3620,7 +3935,6 @@ function renderManutencao() {
                 tbodyManutencao.innerHTML = htmlManutencao;
             }
 
-            // Histórico de Pneus Removidos
             const tbodyHistorico = document.getElementById('relatorioHistoricoBody');
             const removidos = [];
 
@@ -3691,6 +4005,15 @@ function renderManutencao() {
             }
         }
 
+        function limparFiltrosRelatorios() {
+            document.getElementById('filtroRelatorioVeiculo').value = '';
+            document.getElementById('filtroRelatorioMotorista').value = '';
+            document.getElementById('filtroRelatorioDataInicio').value = '';
+            document.getElementById('filtroRelatorioDataFim').value = '';
+            document.getElementById('filtroRelatorioPneu').value = '';
+            renderRelatorios();
+        }
+
         // ============================================
         //  VEÍCULOS - CRUD
         // ============================================
@@ -3740,7 +4063,6 @@ function renderManutencao() {
                     setPecas(pecas);
                 }
 
-                // Remove manutenções associadas
                 let manutencoes = getManutencoes();
                 manutencoes = manutencoes.filter(m => m.veiculoId !== id);
                 setManutencoes(manutencoes);
