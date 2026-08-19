@@ -1458,6 +1458,21 @@
             transition: all 0.3s;
         }
 
+        /* Modal de Cadastro Múltiplo */
+        #modalCadastroMultiplo .modal-manutencao-content {
+            max-width: 700px;
+        }
+
+        #modalCadastroMultiplo .modal-manutencao-content input:focus,
+        #modalCadastroMultiplo .modal-manutencao-content select:focus {
+            outline: none;
+            border-color: #2a5f7a;
+        }
+
+        #modalCadastroMultiplo .modal-manutencao-content input {
+            transition: border 0.3s;
+        }
+
         .manutencao-item {
             background: #f8f9fa;
             padding: 12px 15px;
@@ -2458,6 +2473,21 @@
         </div>
     </div>
 
+    <!-- Modal de Cadastro Múltiplo de Pneus -->
+    <div id="modalCadastroMultiplo" class="modal-manutencao">
+        <div class="modal-manutencao-content" style="max-width: 700px;">
+            <h3>📦 Cadastrar Múltiplos Pneus</h3>
+            <p class="subtitle" id="modalMultiploSubtitle">Preencha os dados de cada pneu individualmente</p>
+            
+            <div id="listaPneusCadastro" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;"></div>
+            
+            <div class="modal-manutencao-actions">
+                <button class="btn-confirmar" onclick="confirmarCadastroMultiplo()">✅ Salvar Todos</button>
+                <button class="btn-cancelar" onclick="fecharModalCadastroMultiplo()">❌ Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ============================================
         //  BANCO DE DADOS
@@ -2728,8 +2758,10 @@
         }
 
         // ============================================
-        //  CADASTRAR PNEU
+        //  CADASTRAR PNEU - COM CADASTRO MULTIPLO
         // ============================================
+        let pneusParaCadastrar = [];
+
         function cadastrarPneu(e) {
             e.preventDefault();
 
@@ -2757,36 +2789,64 @@
             const valor = parseFloat(document.getElementById('pneuValor').value) || 0;
             const quantidade = parseInt(document.getElementById('pneuQuantidade').value) || 1;
 
-            const pneus = getPneus();
-            for (let i = 0; i < quantidade; i++) {
-                const pneu = {
-                    id: Date.now() + i + Math.random() * 1000,
-                    nome,
-                    dot,
-                    tamanho,
-                    tipo,
-                    situacao,
-                    valor,
-                    valorRecapagem: 0,
-                    valorVulcanizacao: 0,
-                    valorRodizio: 0,
-                    valorRemendo: 0,
-                    quantidade: 1,
-                    status: 'disponivel',
-                    veiculoInstalado: null,
-                    kmInstalacao: null,
-                    dataCadastro: new Date().toLocaleDateString('pt-BR'),
-                    historico: [{
-                        data: new Date().toLocaleString('pt-BR'),
-                        acao: 'Cadastro',
-                        detalhes: `Pneu cadastrado como ${situacao}`
-                    }]
-                };
+            // Se for apenas 1 pneu, cadastra diretamente
+            if (quantidade === 1) {
+                const pneu = criarPneu(nome, dot, tamanho, tipo, situacao, valor);
+                const pneus = getPneus();
                 pneus.push(pneu);
+                setPneus(pneus);
+                
+                limparFormPneu();
+                renderEstoque();
+                switchTab('tab-estoque');
+                alert('✅ 1 pneu cadastrado com sucesso!');
+                return;
             }
 
-            setPneus(pneus);
+            // Para múltiplos pneus, abre o modal
+            pneusParaCadastrar = [];
+            for (let i = 0; i < quantidade; i++) {
+                pneusParaCadastrar.push({
+                    index: i + 1,
+                    nome: nome,
+                    dot: i === 0 ? dot : '', // Primeiro pneu usa o DOT preenchido, os outros ficam em branco
+                    tamanho: tamanho,
+                    tipo: tipo,
+                    situacao: situacao,
+                    valor: valor
+                });
+            }
 
+            abrirModalCadastroMultiplo();
+        }
+
+        function criarPneu(nome, dot, tamanho, tipo, situacao, valor) {
+            return {
+                id: Date.now() + Math.random() * 1000,
+                nome: nome,
+                dot: dot || 'Não informado',
+                tamanho: tamanho,
+                tipo: tipo,
+                situacao: situacao,
+                valor: valor,
+                valorRecapagem: 0,
+                valorVulcanizacao: 0,
+                valorRodizio: 0,
+                valorRemendo: 0,
+                quantidade: 1,
+                status: 'disponivel',
+                veiculoInstalado: null,
+                kmInstalacao: null,
+                dataCadastro: new Date().toLocaleDateString('pt-BR'),
+                historico: [{
+                    data: new Date().toLocaleString('pt-BR'),
+                    acao: 'Cadastro',
+                    detalhes: `Pneu cadastrado como ${situacao}`
+                }]
+            };
+        }
+
+        function limparFormPneu() {
             document.getElementById('pneuDot').value = '';
             document.getElementById('pneuValor').value = '0';
             document.getElementById('pneuQuantidade').value = '1';
@@ -2798,10 +2858,114 @@
             document.getElementById('pneuNomeOutros').value = '';
             document.getElementById('pneuTamanhoOutros').classList.add('hidden');
             document.getElementById('pneuTamanhoOutros').value = '';
+        }
 
+        // ============================================
+        //  MODAL DE CADASTRO MÚLTIPLO
+        // ============================================
+        function abrirModalCadastroMultiplo() {
+            const modal = document.getElementById('modalCadastroMultiplo');
+            const lista = document.getElementById('listaPneusCadastro');
+            const subtitle = document.getElementById('modalMultiploSubtitle');
+            
+            subtitle.textContent = `Preencha o DOT/Fogo de cada um dos ${pneusParaCadastrar.length} pneus`;
+            
+            let html = `
+                <div style="display:grid; grid-template-columns: auto 1fr auto; gap:10px; font-weight:600; color:#333; border-bottom:2px solid #dce0e5; padding-bottom:10px; margin-bottom:10px;">
+                    <span>#</span>
+                    <span>DOT / Fogo</span>
+                    <span style="text-align:center;">Situação</span>
+                </div>
+            `;
+            
+            pneusParaCadastrar.forEach((p, index) => {
+                const situacaoOptions = ['novo', 'meia vida', 'recapado', 'carcaça'];
+                let situacaoSelect = '';
+                situacaoOptions.forEach(s => {
+                    const selected = s === p.situacao ? 'selected' : '';
+                    situacaoSelect += `<option value="${s}" ${selected}>${s}</option>`;
+                });
+                
+                html += `
+                    <div style="display:grid; grid-template-columns: auto 1fr auto; gap:10px; align-items:center; padding:8px 0; border-bottom:1px solid #e8ecf0;" data-index="${index}">
+                        <span style="font-weight:600; color:#1a3a5c;">#${p.index}</span>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <input type="text" id="dot_multi_${index}" placeholder="DOT/Fogo (ex: DOT 1234)" value="${p.dot}" style="flex:1; min-width:150px; padding:8px 12px; border:2px solid #dce0e5; border-radius:6px; font-size:13px;">
+                            <select id="situacao_multi_${index}" style="padding:8px 12px; border:2px solid #dce0e5; border-radius:6px; font-size:13px; background:white;">
+                                ${situacaoSelect}
+                            </select>
+                        </div>
+                        <span style="font-size:12px; color:#666;">${p.nome} ${p.tamanho}</span>
+                    </div>
+                `;
+            });
+            
+            // Adiciona informações resumidas no final
+            html += `
+                <div style="margin-top:15px; padding:10px; background:#f8f9fa; border-radius:8px; display:flex; gap:20px; flex-wrap:wrap; font-size:13px;">
+                    <span><strong>Total:</strong> ${pneusParaCadastrar.length} pneus</span>
+                    <span><strong>Marca:</strong> ${pneusParaCadastrar[0]?.nome || '-'}</span>
+                    <span><strong>Tamanho:</strong> ${pneusParaCadastrar[0]?.tamanho || '-'}</span>
+                    <span><strong>Tipo:</strong> ${pneusParaCadastrar[0]?.tipo || '-'}</span>
+                    <span><strong>Valor Unitário:</strong> R$ ${pneusParaCadastrar[0]?.valor?.toFixed(2) || '0,00'}</span>
+                </div>
+            `;
+            
+            lista.innerHTML = html;
+            modal.classList.add('show');
+        }
+
+        function fecharModalCadastroMultiplo() {
+            document.getElementById('modalCadastroMultiplo').classList.remove('show');
+            pneusParaCadastrar = [];
+        }
+
+        function confirmarCadastroMultiplo() {
+            const pneus = getPneus();
+            let cadastrados = 0;
+            let erros = [];
+            
+            pneusParaCadastrar.forEach((p, index) => {
+                const dotInput = document.getElementById(`dot_multi_${index}`);
+                const situacaoSelect = document.getElementById(`situacao_multi_${index}`);
+                
+                const dot = dotInput ? dotInput.value.trim() : p.dot;
+                const situacao = situacaoSelect ? situacaoSelect.value : p.situacao;
+                
+                if (!dot) {
+                    erros.push(`Pneu #${p.index} sem DOT/Fogo informado.`);
+                }
+                
+                const pneu = criarPneu(
+                    p.nome,
+                    dot || 'Não informado',
+                    p.tamanho,
+                    p.tipo,
+                    situacao,
+                    p.valor
+                );
+                pneus.push(pneu);
+                cadastrados++;
+            });
+            
+            if (erros.length > 0) {
+                const confirmar = confirm(
+                    `⚠️ ATENÇÃO: ${erros.length} pneu(s) estão sem DOT/Fogo.\n\n` +
+                    erros.join('\n') +
+                    `\n\nDeseja continuar mesmo assim?`
+                );
+                if (!confirmar) {
+                    return;
+                }
+            }
+            
+            setPneus(pneus);
+            
+            fecharModalCadastroMultiplo();
+            limparFormPneu();
             renderEstoque();
             switchTab('tab-estoque');
-            alert(`✅ ${quantidade} pneu(s) cadastrado(s) com sucesso!`);
+            alert(`✅ ${cadastrados} pneu(s) cadastrado(s) com sucesso!`);
         }
 
         // ============================================
@@ -5051,6 +5215,7 @@
                 fecharModalSelecaoPeca();
                 fecharModalInstalacaoPeca();
                 fecharModalManutencao();
+                fecharModalCadastroMultiplo();
             }
         });
 
@@ -5080,6 +5245,9 @@
         });
         document.getElementById('modalManutencao').addEventListener('click', function(e) {
             if (e.target === this) fecharModalManutencao();
+        });
+        document.getElementById('modalCadastroMultiplo').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalCadastroMultiplo();
         });
     </script>
 </body>
