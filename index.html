@@ -1375,7 +1375,6 @@
             color: #2e7d32;
         }
 
-        /* Modal Manutenção */
         .modal-manutencao {
             display: none;
             position: fixed;
@@ -2742,6 +2741,57 @@
         }
 
         // ============================================
+        //  CADASTRAR VEÍCULO - CORRIGIDO
+        // ============================================
+        function cadastrarVeiculo(e) {
+            e.preventDefault();
+
+            const marca = document.getElementById('veiculoMarca').value.trim();
+            const modelo = document.getElementById('veiculoModelo').value.trim();
+            const placa = document.getElementById('veiculoPlaca').value.trim().toUpperCase();
+            const motorista = document.getElementById('veiculoMotorista').value.trim();
+            const km = parseInt(document.getElementById('veiculoKm').value) || 0;
+            const eixos = parseInt(document.getElementById('veiculoEixos').value);
+            const status = document.getElementById('veiculoStatus').value;
+
+            if (!marca || !modelo || !placa || !motorista) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            if (veiculos.find(v => v.placa === placa)) {
+                alert('Esta placa já está cadastrada.');
+                return;
+            }
+
+            const veiculo = {
+                id: Date.now(),
+                marca: marca,
+                modelo: modelo,
+                placa: placa,
+                motorista: motorista,
+                km: km,
+                eixos: eixos,
+                status: status,
+                pneus: {},
+                pecas: {},
+                dataCadastro: new Date().toLocaleDateString('pt-BR')
+            };
+
+            veiculos.push(veiculo);
+            setVeiculos(veiculos);
+
+            document.getElementById('veiculoForm').reset();
+            document.getElementById('veiculoKm').value = '0';
+
+            renderVeiculos();
+            renderManutencao();
+            renderRelatorios();
+            alert('✅ Veículo cadastrado com sucesso!');
+        }
+
+        // ============================================
         //  RENDER ESTOQUE DE PNEUS COM FILTROS
         // ============================================
         let pneusFiltrados = [];
@@ -3101,7 +3151,6 @@
                 const matchPlaca = v.placa.includes(filtroPlaca);
                 const matchMotorista = v.motorista.toLowerCase().includes(filtroMotorista);
                 
-                // Filtra por tipo de manutenção se selecionado
                 let matchTipo = true;
                 if (filtroTipo) {
                     const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
@@ -3111,7 +3160,6 @@
                 return (temManutencao || !filtroPlaca && !filtroMotorista) && matchPlaca && matchMotorista && matchTipo;
             });
 
-            // Se não houver filtros, mostra todos os veículos com manutenção
             if (!filtroPlaca && !filtroMotorista && !filtroTipo) {
                 veiculosComManutencao = veiculos.filter(v => manutencoes.some(m => m.veiculoId === v.id));
             }
@@ -3176,7 +3224,6 @@
             document.getElementById('modalManutencaoSubtitle').textContent = 
                 `Registre uma nova manutenção para: ${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
             
-            // Preenche data atual
             const hoje = new Date().toISOString().split('T')[0];
             document.getElementById('manutencaoData').value = hoje;
             document.getElementById('manutencaoKm').value = veiculo.km;
@@ -3329,16 +3376,14 @@
             if (!confirm('Tem certeza que deseja excluir esta manutenção?')) return;
             
             let manutencoes = getManutencoes();
+            const manutencao = manutencoes.find(m => m.id === id);
             manutencoes = manutencoes.filter(m => m.id !== id);
             setManutencoes(manutencoes);
             
             // Recarrega a visualização
             const modal = document.getElementById('modalCaminhao');
-            if (modal.classList.contains('show')) {
-                const veiculoId = manutencoes.find(m => m.id === id)?.veiculoId;
-                if (veiculoId) {
-                    abrirModalManutencaoDetalhes(veiculoId);
-                }
+            if (modal.classList.contains('show') && manutencao) {
+                abrirModalManutencaoDetalhes(manutencao.veiculoId);
             }
             
             renderManutencao();
@@ -3510,7 +3555,6 @@
                 let indexPecas = 0;
                 Object.entries(custoPorVeiculo).forEach(([veiculo, dados]) => {
                     indexPecas++;
-                    // Busca detalhes do veículo
                     let veiculoInfo = veiculo;
                     const veiculoEncontrado = veiculos.find(v => v.placa === veiculo || 
                         `${v.marca} ${v.modelo}` === veiculo);
