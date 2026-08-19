@@ -426,6 +426,21 @@
             background: #004d40;
         }
 
+        .btn-orange {
+            background: #e65100;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 13px;
+        }
+
+        .btn-orange:hover {
+            background: #bf360c;
+        }
+
         .estoque-header,
         .veiculos-header {
             display: flex;
@@ -458,7 +473,6 @@
             color: #333;
         }
 
-        /* Filtros */
         .filtros-container {
             display: flex;
             gap: 15px;
@@ -595,6 +609,22 @@
         .badge-em-uso {
             background: #ffccbc;
             color: #bf360c;
+        }
+        .badge-manutencao {
+            background: #ffab91;
+            color: #bf360c;
+        }
+        .badge-preventiva {
+            background: #a5d6a7;
+            color: #1b5e20;
+        }
+        .badge-corretiva {
+            background: #ffcdd2;
+            color: #b71c1c;
+        }
+        .badge-revisao {
+            background: #b3e5fc;
+            color: #01579b;
         }
 
         .badge-liso {
@@ -1297,7 +1327,6 @@
             background: #d0d4d9;
         }
 
-        /* Relatórios */
         .relatorio-card {
             background: white;
             border-radius: 12px;
@@ -1344,6 +1373,136 @@
 
         .relatorio-item .positivo {
             color: #2e7d32;
+        }
+
+        /* Modal Manutenção */
+        .modal-manutencao {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-manutencao.show {
+            display: flex;
+        }
+
+        .modal-manutencao-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-manutencao-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 10px;
+        }
+
+        .modal-manutencao-content .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .modal-manutencao-content .form-group {
+            margin-bottom: 15px;
+        }
+
+        .modal-manutencao-content label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .modal-manutencao-content input,
+        .modal-manutencao-content select,
+        .modal-manutencao-content textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #dce0e5;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .modal-manutencao-content input:focus,
+        .modal-manutencao-content select:focus,
+        .modal-manutencao-content textarea:focus {
+            outline: none;
+            border-color: #e65100;
+        }
+
+        .modal-manutencao-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-manutencao-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .manutencao-item {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #e65100;
+        }
+
+        .manutencao-item .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            background: transparent;
+            padding: 0;
+            box-shadow: none;
+        }
+
+        .manutencao-item .header .tipo {
+            font-weight: 600;
+            color: #e65100;
+            font-size: 14px;
+        }
+
+        .manutencao-item .header .data {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .manutencao-item .descricao {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .manutencao-item .valor {
+            font-weight: 600;
+            color: #1a3a5c;
+            font-size: 14px;
+        }
+
+        .manutencao-item .km {
+            color: #666;
+            font-size: 13px;
         }
 
         @media (max-width: 768px) {
@@ -1462,6 +1621,7 @@
                 <button data-tab="tab-estoque" onclick="switchTab('tab-estoque')">📋 Estoque de Pneus</button>
                 <button data-tab="tab-pecas" onclick="switchTab('tab-pecas')">🔧 Estoque de Peças</button>
                 <button data-tab="tab-veiculos" onclick="switchTab('tab-veiculos')">🚗 Veículos</button>
+                <button data-tab="tab-manutencao" onclick="switchTab('tab-manutencao')">🔧 Manutenção</button>
                 <button data-tab="tab-descartados" onclick="switchTab('tab-descartados')">🗑️ Descartados</button>
                 <button data-tab="tab-relatorios" onclick="switchTab('tab-relatorios')">📊 Relatórios</button>
             </div>
@@ -1549,7 +1709,6 @@
                         </div>
                     </div>
 
-                    <!-- Filtros -->
                     <div class="filtros-container" id="filtrosPneus">
                         <div class="form-group">
                             <label>Buscar por Nome</label>
@@ -1662,7 +1821,6 @@
                         </div>
                     </div>
 
-                    <!-- Filtros Peças -->
                     <div class="filtros-container" id="filtrosPecas">
                         <div class="form-group">
                             <label>Buscar por Nome</label>
@@ -1755,7 +1913,6 @@
                         </div>
                     </div>
 
-                    <!-- Filtros Veículos -->
                     <div class="filtros-container" id="filtrosVeiculos">
                         <div class="form-group">
                             <label>Buscar por Placa</label>
@@ -1779,6 +1936,34 @@
                     <div id="veiculosGrid" class="veiculos-grid"></div>
                 </div>
 
+                <!-- TAB MANUTENÇÃO -->
+                <div id="tab-manutencao" class="tab-pane">
+                    <h2 style="color:#1a3a5c; margin-bottom:20px;">🔧 Manutenção de Veículos</h2>
+
+                    <div class="filtros-container" id="filtrosManutencao">
+                        <div class="form-group">
+                            <label>Buscar por Placa</label>
+                            <input type="text" id="filtroManutencaoPlaca" placeholder="Digite a placa..." oninput="filtrarManutencao()">
+                        </div>
+                        <div class="form-group">
+                            <label>Motorista</label>
+                            <input type="text" id="filtroManutencaoMotorista" placeholder="Nome do motorista..." oninput="filtrarManutencao()">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Manutenção</label>
+                            <select id="filtroManutencaoTipo" onchange="filtrarManutencao()">
+                                <option value="">Todos</option>
+                                <option value="preventiva">Preventiva</option>
+                                <option value="corretiva">Corretiva</option>
+                                <option value="revisao">Revisão</option>
+                            </select>
+                        </div>
+                        <button class="btn-limpar" onclick="limparFiltrosManutencao()">Limpar Filtros</button>
+                    </div>
+
+                    <div id="manutencaoGrid" class="veiculos-grid"></div>
+                </div>
+
                 <!-- TAB DESCARTADOS -->
                 <div id="tab-descartados" class="tab-pane">
                     <div class="estoque-header">
@@ -1788,7 +1973,6 @@
                         </div>
                     </div>
 
-                    <!-- Filtros Descartados -->
                     <div class="filtros-container" id="filtrosDescartados">
                         <div class="form-group">
                             <label>Buscar por Nome</label>
@@ -1834,7 +2018,7 @@
 
                 <!-- TAB RELATÓRIOS -->
                 <div id="tab-relatorios" class="tab-pane">
-                    <h2 style="color:#1a3a5c; margin-bottom:20px;">📊 Relatórios de Custo por KM</h2>
+                    <h2 style="color:#1a3a5c; margin-bottom:20px;">📊 Relatórios</h2>
 
                     <!-- Resumo Geral -->
                     <div class="relatorio-card">
@@ -1880,6 +2064,50 @@
                                 </thead>
                                 <tbody id="relatorioCustoKmBody">
                                     <tr><td colspan="9" class="empty-state"><p>Nenhum pneu instalado para calcular custo por KM.</p></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Custo de Peças por Veículo -->
+                    <div class="relatorio-card">
+                        <h3>🔧 Custos de Peças por Veículo</h3>
+                        <p style="color:#666; margin-bottom:15px; font-size:14px;">Total de custos com peças instaladas em cada veículo</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Veículo</th>
+                                        <th>Placa</th>
+                                        <th>Total de Peças</th>
+                                        <th>Valor Total (R$)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioCustoPecasBody">
+                                    <tr><td colspan="5" class="empty-state"><p>Nenhuma peça instalada em veículos.</p></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Custos de Manutenção por Veículo -->
+                    <div class="relatorio-card">
+                        <h3>🔧 Custos de Manutenção por Veículo</h3>
+                        <p style="color:#666; margin-bottom:15px; font-size:14px;">Total de custos com manutenção em cada veículo</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Veículo</th>
+                                        <th>Placa</th>
+                                        <th>Total de Manutenções</th>
+                                        <th>Valor Total (R$)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioCustoManutencaoBody">
+                                    <tr><td colspan="5" class="empty-state"><p>Nenhuma manutenção registrada.</p></td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -2081,6 +2309,54 @@
         </div>
     </div>
 
+    <!-- Modal de Manutenção -->
+    <div id="modalManutencao" class="modal-manutencao">
+        <div class="modal-manutencao-content">
+            <h3>🔧 Adicionar Manutenção</h3>
+            <p class="subtitle" id="modalManutencaoSubtitle">Registre uma nova manutenção para este veículo</p>
+            
+            <div class="form-group">
+                <label>Tipo de Manutenção</label>
+                <select id="manutencaoTipo" required>
+                    <option value="">Selecione...</option>
+                    <option value="preventiva">Preventiva</option>
+                    <option value="corretiva">Corretiva</option>
+                    <option value="revisao">Revisão</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Data da Manutenção</label>
+                <input type="date" id="manutencaoData" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Quilometragem Atual (KM)</label>
+                <input type="number" id="manutencaoKm" placeholder="Digite a KM atual" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Descrição do Serviço</label>
+                <textarea id="manutencaoDescricao" rows="3" placeholder="Descreva o que foi feito..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Valor da Manutenção (R$)</label>
+                <input type="number" id="manutencaoValor" placeholder="0,00" min="0" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Fornecedor/Oficina (opcional)</label>
+                <input type="text" id="manutencaoFornecedor" placeholder="Nome da oficina ou fornecedor">
+            </div>
+            
+            <div class="modal-manutencao-actions">
+                <button class="btn-confirmar" onclick="confirmarManutencao()">Registrar Manutenção</button>
+                <button class="btn-cancelar" onclick="fecharModalManutencao()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ============================================
         //  BANCO DE DADOS
@@ -2123,6 +2399,14 @@
 
         function setDescartados(descartados) {
             localStorage.setItem('estoque_descartados', JSON.stringify(descartados));
+        }
+
+        function getManutencoes() {
+            return JSON.parse(localStorage.getItem('estoque_manutencoes')) || [];
+        }
+
+        function setManutencoes(manutencoes) {
+            localStorage.setItem('estoque_manutencoes', JSON.stringify(manutencoes));
         }
 
         function getCurrentUser() {
@@ -2231,6 +2515,7 @@
             renderEstoque();
             renderPecas();
             renderVeiculos();
+            renderManutencao();
             renderDescartados();
             renderRelatorios();
             switchTab('tab-cadastro');
@@ -2284,6 +2569,9 @@
             }
             if (tabId === 'tab-veiculos') {
                 renderVeiculos();
+            }
+            if (tabId === 'tab-manutencao') {
+                renderManutencao();
             }
             if (tabId === 'tab-descartados') {
                 renderDescartados();
@@ -2796,6 +3084,269 @@
         }
 
         // ============================================
+        //  RENDER MANUTENÇÃO COM FILTROS
+        // ============================================
+        let manutencoesFiltradas = [];
+
+        function renderManutencao() {
+            const veiculos = getVeiculos();
+            const manutencoes = getManutencoes();
+            const filtroPlaca = document.getElementById('filtroManutencaoPlaca')?.value.toUpperCase() || '';
+            const filtroMotorista = document.getElementById('filtroManutencaoMotorista')?.value.toLowerCase() || '';
+            const filtroTipo = document.getElementById('filtroManutencaoTipo')?.value || '';
+
+            // Filtra veículos que têm manutenções
+            let veiculosComManutencao = veiculos.filter(v => {
+                const temManutencao = manutencoes.some(m => m.veiculoId === v.id);
+                const matchPlaca = v.placa.includes(filtroPlaca);
+                const matchMotorista = v.motorista.toLowerCase().includes(filtroMotorista);
+                
+                // Filtra por tipo de manutenção se selecionado
+                let matchTipo = true;
+                if (filtroTipo) {
+                    const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
+                    matchTipo = manutencoesVeiculo.some(m => m.tipo === filtroTipo);
+                }
+                
+                return (temManutencao || !filtroPlaca && !filtroMotorista) && matchPlaca && matchMotorista && matchTipo;
+            });
+
+            // Se não houver filtros, mostra todos os veículos com manutenção
+            if (!filtroPlaca && !filtroMotorista && !filtroTipo) {
+                veiculosComManutencao = veiculos.filter(v => manutencoes.some(m => m.veiculoId === v.id));
+            }
+
+            const grid = document.getElementById('manutencaoGrid');
+
+            if (veiculosComManutencao.length === 0) {
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>${veiculos.length === 0 ? 'Nenhum veículo cadastrado ainda.' : 'Nenhum veículo com manutenção registrada.'}</p></div>`;
+                return;
+            }
+
+            let html = '';
+            veiculosComManutencao.forEach((v) => {
+                const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
+                const totalManutencoes = manutencoesVeiculo.length;
+                const valorTotal = manutencoesVeiculo.reduce((sum, m) => sum + m.valor, 0);
+
+                html += `
+                        <div class="veiculo-card" onclick="abrirModalManutencaoDetalhes(${v.id})">
+                            <div class="veiculo-card-header">
+                                <h3>${v.marca} ${v.modelo}</h3>
+                                <span class="badge ${v.status === 'ativo' ? 'badge-ativo' : 'badge-inativo'}">${v.status}</span>
+                            </div>
+                            <div class="veiculo-card-info">
+                                <span><span class="label">Placa:</span> ${v.placa}</span>
+                                <span><span class="label">Motorista:</span> ${v.motorista}</span>
+                                <span><span class="label">KM:</span> ${v.km.toLocaleString('pt-BR')}</span>
+                                <span><span class="label">Manutenções:</span> ${totalManutencoes}</span>
+                                <span style="grid-column:1/-1;"><span class="label">Valor Total:</span> R$ ${valorTotal.toFixed(2)}</span>
+                            </div>
+                            <div class="veiculo-card-actions">
+                                <button class="btn-orange" onclick="event.stopPropagation(); abrirModalManutencao(${v.id})" title="Adicionar Manutenção">➕</button>
+                            </div>
+                        </div>
+                    `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        function filtrarManutencao() {
+            renderManutencao();
+        }
+
+        function limparFiltrosManutencao() {
+            document.getElementById('filtroManutencaoPlaca').value = '';
+            document.getElementById('filtroManutencaoMotorista').value = '';
+            document.getElementById('filtroManutencaoTipo').value = '';
+            renderManutencao();
+        }
+
+        // ============================================
+        //  MODAL MANUTENÇÃO
+        // ============================================
+        let veiculoManutencaoId = null;
+
+        function abrirModalManutencao(veiculoId) {
+            veiculoManutencaoId = veiculoId;
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            
+            document.getElementById('modalManutencaoSubtitle').textContent = 
+                `Registre uma nova manutenção para: ${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
+            
+            // Preenche data atual
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('manutencaoData').value = hoje;
+            document.getElementById('manutencaoKm').value = veiculo.km;
+            document.getElementById('manutencaoKm').min = veiculo.km;
+            
+            document.getElementById('manutencaoTipo').value = '';
+            document.getElementById('manutencaoDescricao').value = '';
+            document.getElementById('manutencaoValor').value = '';
+            document.getElementById('manutencaoFornecedor').value = '';
+            
+            document.getElementById('modalManutencao').classList.add('show');
+        }
+
+        function fecharModalManutencao() {
+            document.getElementById('modalManutencao').classList.remove('show');
+            veiculoManutencaoId = null;
+        }
+
+        function confirmarManutencao() {
+            const tipo = document.getElementById('manutencaoTipo').value;
+            const data = document.getElementById('manutencaoData').value;
+            const km = parseInt(document.getElementById('manutencaoKm').value);
+            const descricao = document.getElementById('manutencaoDescricao').value.trim();
+            const valor = parseFloat(document.getElementById('manutencaoValor').value) || 0;
+            const fornecedor = document.getElementById('manutencaoFornecedor').value.trim();
+
+            if (!tipo) {
+                alert('Por favor, selecione o tipo de manutenção.');
+                return;
+            }
+
+            if (!data) {
+                alert('Por favor, informe a data da manutenção.');
+                return;
+            }
+
+            if (!km || km < 0) {
+                alert('Por favor, informe uma quilometragem válida.');
+                return;
+            }
+
+            if (!descricao) {
+                alert('Por favor, descreva o serviço realizado.');
+                return;
+            }
+
+            if (!valor || valor <= 0) {
+                alert('Por favor, informe o valor da manutenção.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoManutencaoId);
+            if (!veiculo) {
+                alert('Veículo não encontrado.');
+                return;
+            }
+
+            // Atualiza KM do veículo
+            const idx = veiculos.findIndex(v => v.id === veiculoManutencaoId);
+            if (idx !== -1 && km > veiculo.km) {
+                veiculos[idx].km = km;
+                setVeiculos(veiculos);
+            }
+
+            // Registra manutenção
+            const manutencoes = getManutencoes();
+            const manutencao = {
+                id: Date.now() + Math.random() * 1000,
+                veiculoId: veiculoManutencaoId,
+                veiculoPlaca: veiculo.placa,
+                veiculoMarca: veiculo.marca,
+                veiculoModelo: veiculo.modelo,
+                tipo: tipo,
+                data: data,
+                km: km,
+                descricao: descricao,
+                valor: valor,
+                fornecedor: fornecedor || 'Não informado',
+                dataRegistro: new Date().toLocaleString('pt-BR')
+            };
+            manutencoes.push(manutencao);
+            setManutencoes(manutencoes);
+
+            fecharModalManutencao();
+            renderManutencao();
+            renderRelatorios();
+            alert('✅ Manutenção registrada com sucesso!');
+        }
+
+        // ============================================
+        //  MODAL DETALHES MANUTENÇÃO
+        // ============================================
+        function abrirModalManutencaoDetalhes(veiculoId) {
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            const manutencoes = getManutencoes();
+            const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === veiculoId);
+
+            if (!veiculo || manutencoesVeiculo.length === 0) {
+                alert('Nenhuma manutenção registrada para este veículo.');
+                return;
+            }
+
+            const modal = document.getElementById('modalCaminhao');
+            const container = document.getElementById('caminhaoContainer');
+            
+            document.getElementById('modalVeiculoTitle').textContent = 
+                `🔧 Manutenções - ${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
+
+            let html = `
+                <div style="max-height:500px; overflow-y:auto; width:100%;">
+                    <div style="margin-bottom:15px; padding:10px; background:#f8f9fa; border-radius:8px;">
+                        <strong>Total de Manutenções:</strong> ${manutencoesVeiculo.length} | 
+                        <strong>Valor Total:</strong> R$ ${manutencoesVeiculo.reduce((sum, m) => sum + m.valor, 0).toFixed(2)}
+                    </div>
+            `;
+
+            manutencoesVeiculo.sort((a, b) => new Date(b.data) - new Date(a.data)).forEach((m, index) => {
+                const badgeTipo = {
+                    'preventiva': 'badge-preventiva',
+                    'corretiva': 'badge-corretiva',
+                    'revisao': 'badge-revisao'
+                } [m.tipo] || '';
+
+                html += `
+                    <div class="manutencao-item">
+                        <div class="header">
+                            <span class="tipo">#${index + 1} - ${m.tipo.toUpperCase()}</span>
+                            <span class="data">${m.data} • ${m.km}km</span>
+                        </div>
+                        <div class="descricao">${m.descricao}</div>
+                        <div style="display:flex; justify-content:space-between; margin-top:5px;">
+                            <span class="valor">R$ ${m.valor.toFixed(2)}</span>
+                            <span class="km">Fornecedor: ${m.fornecedor || 'Não informado'}</span>
+                        </div>
+                        <button class="btn-danger" onclick="excluirManutencao(${m.id})" style="margin-top:8px; padding:4px 12px; font-size:11px;">
+                            🗑️ Excluir
+                        </button>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+            modal.classList.add('show');
+        }
+
+        function excluirManutencao(id) {
+            if (!confirm('Tem certeza que deseja excluir esta manutenção?')) return;
+            
+            let manutencoes = getManutencoes();
+            manutencoes = manutencoes.filter(m => m.id !== id);
+            setManutencoes(manutencoes);
+            
+            // Recarrega a visualização
+            const modal = document.getElementById('modalCaminhao');
+            if (modal.classList.contains('show')) {
+                const veiculoId = manutencoes.find(m => m.id === id)?.veiculoId;
+                if (veiculoId) {
+                    abrirModalManutencaoDetalhes(veiculoId);
+                }
+            }
+            
+            renderManutencao();
+            renderRelatorios();
+            alert('✅ Manutenção excluída com sucesso!');
+        }
+
+        // ============================================
         //  RENDER DESCARTADOS COM FILTROS
         // ============================================
         let descartadosFiltrados = [];
@@ -2864,6 +3415,8 @@
         function renderRelatorios() {
             const pneus = getPneus();
             const veiculos = getVeiculos();
+            const pecas = getPecas();
+            const manutencoes = getManutencoes();
 
             // Resumo Geral
             const totalPneus = pneus.length;
@@ -2887,7 +3440,6 @@
                 let index = 0;
                 pneusInstaladosList.forEach(p => {
                     index++;
-                    // Encontra o veículo onde o pneu está instalado
                     let veiculo = null;
                     veiculos.forEach(v => {
                         if (v.pneus) {
@@ -2937,10 +3489,87 @@
                 tbodyCusto.innerHTML = htmlCusto;
             }
 
+            // Custo de Peças por Veículo
+            const tbodyPecas = document.getElementById('relatorioCustoPecasBody');
+            const pecasInstaladas = pecas.filter(p => p.status === 'instalado');
+
+            if (pecasInstaladas.length === 0) {
+                tbodyPecas.innerHTML = `<tr><td colspan="5" class="empty-state"><p>Nenhuma peça instalada em veículos.</p></td></tr>`;
+            } else {
+                const custoPorVeiculo = {};
+                pecasInstaladas.forEach(p => {
+                    const veiculo = p.veiculoInstalado || 'Não identificado';
+                    if (!custoPorVeiculo[veiculo]) {
+                        custoPorVeiculo[veiculo] = { total: 0, quantidade: 0 };
+                    }
+                    custoPorVeiculo[veiculo].total += p.valor;
+                    custoPorVeiculo[veiculo].quantidade += 1;
+                });
+
+                let htmlPecas = '';
+                let indexPecas = 0;
+                Object.entries(custoPorVeiculo).forEach(([veiculo, dados]) => {
+                    indexPecas++;
+                    // Busca detalhes do veículo
+                    let veiculoInfo = veiculo;
+                    const veiculoEncontrado = veiculos.find(v => v.placa === veiculo || 
+                        `${v.marca} ${v.modelo}` === veiculo);
+                    if (veiculoEncontrado) {
+                        veiculoInfo = `${veiculoEncontrado.marca} ${veiculoEncontrado.modelo}`;
+                    }
+
+                    htmlPecas += `
+                            <tr>
+                                <td>${indexPecas}</td>
+                                <td><strong>${veiculoInfo}</strong></td>
+                                <td>${veiculo}</td>
+                                <td>${dados.quantidade}</td>
+                                <td>R$ ${dados.total.toFixed(2)}</td>
+                            </tr>
+                        `;
+                });
+                tbodyPecas.innerHTML = htmlPecas;
+            }
+
+            // Custos de Manutenção por Veículo
+            const tbodyManutencao = document.getElementById('relatorioCustoManutencaoBody');
+
+            if (manutencoes.length === 0) {
+                tbodyManutencao.innerHTML = `<tr><td colspan="5" class="empty-state"><p>Nenhuma manutenção registrada.</p></td></tr>`;
+            } else {
+                const custoManutencao = {};
+                manutencoes.forEach(m => {
+                    const key = m.veiculoPlaca || 'Não identificado';
+                    if (!custoManutencao[key]) {
+                        custoManutencao[key] = { total: 0, quantidade: 0, marca: m.veiculoMarca || '', modelo: m.veiculoModelo || '' };
+                    }
+                    custoManutencao[key].total += m.valor;
+                    custoManutencao[key].quantidade += 1;
+                });
+
+                let htmlManutencao = '';
+                let indexManutencao = 0;
+                Object.entries(custoManutencao).forEach(([placa, dados]) => {
+                    indexManutencao++;
+                    const nomeVeiculo = dados.marca && dados.modelo ? `${dados.marca} ${dados.modelo}` : placa;
+
+                    htmlManutencao += `
+                            <tr>
+                                <td>${indexManutencao}</td>
+                                <td><strong>${nomeVeiculo}</strong></td>
+                                <td>${placa}</td>
+                                <td>${dados.quantidade}</td>
+                                <td>R$ ${dados.total.toFixed(2)}</td>
+                            </tr>
+                        `;
+                });
+                tbodyManutencao.innerHTML = htmlManutencao;
+            }
+
             // Histórico de Pneus Removidos
             const tbodyHistorico = document.getElementById('relatorioHistoricoBody');
-            // Busca no histórico de cada pneu por remoções
             const removidos = [];
+
             pneus.forEach(p => {
                 if (p.historico) {
                     p.historico.forEach(h => {
@@ -2955,7 +3584,6 @@
                 }
             });
 
-            // Também busca pneus descartados
             const descartados = getDescartados();
             descartados.forEach(p => {
                 removidos.push({
@@ -2981,7 +3609,6 @@
                     const kmRodados = Math.max(0, kmFinal - kmInicial);
                     const custoPorKm = kmRodados > 0 ? p.valor / kmRodados : p.valor;
 
-                    // Extrai KM da remoção do histórico
                     let kmRemocao = 0;
                     if (p.historico) {
                         p.historico.forEach(h => {
@@ -3058,11 +3685,17 @@
                     });
                     setPecas(pecas);
                 }
+
+                // Remove manutenções associadas
+                let manutencoes = getManutencoes();
+                manutencoes = manutencoes.filter(m => m.veiculoId !== id);
+                setManutencoes(manutencoes);
             }
 
             const novosVeiculos = veiculos.filter(v => v.id !== id);
             setVeiculos(novosVeiculos);
             renderVeiculos();
+            renderManutencao();
             renderEstoque();
             renderPecas();
             renderRelatorios();
@@ -3075,6 +3708,7 @@
                 veiculos[idx].status = veiculos[idx].status === 'ativo' ? 'inativo' : 'ativo';
                 setVeiculos(veiculos);
                 renderVeiculos();
+                renderManutencao();
             }
         }
 
@@ -4000,6 +4634,7 @@
             fecharModalInstalacaoPeca();
             renderVeiculos();
             renderPecas();
+            renderRelatorios();
             
             alert(`✅ Peça ${peca.nome} instalada com sucesso!`);
         }
@@ -4039,6 +4674,7 @@
                 fecharModalServico();
                 fecharModalSelecaoPeca();
                 fecharModalInstalacaoPeca();
+                fecharModalManutencao();
             }
         });
 
@@ -4065,6 +4701,9 @@
         });
         document.getElementById('modalInstalacaoPeca').addEventListener('click', function(e) {
             if (e.target === this) fecharModalInstalacaoPeca();
+        });
+        document.getElementById('modalManutencao').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalManutencao();
         });
     </script>
 </body>
