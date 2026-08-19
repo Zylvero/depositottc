@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Controle de Estoque</title>
     <style>
+        /* ... (mesmo CSS anterior) ... */
         * {
             margin: 0;
             padding: 0;
@@ -2314,7 +2315,7 @@
         }
 
         // ============================================
-        //  VARIÁVEIS GLOBAIS
+        //  VARIÁVEIS GLOBAIS PARA INSTALAÇÃO
         // ============================================
         let veiculoAtual = null;
         let slotSelecionado = null;
@@ -2474,7 +2475,9 @@
             const veiculo = veiculos.find(v => v.id === veiculoId);
             if (!veiculo) return;
 
+            // Salva o ID do veículo para uso posterior
             veiculoInstalacaoId = veiculoId;
+            slotSelecionado = slotId;
 
             // Busca pneus disponíveis (status disponivel)
             const pneus = getPneus();
@@ -2493,7 +2496,7 @@
             info.textContent = `Selecione um pneu para instalar em: ${nomeSlot}`;
 
             lista.innerHTML = pneusDisponiveis.map(p => `
-                    <div class="item-pneu-disponivel" onclick="abrirModalInstalacao(${p.id}, '${slotId}')">
+                    <div class="item-pneu-disponivel" onclick="abrirModalInstalacao(${p.id})">
                         <div class="info">
                             <span class="nome">${p.nome}</span>
                             <span class="detalhes">${p.tamanho} • ${p.tipo} • ${p.situacao} • R$ ${p.valor.toFixed(2)}</span>
@@ -2503,21 +2506,17 @@
                 `).join('');
 
             modal.classList.add('show');
-            slotSelecionado = slotId;
         }
 
         function fecharModalSelecao() {
             document.getElementById('modalSelecao').classList.remove('show');
-            slotSelecionado = null;
-            pneuSelecionadoId = null;
         }
 
         // ============================================
         //  MODAL DE INSTALAÇÃO (KM) - CORRIGIDO
         // ============================================
-        function abrirModalInstalacao(pneuId, slotId) {
+        function abrirModalInstalacao(pneuId) {
             pneuSelecionadoId = pneuId;
-            slotSelecionado = slotId;
 
             // Recupera o veículo usando o ID salvo
             const veiculos = getVeiculos();
@@ -2529,7 +2528,7 @@
             veiculoAtual = veiculo;
 
             document.getElementById('infoInstalacao').textContent = 
-                `Instalando pneu em: ${slotId.replace(/-/g, ' ')} - Veículo: ${veiculo.marca} ${veiculo.modelo}`;
+                `Instalando pneu em: ${slotSelecionado.replace(/-/g, ' ')} - Veículo: ${veiculo.marca} ${veiculo.modelo}`;
             document.getElementById('kmInstalacao').value = veiculo.km;
             document.getElementById('kmInstalacao').min = veiculo.km;
 
