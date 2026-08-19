@@ -411,6 +411,21 @@
             background: #4a148c;
         }
 
+        .btn-teal {
+            background: #00695c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 13px;
+        }
+
+        .btn-teal:hover {
+            background: #004d40;
+        }
+
         .estoque-header,
         .veiculos-header {
             display: flex;
@@ -441,6 +456,67 @@
             font-size: 14px;
             font-weight: 600;
             color: #333;
+        }
+
+        /* Filtros */
+        .filtros-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            align-items: flex-end;
+        }
+
+        .filtros-container .form-group {
+            flex: 1;
+            min-width: 150px;
+            margin-bottom: 0;
+        }
+
+        .filtros-container .form-group label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .filtros-container .form-group input,
+        .filtros-container .form-group select {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .filtros-container .btn-filtro {
+            padding: 8px 20px;
+            background: #2a5f7a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            height: 38px;
+        }
+
+        .filtros-container .btn-filtro:hover {
+            background: #1a3a5c;
+        }
+
+        .filtros-container .btn-limpar {
+            padding: 8px 20px;
+            background: #e8ecf0;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            height: 38px;
+        }
+
+        .filtros-container .btn-limpar:hover {
+            background: #d0d4d9;
         }
 
         .table-responsive {
@@ -820,7 +896,6 @@
             font-size: 14px;
         }
 
-        /* Estilos para Peças */
         .pecas-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1222,6 +1297,55 @@
             background: #d0d4d9;
         }
 
+        /* Relatórios */
+        .relatorio-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e8ecf0;
+        }
+
+        .relatorio-card h3 {
+            color: #1a3a5c;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .relatorio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .relatorio-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .relatorio-item .valor {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a3a5c;
+        }
+
+        .relatorio-item .label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .relatorio-item .destaque {
+            color: #c62828;
+        }
+
+        .relatorio-item .positivo {
+            color: #2e7d32;
+        }
+
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -1268,6 +1392,15 @@
             }
             .modal-content {
                 padding: 20px;
+            }
+            .filtros-container {
+                flex-direction: column;
+            }
+            .filtros-container .form-group {
+                min-width: 100%;
+            }
+            .relatorio-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -1330,6 +1463,7 @@
                 <button data-tab="tab-pecas" onclick="switchTab('tab-pecas')">🔧 Estoque de Peças</button>
                 <button data-tab="tab-veiculos" onclick="switchTab('tab-veiculos')">🚗 Veículos</button>
                 <button data-tab="tab-descartados" onclick="switchTab('tab-descartados')">🗑️ Descartados</button>
+                <button data-tab="tab-relatorios" onclick="switchTab('tab-relatorios')">📊 Relatórios</button>
             </div>
 
             <div class="tab-content">
@@ -1414,6 +1548,47 @@
                             <span id="totalItensPneus">Itens: 0</span>
                         </div>
                     </div>
+
+                    <!-- Filtros -->
+                    <div class="filtros-container" id="filtrosPneus">
+                        <div class="form-group">
+                            <label>Buscar por Nome</label>
+                            <input type="text" id="filtroPneuNome" placeholder="Digite o nome..." oninput="filtrarPneus()">
+                        </div>
+                        <div class="form-group">
+                            <label>Tamanho</label>
+                            <select id="filtroPneuTamanho" onchange="filtrarPneus()">
+                                <option value="">Todos</option>
+                                <option value="215">215</option>
+                                <option value="235">235</option>
+                                <option value="275">275</option>
+                                <option value="295">295</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Situação</label>
+                            <select id="filtroPneuSituacao" onchange="filtrarPneus()">
+                                <option value="">Todos</option>
+                                <option value="novo">Novo</option>
+                                <option value="meia vida">Meia Vida</option>
+                                <option value="recapado">Recapado</option>
+                                <option value="carcaça">Carcaça</option>
+                                <option value="vulcanizado">Vulcanizado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="filtroPneuStatus" onchange="filtrarPneus()">
+                                <option value="">Todos</option>
+                                <option value="disponivel">Disponível</option>
+                                <option value="instalado">Instalado</option>
+                                <option value="recapagem">Em Recapagem</option>
+                                <option value="vulcanizacao">Em Vulcanização</option>
+                            </select>
+                        </div>
+                        <button class="btn-limpar" onclick="limparFiltrosPneus()">Limpar Filtros</button>
+                    </div>
+
                     <div class="table-responsive">
                         <table>
                             <thead>
@@ -1486,6 +1661,37 @@
                             <span id="totalItensPecas">Itens: 0</span>
                         </div>
                     </div>
+
+                    <!-- Filtros Peças -->
+                    <div class="filtros-container" id="filtrosPecas">
+                        <div class="form-group">
+                            <label>Buscar por Nome</label>
+                            <input type="text" id="filtroPecaNome" placeholder="Digite o nome..." oninput="filtrarPecas()">
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select id="filtroPecaCategoria" onchange="filtrarPecas()">
+                                <option value="">Todos</option>
+                                <option value="filtro">Filtro</option>
+                                <option value="freio">Freio</option>
+                                <option value="oleo">Óleo</option>
+                                <option value="suspensao">Suspensão</option>
+                                <option value="motor">Motor</option>
+                                <option value="eletrica">Elétrica</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="filtroPecaStatus" onchange="filtrarPecas()">
+                                <option value="">Todos</option>
+                                <option value="disponivel">Disponível</option>
+                                <option value="instalado">Instalado</option>
+                            </select>
+                        </div>
+                        <button class="btn-limpar" onclick="limparFiltrosPecas()">Limpar Filtros</button>
+                    </div>
+
                     <div id="pecasGrid" class="pecas-grid"></div>
                 </div>
 
@@ -1549,6 +1755,27 @@
                         </div>
                     </div>
 
+                    <!-- Filtros Veículos -->
+                    <div class="filtros-container" id="filtrosVeiculos">
+                        <div class="form-group">
+                            <label>Buscar por Placa</label>
+                            <input type="text" id="filtroVeiculoPlaca" placeholder="Digite a placa..." oninput="filtrarVeiculos()">
+                        </div>
+                        <div class="form-group">
+                            <label>Motorista</label>
+                            <input type="text" id="filtroVeiculoMotorista" placeholder="Nome do motorista..." oninput="filtrarVeiculos()">
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="filtroVeiculoStatus" onchange="filtrarVeiculos()">
+                                <option value="">Todos</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                        </div>
+                        <button class="btn-limpar" onclick="limparFiltrosVeiculos()">Limpar Filtros</button>
+                    </div>
+
                     <div id="veiculosGrid" class="veiculos-grid"></div>
                 </div>
 
@@ -1560,6 +1787,30 @@
                             <span id="totalDescartados">Total: 0</span>
                         </div>
                     </div>
+
+                    <!-- Filtros Descartados -->
+                    <div class="filtros-container" id="filtrosDescartados">
+                        <div class="form-group">
+                            <label>Buscar por Nome</label>
+                            <input type="text" id="filtroDescarteNome" placeholder="Digite o nome..." oninput="filtrarDescartados()">
+                        </div>
+                        <div class="form-group">
+                            <label>Tamanho</label>
+                            <select id="filtroDescarteTamanho" onchange="filtrarDescartados()">
+                                <option value="">Todos</option>
+                                <option value="215">215</option>
+                                <option value="235">235</option>
+                                <option value="275">275</option>
+                                <option value="295">295</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Motivo</label>
+                            <input type="text" id="filtroDescarteMotivo" placeholder="Motivo..." oninput="filtrarDescartados()">
+                        </div>
+                        <button class="btn-limpar" onclick="limparFiltrosDescartados()">Limpar Filtros</button>
+                    </div>
+
                     <div class="table-responsive">
                         <table>
                             <thead>
@@ -1578,6 +1829,86 @@
                                 <tr><td colspan="8" class="empty-state"><p>Nenhum pneu descartado ainda.</p></td></tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- TAB RELATÓRIOS -->
+                <div id="tab-relatorios" class="tab-pane">
+                    <h2 style="color:#1a3a5c; margin-bottom:20px;">📊 Relatórios de Custo por KM</h2>
+
+                    <!-- Resumo Geral -->
+                    <div class="relatorio-card">
+                        <h3>Resumo Geral</h3>
+                        <div class="relatorio-grid" id="resumoGeral">
+                            <div class="relatorio-item">
+                                <div class="valor" id="totalPneusRelatorio">0</div>
+                                <div class="label">Total de Pneus</div>
+                            </div>
+                            <div class="relatorio-item">
+                                <div class="valor" id="totalPneusInstalados">0</div>
+                                <div class="label">Pneus Instalados</div>
+                            </div>
+                            <div class="relatorio-item">
+                                <div class="valor" id="totalPneusDisponiveis">0</div>
+                                <div class="label">Pneus Disponíveis</div>
+                            </div>
+                            <div class="relatorio-item">
+                                <div class="valor" id="valorTotalPneus">R$ 0,00</div>
+                                <div class="label">Valor Total em Estoque</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custo por KM dos Pneus -->
+                    <div class="relatorio-card">
+                        <h3>📈 Custo por KM dos Pneus</h3>
+                        <p style="color:#666; margin-bottom:15px; font-size:14px;">Cálculo baseado no valor do pneu e quilometragem percorrida desde a instalação</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pneu</th>
+                                        <th>Veículo</th>
+                                        <th>Valor (R$)</th>
+                                        <th>KM Instalação</th>
+                                        <th>KM Atual</th>
+                                        <th>KM Rodados</th>
+                                        <th>Custo por KM (R$)</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioCustoKmBody">
+                                    <tr><td colspan="9" class="empty-state"><p>Nenhum pneu instalado para calcular custo por KM.</p></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Histórico de Pneus Removidos -->
+                    <div class="relatorio-card">
+                        <h3>📋 Histórico de Pneus Removidos</h3>
+                        <p style="color:#666; margin-bottom:15px; font-size:14px;">Custo por KM de pneus que já foram removidos dos veículos</p>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pneu</th>
+                                        <th>Veículo</th>
+                                        <th>Valor (R$)</th>
+                                        <th>KM Inicial</th>
+                                        <th>KM Final</th>
+                                        <th>KM Rodados</th>
+                                        <th>Custo por KM (R$)</th>
+                                        <th>Destino</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioHistoricoBody">
+                                    <tr><td colspan="9" class="empty-state"><p>Nenhum pneu removido ainda.</p></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -1901,6 +2232,7 @@
             renderPecas();
             renderVeiculos();
             renderDescartados();
+            renderRelatorios();
             switchTab('tab-cadastro');
         }
 
@@ -1955,6 +2287,9 @@
             }
             if (tabId === 'tab-descartados') {
                 renderDescartados();
+            }
+            if (tabId === 'tab-relatorios') {
+                renderRelatorios();
             }
         }
 
@@ -2036,6 +2371,7 @@
                     quantidade: 1,
                     status: 'disponivel',
                     veiculoInstalado: null,
+                    kmInstalacao: null,
                     dataCadastro: new Date().toLocaleDateString('pt-BR'),
                     historico: [{
                         data: new Date().toLocaleString('pt-BR'),
@@ -2118,21 +2454,36 @@
         }
 
         // ============================================
-        //  RENDER ESTOQUE DE PNEUS
+        //  RENDER ESTOQUE DE PNEUS COM FILTROS
         // ============================================
+        let pneusFiltrados = [];
+
         function renderEstoque() {
             const pneus = getPneus();
+            const filtroNome = document.getElementById('filtroPneuNome')?.value.toLowerCase() || '';
+            const filtroTamanho = document.getElementById('filtroPneuTamanho')?.value || '';
+            const filtroSituacao = document.getElementById('filtroPneuSituacao')?.value || '';
+            const filtroStatus = document.getElementById('filtroPneuStatus')?.value || '';
+
+            pneusFiltrados = pneus.filter(p => {
+                const matchNome = p.nome.toLowerCase().includes(filtroNome);
+                const matchTamanho = !filtroTamanho || p.tamanho === filtroTamanho;
+                const matchSituacao = !filtroSituacao || p.situacao === filtroSituacao;
+                const matchStatus = !filtroStatus || p.status === filtroStatus;
+                return matchNome && matchTamanho && matchSituacao && matchStatus;
+            });
+
             const tbody = document.getElementById('estoqueTableBody');
 
-            if (pneus.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="10" class="empty-state"><p>Nenhum pneu cadastrado ainda.</p></td></tr>`;
-                document.getElementById('totalPneus').textContent = 'Total: 0';
-                document.getElementById('totalItensPneus').textContent = 'Itens: 0';
+            if (pneusFiltrados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="empty-state"><p>${pneus.length === 0 ? 'Nenhum pneu cadastrado ainda.' : 'Nenhum pneu encontrado com os filtros aplicados.'}</p></td></tr>`;
+                document.getElementById('totalPneus').textContent = `Total: ${pneus.length}`;
+                document.getElementById('totalItensPneus').textContent = `Itens: ${pneus.length}`;
                 return;
             }
 
             const grupos = {};
-            pneus.forEach(p => {
+            pneusFiltrados.forEach(p => {
                 const key = `${p.nome}-${p.tamanho}-${p.tipo}-${p.situacao}-${p.status}`;
                 if (!grupos[key]) {
                     grupos[key] = {
@@ -2145,7 +2496,7 @@
                 grupos[key].ids.push(p.id);
             });
 
-            let totalQtd = pneus.length;
+            let totalQtd = pneusFiltrados.length;
             let html = '';
             let index = 0;
             Object.values(grupos).forEach(g => {
@@ -2219,8 +2570,20 @@
             });
 
             tbody.innerHTML = html;
-            document.getElementById('totalPneus').textContent = `Total: ${Object.keys(grupos).length}`;
+            document.getElementById('totalPneus').textContent = `Total: ${pneus.length}`;
             document.getElementById('totalItensPneus').textContent = `Itens: ${totalQtd}`;
+        }
+
+        function filtrarPneus() {
+            renderEstoque();
+        }
+
+        function limparFiltrosPneus() {
+            document.getElementById('filtroPneuNome').value = '';
+            document.getElementById('filtroPneuTamanho').value = '';
+            document.getElementById('filtroPneuSituacao').value = '';
+            document.getElementById('filtroPneuStatus').value = '';
+            renderEstoque();
         }
 
         function excluirPneuGrupo(idsString) {
@@ -2234,21 +2597,34 @@
         }
 
         // ============================================
-        //  RENDER ESTOQUE DE PEÇAS
+        //  RENDER ESTOQUE DE PEÇAS COM FILTROS
         // ============================================
+        let pecasFiltradas = [];
+
         function renderPecas() {
             const pecas = getPecas();
+            const filtroNome = document.getElementById('filtroPecaNome')?.value.toLowerCase() || '';
+            const filtroCategoria = document.getElementById('filtroPecaCategoria')?.value || '';
+            const filtroStatus = document.getElementById('filtroPecaStatus')?.value || '';
+
+            pecasFiltradas = pecas.filter(p => {
+                const matchNome = p.nome.toLowerCase().includes(filtroNome);
+                const matchCategoria = !filtroCategoria || p.categoria === filtroCategoria;
+                const matchStatus = !filtroStatus || p.status === filtroStatus;
+                return matchNome && matchCategoria && matchStatus;
+            });
+
             const grid = document.getElementById('pecasGrid');
 
-            if (pecas.length === 0) {
-                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>Nenhuma peça cadastrada ainda.</p></div>`;
-                document.getElementById('totalPecas').textContent = 'Total: 0';
-                document.getElementById('totalItensPecas').textContent = 'Itens: 0';
+            if (pecasFiltradas.length === 0) {
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>${pecas.length === 0 ? 'Nenhuma peça cadastrada ainda.' : 'Nenhuma peça encontrada com os filtros aplicados.'}</p></div>`;
+                document.getElementById('totalPecas').textContent = `Total: ${pecas.length}`;
+                document.getElementById('totalItensPecas').textContent = `Itens: ${pecas.length}`;
                 return;
             }
 
             const grupos = {};
-            pecas.forEach(p => {
+            pecasFiltradas.forEach(p => {
                 const key = `${p.nome}-${p.categoria}-${p.status}`;
                 if (!grupos[key]) {
                     grupos[key] = {
@@ -2261,7 +2637,7 @@
                 grupos[key].ids.push(p.id);
             });
 
-            let totalQtd = pecas.length;
+            let totalQtd = pecasFiltradas.length;
             let html = '';
             Object.values(grupos).forEach(g => {
                 const badgeStatus = {
@@ -2319,8 +2695,19 @@
             });
 
             grid.innerHTML = html;
-            document.getElementById('totalPecas').textContent = `Total: ${Object.keys(grupos).length}`;
+            document.getElementById('totalPecas').textContent = `Total: ${pecas.length}`;
             document.getElementById('totalItensPecas').textContent = `Itens: ${totalQtd}`;
+        }
+
+        function filtrarPecas() {
+            renderPecas();
+        }
+
+        function limparFiltrosPecas() {
+            document.getElementById('filtroPecaNome').value = '';
+            document.getElementById('filtroPecaCategoria').value = '';
+            document.getElementById('filtroPecaStatus').value = '';
+            renderPecas();
         }
 
         function excluirPecaGrupo(idsString) {
@@ -2334,107 +2721,35 @@
         }
 
         // ============================================
-        //  RENDER DESCARTADOS
+        //  RENDER VEÍCULOS COM FILTROS
         // ============================================
-        function renderDescartados() {
-            const descartados = getDescartados();
-            const tbody = document.getElementById('descartadosTableBody');
-
-            if (descartados.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="empty-state"><p>Nenhum pneu descartado ainda.</p></td></tr>`;
-                document.getElementById('totalDescartados').textContent = 'Total: 0';
-                return;
-            }
-
-            let html = '';
-            descartados.forEach((p, index) => {
-                const badgeTipo = {
-                    'liso': 'badge-liso',
-                    'misto': 'badge-misto',
-                    'borrachudo': 'badge-borrachudo'
-                } [p.tipo] || '';
-
-                html += `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td><strong>${p.nome}</strong></td>
-                            <td>${p.dot || '-'}</td>
-                            <td>${p.tamanho}</td>
-                            <td><span class="badge ${badgeTipo}">${p.tipo}</span></td>
-                            <td>${p.motivoDescarte || 'Descarte'}</td>
-                            <td>${p.dataDescarte || p.dataCadastro}</td>
-                            <td>R$ ${p.valor.toFixed(2)}</td>
-                        </tr>
-                    `;
-            });
-
-            tbody.innerHTML = html;
-            document.getElementById('totalDescartados').textContent = `Total: ${descartados.length}`;
-        }
-
-        // ============================================
-        //  VEÍCULOS
-        // ============================================
-        function cadastrarVeiculo(e) {
-            e.preventDefault();
-
-            const marca = document.getElementById('veiculoMarca').value.trim();
-            const modelo = document.getElementById('veiculoModelo').value.trim();
-            const placa = document.getElementById('veiculoPlaca').value.trim().toUpperCase();
-            const motorista = document.getElementById('veiculoMotorista').value.trim();
-            const km = parseInt(document.getElementById('veiculoKm').value) || 0;
-            const eixos = parseInt(document.getElementById('veiculoEixos').value);
-            const status = document.getElementById('veiculoStatus').value;
-
-            if (!marca || !modelo || !placa || !motorista) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-
-            const veiculos = getVeiculos();
-            if (veiculos.find(v => v.placa === placa)) {
-                alert('Esta placa já está cadastrada.');
-                return;
-            }
-
-            const veiculo = {
-                id: Date.now(),
-                marca,
-                modelo,
-                placa,
-                motorista,
-                km,
-                eixos,
-                status,
-                pneus: {},
-                pecas: {},
-                dataCadastro: new Date().toLocaleDateString('pt-BR')
-            };
-
-            veiculos.push(veiculo);
-            setVeiculos(veiculos);
-
-            document.getElementById('veiculoForm').reset();
-            document.getElementById('veiculoKm').value = '0';
-
-            renderVeiculos();
-            alert('✅ Veículo cadastrado com sucesso!');
-        }
+        let veiculosFiltrados = [];
 
         function renderVeiculos() {
             const veiculos = getVeiculos();
+            const filtroPlaca = document.getElementById('filtroVeiculoPlaca')?.value.toUpperCase() || '';
+            const filtroMotorista = document.getElementById('filtroVeiculoMotorista')?.value.toLowerCase() || '';
+            const filtroStatus = document.getElementById('filtroVeiculoStatus')?.value || '';
+
+            veiculosFiltrados = veiculos.filter(v => {
+                const matchPlaca = v.placa.includes(filtroPlaca);
+                const matchMotorista = v.motorista.toLowerCase().includes(filtroMotorista);
+                const matchStatus = !filtroStatus || v.status === filtroStatus;
+                return matchPlaca && matchMotorista && matchStatus;
+            });
+
             const grid = document.getElementById('veiculosGrid');
 
-            if (veiculos.length === 0) {
-                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>Nenhum veículo cadastrado ainda.</p></div>`;
-                document.getElementById('totalVeiculos').textContent = 'Total: 0';
-                document.getElementById('veiculosAtivos').textContent = 'Ativos: 0';
+            if (veiculosFiltrados.length === 0) {
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>${veiculos.length === 0 ? 'Nenhum veículo cadastrado ainda.' : 'Nenhum veículo encontrado com os filtros aplicados.'}</p></div>`;
+                document.getElementById('totalVeiculos').textContent = `Total: ${veiculos.length}`;
+                document.getElementById('veiculosAtivos').textContent = `Ativos: ${veiculos.filter(v => v.status === 'ativo').length}`;
                 return;
             }
 
             let ativos = 0;
             let html = '';
-            veiculos.forEach((v) => {
+            veiculosFiltrados.forEach((v) => {
                 if (v.status === 'ativo') ativos++;
                 const statusBadge = v.status === 'ativo' ? 'badge-ativo' : 'badge-inativo';
                 const totalPneus = (v.eixos - 1) * 4 + 2 + 4;
@@ -2466,9 +2781,238 @@
 
             grid.innerHTML = html;
             document.getElementById('totalVeiculos').textContent = `Total: ${veiculos.length}`;
-            document.getElementById('veiculosAtivos').textContent = `Ativos: ${ativos}`;
+            document.getElementById('veiculosAtivos').textContent = `Ativos: ${veiculos.filter(v => v.status === 'ativo').length}`;
         }
 
+        function filtrarVeiculos() {
+            renderVeiculos();
+        }
+
+        function limparFiltrosVeiculos() {
+            document.getElementById('filtroVeiculoPlaca').value = '';
+            document.getElementById('filtroVeiculoMotorista').value = '';
+            document.getElementById('filtroVeiculoStatus').value = '';
+            renderVeiculos();
+        }
+
+        // ============================================
+        //  RENDER DESCARTADOS COM FILTROS
+        // ============================================
+        let descartadosFiltrados = [];
+
+        function renderDescartados() {
+            const descartados = getDescartados();
+            const filtroNome = document.getElementById('filtroDescarteNome')?.value.toLowerCase() || '';
+            const filtroTamanho = document.getElementById('filtroDescarteTamanho')?.value || '';
+            const filtroMotivo = document.getElementById('filtroDescarteMotivo')?.value.toLowerCase() || '';
+
+            descartadosFiltrados = descartados.filter(p => {
+                const matchNome = p.nome.toLowerCase().includes(filtroNome);
+                const matchTamanho = !filtroTamanho || p.tamanho === filtroTamanho;
+                const matchMotivo = (p.motivoDescarte || '').toLowerCase().includes(filtroMotivo);
+                return matchNome && matchTamanho && matchMotivo;
+            });
+
+            const tbody = document.getElementById('descartadosTableBody');
+
+            if (descartadosFiltrados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="empty-state"><p>${descartados.length === 0 ? 'Nenhum pneu descartado ainda.' : 'Nenhum pneu encontrado com os filtros aplicados.'}</p></td></tr>`;
+                document.getElementById('totalDescartados').textContent = `Total: ${descartados.length}`;
+                return;
+            }
+
+            let html = '';
+            descartadosFiltrados.forEach((p, index) => {
+                const badgeTipo = {
+                    'liso': 'badge-liso',
+                    'misto': 'badge-misto',
+                    'borrachudo': 'badge-borrachudo'
+                } [p.tipo] || '';
+
+                html += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td><strong>${p.nome}</strong></td>
+                            <td>${p.dot || '-'}</td>
+                            <td>${p.tamanho}</td>
+                            <td><span class="badge ${badgeTipo}">${p.tipo}</span></td>
+                            <td>${p.motivoDescarte || 'Descarte'}</td>
+                            <td>${p.dataDescarte || p.dataCadastro}</td>
+                            <td>R$ ${p.valor.toFixed(2)}</td>
+                        </tr>
+                    `;
+            });
+
+            tbody.innerHTML = html;
+            document.getElementById('totalDescartados').textContent = `Total: ${descartados.length}`;
+        }
+
+        function filtrarDescartados() {
+            renderDescartados();
+        }
+
+        function limparFiltrosDescartados() {
+            document.getElementById('filtroDescarteNome').value = '';
+            document.getElementById('filtroDescarteTamanho').value = '';
+            document.getElementById('filtroDescarteMotivo').value = '';
+            renderDescartados();
+        }
+
+        // ============================================
+        //  RELATÓRIOS
+        // ============================================
+        function renderRelatorios() {
+            const pneus = getPneus();
+            const veiculos = getVeiculos();
+
+            // Resumo Geral
+            const totalPneus = pneus.length;
+            const pneusInstalados = pneus.filter(p => p.status === 'instalado').length;
+            const pneusDisponiveis = pneus.filter(p => p.status === 'disponivel' || !p.status).length;
+            const valorTotal = pneus.reduce((sum, p) => sum + p.valor, 0);
+
+            document.getElementById('totalPneusRelatorio').textContent = totalPneus;
+            document.getElementById('totalPneusInstalados').textContent = pneusInstalados;
+            document.getElementById('totalPneusDisponiveis').textContent = pneusDisponiveis;
+            document.getElementById('valorTotalPneus').textContent = `R$ ${valorTotal.toFixed(2)}`;
+
+            // Custo por KM - Pneus Instalados
+            const tbodyCusto = document.getElementById('relatorioCustoKmBody');
+            const pneusInstaladosList = pneus.filter(p => p.status === 'instalado');
+
+            if (pneusInstaladosList.length === 0) {
+                tbodyCusto.innerHTML = `<tr><td colspan="9" class="empty-state"><p>Nenhum pneu instalado para calcular custo por KM.</p></td></tr>`;
+            } else {
+                let htmlCusto = '';
+                let index = 0;
+                pneusInstaladosList.forEach(p => {
+                    index++;
+                    // Encontra o veículo onde o pneu está instalado
+                    let veiculo = null;
+                    veiculos.forEach(v => {
+                        if (v.pneus) {
+                            Object.keys(v.pneus).forEach(slot => {
+                                if (v.pneus[slot] === p.id) {
+                                    veiculo = v;
+                                }
+                            });
+                        }
+                    });
+
+                    if (veiculo) {
+                        const kmInstalacao = p.kmInstalacao || veiculo.km || 0;
+                        const kmAtual = veiculo.km || 0;
+                        const kmRodados = Math.max(0, kmAtual - kmInstalacao);
+                        const custoPorKm = kmRodados > 0 ? p.valor / kmRodados : p.valor;
+
+                        htmlCusto += `
+                                <tr>
+                                    <td>${index}</td>
+                                    <td><strong>${p.nome}</strong> (${p.tamanho})</td>
+                                    <td>${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}</td>
+                                    <td>R$ ${p.valor.toFixed(2)}</td>
+                                    <td>${kmInstalacao.toLocaleString('pt-BR')}</td>
+                                    <td>${kmAtual.toLocaleString('pt-BR')}</td>
+                                    <td>${kmRodados.toLocaleString('pt-BR')}</td>
+                                    <td><strong>R$ ${custoPorKm.toFixed(4)}</strong></td>
+                                    <td><span class="badge badge-instalado">Instalado</span></td>
+                                </tr>
+                            `;
+                    } else {
+                        htmlCusto += `
+                                <tr>
+                                    <td>${index}</td>
+                                    <td><strong>${p.nome}</strong> (${p.tamanho})</td>
+                                    <td>${p.veiculoInstalado || 'Não identificado'}</td>
+                                    <td>R$ ${p.valor.toFixed(2)}</td>
+                                    <td>${p.kmInstalacao || 'N/A'}</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td><span class="badge badge-instalado">Instalado</span></td>
+                                </tr>
+                            `;
+                    }
+                });
+                tbodyCusto.innerHTML = htmlCusto;
+            }
+
+            // Histórico de Pneus Removidos
+            const tbodyHistorico = document.getElementById('relatorioHistoricoBody');
+            // Busca no histórico de cada pneu por remoções
+            const removidos = [];
+            pneus.forEach(p => {
+                if (p.historico) {
+                    p.historico.forEach(h => {
+                        if (h.acao === 'Remoção') {
+                            removidos.push({
+                                pneu: p,
+                                historico: h,
+                                veiculo: p.veiculoInstalado || 'Não identificado'
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Também busca pneus descartados
+            const descartados = getDescartados();
+            descartados.forEach(p => {
+                removidos.push({
+                    pneu: p,
+                    historico: {
+                        detalhes: `Descartado - ${p.motivoDescarte || 'Sem motivo'}`
+                    },
+                    veiculo: p.veiculoInstalado || 'Não identificado',
+                    isDescartado: true
+                });
+            });
+
+            if (removidos.length === 0) {
+                tbodyHistorico.innerHTML = `<tr><td colspan="9" class="empty-state"><p>Nenhum pneu removido ainda.</p></td></tr>`;
+            } else {
+                let htmlHistorico = '';
+                let indexHistorico = 0;
+                removidos.slice(0, 50).forEach(r => {
+                    indexHistorico++;
+                    const p = r.pneu;
+                    const kmInicial = p.kmInstalacao || 0;
+                    const kmFinal = p.kmRemocao || 0;
+                    const kmRodados = Math.max(0, kmFinal - kmInicial);
+                    const custoPorKm = kmRodados > 0 ? p.valor / kmRodados : p.valor;
+
+                    // Extrai KM da remoção do histórico
+                    let kmRemocao = 0;
+                    if (p.historico) {
+                        p.historico.forEach(h => {
+                            if (h.acao === 'Remoção' && h.detalhes) {
+                                const match = h.detalhes.match(/KM (\d+)/);
+                                if (match) kmRemocao = parseInt(match[1]);
+                            }
+                        });
+                    }
+
+                    htmlHistorico += `
+                            <tr>
+                                <td>${indexHistorico}</td>
+                                <td><strong>${p.nome}</strong> (${p.tamanho})</td>
+                                <td>${r.veiculo}</td>
+                                <td>R$ ${p.valor.toFixed(2)}</td>
+                                <td>${kmInicial.toLocaleString('pt-BR')}</td>
+                                <td>${kmRemocao > 0 ? kmRemocao.toLocaleString('pt-BR') : 'N/A'}</td>
+                                <td>${kmRodados > 0 ? kmRodados.toLocaleString('pt-BR') : 'N/A'}</td>
+                                <td>${kmRodados > 0 ? `R$ ${custoPorKm.toFixed(4)}` : 'N/A'}</td>
+                                <td><span class="badge badge-descarte">${r.isDescartado ? 'Descartado' : 'Removido'}</span></td>
+                            </tr>
+                        `;
+                });
+                tbodyHistorico.innerHTML = htmlHistorico;
+            }
+        }
+
+        // ============================================
+        //  VEÍCULOS - CRUD
+        // ============================================
         function excluirVeiculo(id) {
             if (!confirm('Tem certeza que deseja excluir este veículo? Isso devolverá todos os pneus e peças ao estoque.')) return;
 
@@ -2476,7 +3020,6 @@
             const veiculo = veiculos.find(v => v.id === id);
 
             if (veiculo) {
-                // Devolve pneus
                 if (veiculo.pneus) {
                     const pneus = getPneus();
                     Object.values(veiculo.pneus).forEach(pneuId => {
@@ -2484,6 +3027,7 @@
                         if (pneu) {
                             pneu.status = 'disponivel';
                             pneu.veiculoInstalado = null;
+                            pneu.kmInstalacao = null;
                             pneu.historico = pneu.historico || [];
                             pneu.historico.push({
                                 data: new Date().toLocaleString('pt-BR'),
@@ -2495,7 +3039,6 @@
                     setPneus(pneus);
                 }
 
-                // Devolve peças
                 if (veiculo.pecas) {
                     const pecas = getPecas();
                     Object.values(veiculo.pecas).forEach(pecaId => {
@@ -2522,6 +3065,7 @@
             renderVeiculos();
             renderEstoque();
             renderPecas();
+            renderRelatorios();
         }
 
         function toggleStatusVeiculo(id) {
@@ -2626,6 +3170,7 @@
             renderCaminhao(veiculo);
             renderVeiculos();
             renderEstoque();
+            renderRelatorios();
         }
 
         // ============================================
@@ -2882,6 +3427,7 @@
 
             pneu.status = 'instalado';
             pneu.veiculoInstalado = veiculoAtual.placa;
+            pneu.kmInstalacao = km;
 
             if (!veiculoAtual.pneus) veiculoAtual.pneus = {};
             veiculoAtual.pneus[slotSelecionado] = pneuSelecionadoId;
@@ -2909,6 +3455,7 @@
             renderCaminhao(veiculoTemp);
             renderVeiculos();
             renderEstoque();
+            renderRelatorios();
             
             alert(`✅ Pneu ${pneu.nome} instalado com sucesso!`);
         }
@@ -2940,6 +3487,7 @@
                     <div class="info-row"><span class="label">Situação:</span> <span>${pneu.situacao}</span></div>
                     <div class="info-row"><span class="label">Valor Total:</span> <span>R$ ${pneu.valor.toFixed(2)}</span></div>
                     <div class="info-row"><span class="label">Posição:</span> <span>${slotId.replace(/-/g, ' ')}</span></div>
+                    <div class="info-row"><span class="label">KM Instalação:</span> <span>${pneu.kmInstalacao || 'N/A'}</span></div>
                 `;
 
             document.getElementById('kmRemocao').value = veiculo.km;
@@ -3011,6 +3559,7 @@
                 'descarte': 'Descartado'
             };
 
+            pneu.kmRemocao = km;
             pneu.historico = pneu.historico || [];
             pneu.historico.push({
                 data: new Date().toLocaleString('pt-BR'),
@@ -3022,14 +3571,17 @@
                 pneu.situacao = 'meia vida';
                 pneu.status = 'disponivel';
                 pneu.veiculoInstalado = null;
+                pneu.kmInstalacao = null;
             } else if (destino === 'recapagem') {
                 pneu.status = 'recapagem';
                 pneu.situacao = 'recapado';
                 pneu.veiculoInstalado = null;
+                pneu.kmInstalacao = null;
             } else if (destino === 'vulcanizacao') {
                 pneu.status = 'vulcanizacao';
                 pneu.situacao = 'vulcanizado';
                 pneu.veiculoInstalado = null;
+                pneu.kmInstalacao = null;
             } else if (destino === 'descarte') {
                 const descartados = getDescartados();
                 pneu.motivoDescarte = 'Removido do veículo';
@@ -3047,6 +3599,7 @@
                 renderCaminhao(veiculoAtual);
                 renderVeiculos();
                 renderEstoque();
+                renderRelatorios();
                 alert(`✅ Pneu descartado com sucesso!`);
                 return;
             }
@@ -3057,6 +3610,7 @@
             renderCaminhao(veiculoAtual);
             renderVeiculos();
             renderEstoque();
+            renderRelatorios();
             alert(`✅ Pneu removido com sucesso! Destino: ${destinoLabels[destino]}`);
         }
 
@@ -3150,6 +3704,7 @@
             renderCaminhao(veiculoAtual);
             renderVeiculos();
             renderEstoque();
+            renderRelatorios();
             alert(`✅ ${servicoLabel} adicionado com sucesso! Novo valor do pneu: R$ ${pneu.valor.toFixed(2)}`);
         }
 
@@ -3249,6 +3804,7 @@
                     pneu.situacao = 'recapado';
                     pneu.status = 'disponivel';
                     pneu.veiculoInstalado = null;
+                    pneu.kmInstalacao = null;
                     pneu.historico = pneu.historico || [];
                     pneu.historico.push({
                         data: new Date().toLocaleString('pt-BR'),
@@ -3260,6 +3816,7 @@
                     pneu.situacao = 'vulcanizado';
                     pneu.status = 'disponivel';
                     pneu.veiculoInstalado = null;
+                    pneu.kmInstalacao = null;
                     pneu.historico = pneu.historico || [];
                     pneu.historico.push({
                         data: new Date().toLocaleString('pt-BR'),
@@ -3286,6 +3843,7 @@
             fecharModalEdicao();
             renderEstoque();
             renderDescartados();
+            renderRelatorios();
             
             if (acao === 'descarte') {
                 alert(`✅ ${pneusAtualizados} pneu(s) descartado(s) com sucesso!`);
@@ -3361,7 +3919,6 @@
             document.getElementById('infoInstalacaoPeca').textContent = 
                 `Instalando peça: ${peca.nome} - Veículo: ${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
             
-            // Data atual como padrão
             const hoje = new Date().toISOString().split('T')[0];
             document.getElementById('dataInstalacaoPeca').value = hoje;
             document.getElementById('kmInstalacaoPeca').value = veiculo.km;
