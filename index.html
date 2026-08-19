@@ -3138,67 +3138,77 @@
         // ============================================
         let manutencoesFiltradas = [];
 
-        function renderManutencao() {
-            const veiculos = getVeiculos();
-            const manutencoes = getManutencoes();
-            const filtroPlaca = document.getElementById('filtroManutencaoPlaca')?.value.toUpperCase() || '';
-            const filtroMotorista = document.getElementById('filtroManutencaoMotorista')?.value.toLowerCase() || '';
-            const filtroTipo = document.getElementById('filtroManutencaoTipo')?.value || '';
+        // Substitua a função renderManutencao() pelo código abaixo:
 
-            // Filtra veículos que têm manutenções
-            let veiculosComManutencao = veiculos.filter(v => {
-                const temManutencao = manutencoes.some(m => m.veiculoId === v.id);
-                const matchPlaca = v.placa.includes(filtroPlaca);
-                const matchMotorista = v.motorista.toLowerCase().includes(filtroMotorista);
-                
-                let matchTipo = true;
-                if (filtroTipo) {
-                    const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
-                    matchTipo = manutencoesVeiculo.some(m => m.tipo === filtroTipo);
-                }
-                
-                return (temManutencao || !filtroPlaca && !filtroMotorista) && matchPlaca && matchMotorista && matchTipo;
-            });
+function renderManutencao() {
+    const veiculos = getVeiculos();
+    const manutencoes = getManutencoes();
+    const filtroPlaca = document.getElementById('filtroManutencaoPlaca')?.value.toUpperCase() || '';
+    const filtroMotorista = document.getElementById('filtroManutencaoMotorista')?.value.toLowerCase() || '';
+    const filtroTipo = document.getElementById('filtroManutencaoTipo')?.value || '';
 
-            if (!filtroPlaca && !filtroMotorista && !filtroTipo) {
-                veiculosComManutencao = veiculos.filter(v => manutencoes.some(m => m.veiculoId === v.id));
-            }
+    // Filtra veículos - MOSTRA TODOS OS VEÍCULOS, não apenas os que têm manutenções
+    let veiculosFiltrados = veiculos.filter(v => {
+        const matchPlaca = v.placa.includes(filtroPlaca);
+        const matchMotorista = v.motorista.toLowerCase().includes(filtroMotorista);
+        return matchPlaca && matchMotorista;
+    });
 
-            const grid = document.getElementById('manutencaoGrid');
+    // Se houver filtro de tipo, mostra apenas veículos que têm manutenções daquele tipo
+    if (filtroTipo) {
+        veiculosFiltrados = veiculosFiltrados.filter(v => {
+            const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
+            return manutencoesVeiculo.some(m => m.tipo === filtroTipo);
+        });
+    }
 
-            if (veiculosComManutencao.length === 0) {
-                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>${veiculos.length === 0 ? 'Nenhum veículo cadastrado ainda.' : 'Nenhum veículo com manutenção registrada.'}</p></div>`;
-                return;
-            }
+    const grid = document.getElementById('manutencaoGrid');
 
-            let html = '';
-            veiculosComManutencao.forEach((v) => {
-                const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
-                const totalManutencoes = manutencoesVeiculo.length;
-                const valorTotal = manutencoesVeiculo.reduce((sum, m) => sum + m.valor, 0);
+    if (veiculosFiltrados.length === 0) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>${veiculos.length === 0 ? 'Nenhum veículo cadastrado ainda.' : 'Nenhum veículo encontrado com os filtros aplicados.'}</p></div>`;
+        return;
+    }
 
-                html += `
-                        <div class="veiculo-card" onclick="abrirModalManutencaoDetalhes(${v.id})">
-                            <div class="veiculo-card-header">
-                                <h3>${v.marca} ${v.modelo}</h3>
-                                <span class="badge ${v.status === 'ativo' ? 'badge-ativo' : 'badge-inativo'}">${v.status}</span>
-                            </div>
-                            <div class="veiculo-card-info">
-                                <span><span class="label">Placa:</span> ${v.placa}</span>
-                                <span><span class="label">Motorista:</span> ${v.motorista}</span>
-                                <span><span class="label">KM:</span> ${v.km.toLocaleString('pt-BR')}</span>
-                                <span><span class="label">Manutenções:</span> ${totalManutencoes}</span>
-                                <span style="grid-column:1/-1;"><span class="label">Valor Total:</span> R$ ${valorTotal.toFixed(2)}</span>
-                            </div>
-                            <div class="veiculo-card-actions">
-                                <button class="btn-orange" onclick="event.stopPropagation(); abrirModalManutencao(${v.id})" title="Adicionar Manutenção">➕</button>
-                            </div>
-                        </div>
-                    `;
-            });
+    let html = '';
+    veiculosFiltrados.forEach((v) => {
+        const manutencoesVeiculo = manutencoes.filter(m => m.veiculoId === v.id);
+        const totalManutencoes = manutencoesVeiculo.length;
+        const valorTotal = manutencoesVeiculo.reduce((sum, m) => sum + m.valor, 0);
 
-            grid.innerHTML = html;
-        }
+        // Pega a última manutenção para mostrar resumo
+        const ultimaManutencao = manutencoesVeiculo.length > 0 ? 
+            manutencoesVeiculo.sort((a, b) => new Date(b.data) - new Date(a.data))[0] : null;
+
+        html += `
+                <div class="veiculo-card" onclick="abrirModalManutencaoDetalhes(${v.id})">
+                    <div class="veiculo-card-header">
+                        <h3>${v.marca} ${v.modelo}</h3>
+                        <span class="badge ${v.status === 'ativo' ? 'badge-ativo' : 'badge-inativo'}">${v.status}</span>
+                    </div>
+                    <div class="veiculo-card-info">
+                        <span><span class="label">Placa:</span> ${v.placa}</span>
+                        <span><span class="label">Motorista:</span> ${v.motorista}</span>
+                        <span><span class="label">KM:</span> ${v.km.toLocaleString('pt-BR')}</span>
+                        <span><span class="label">Manutenções:</span> ${totalManutencoes}</span>
+                        ${totalManutencoes > 0 ? `
+                            <span style="grid-column:1/-1;"><span class="label">Valor Total:</span> R$ ${valorTotal.toFixed(2)}</span>
+                            <span style="grid-column:1/-1; font-size:12px; color:#666;">
+                                Última: ${ultimaManutencao ? `${ultimaManutencao.tipo} - ${ultimaManutencao.data}` : 'N/A'}
+                            </span>
+                        ` : `
+                            <span style="grid-column:1/-1; color:#999; font-style:italic;">Nenhuma manutenção registrada</span>
+                        `}
+                    </div>
+                    <div class="veiculo-card-actions">
+                        <button class="btn-orange" onclick="event.stopPropagation(); abrirModalManutencao(${v.id})" title="Adicionar Manutenção">➕ Manutenção</button>
+                        ${totalManutencoes > 0 ? `<button class="btn-info" onclick="event.stopPropagation(); abrirModalManutencaoDetalhes(${v.id})" title="Ver Detalhes">📋</button>` : ''}
+                    </div>
+                </div>
+            `;
+    });
+
+    grid.innerHTML = html;
+}
 
         function filtrarManutencao() {
             renderManutencao();
