@@ -1,7 +1,9 @@
 <!--
   - adicionar botão para alteracao de carga e botão de concluir rota.
   -adicionar motorista ao veiculo 
+  - ao adicionar um veiculo não é obrigatorio ter um motorista cadastrado
   -adicionar tipo de carga
+  - ao clicar em um veiculo, deve ser mostrado quais as peças estão montadas nele
   - nome da empresa remover o escrito ao lado e centralizar o nome da empresa na tela
   - gerar pdf dos pneus, gerar relatorio dos motoristas, rotas, relatorios, peças, manutenções, veiculos
 -->
