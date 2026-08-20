@@ -33,28 +33,23 @@
             color: white;
             padding: 20px 30px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            position: relative;
         }
 
         .header-title h1 {
             font-size: 24px;
             font-weight: 300;
             cursor: pointer;
-            padding: 5px 12px;
+            padding: 5px 20px;
             border-radius: 8px;
             transition: background 0.3s;
             border: 2px solid transparent;
+            text-align: center;
         }
 
         .header-title h1:hover {
@@ -68,13 +63,9 @@
             border-color: #ffd700;
         }
 
-        .header-title .edit-hint {
-            font-size:13px;
-            opacity:0.7;
-            cursor: default;
-        }
-
         .header-user {
+            position: absolute;
+            right: 30px;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -325,6 +316,7 @@
             display: flex;
             gap: 15px;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .btn-success {
@@ -462,6 +454,36 @@
             background: #004d40;
         }
 
+        .btn-pdf {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 13px;
+        }
+
+        .btn-pdf:hover {
+            background: #b71c1c;
+        }
+
+        .btn-export {
+            background: #2a5f7a;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 13px;
+        }
+
+        .btn-export:hover {
+            background: #1a3a5c;
+        }
+
         .estoque-header,
         .veiculos-header {
             display: flex;
@@ -482,6 +504,7 @@
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .estoque-stats span,
@@ -678,6 +701,15 @@
             color: #e65100;
         }
 
+        .badge-rota-concluida {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+        .badge-rota-andamento {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+
         .empty-state {
             text-align: center;
             padding: 50px 20px;
@@ -694,7 +726,7 @@
 
         .veiculos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
@@ -1484,7 +1516,6 @@
             transition: all 0.3s;
         }
 
-        /* Modal de Cadastro Múltiplo */
         #modalCadastroMultiplo .modal-manutencao-content {
             max-width: 700px;
         }
@@ -1499,7 +1530,6 @@
             transition: border 0.3s;
         }
 
-        /* Status do pneu individual */
         .status-disponivel { color: #1b5e20; font-weight: 600; }
         .status-instalado { color: #01579b; font-weight: 600; }
         .status-recapagem { color: #bf360c; font-weight: 600; }
@@ -1576,6 +1606,31 @@
             color: #004d40;
         }
 
+        .pecas-instaladas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .peca-instalada-item {
+            background: #f8f9fa;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border-left: 4px solid #7b1fa2;
+            font-size: 13px;
+        }
+
+        .peca-instalada-item .nome {
+            font-weight: 600;
+            color: #1a3a5c;
+        }
+
+        .peca-instalada-item .detalhe {
+            color: #666;
+            font-size: 12px;
+        }
+
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -1585,9 +1640,16 @@
             }
             .header {
                 padding: 15px 20px;
+                flex-direction: column;
             }
             .header-title h1 {
                 font-size: 18px;
+            }
+            .header-user {
+                position: static;
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
             }
             .container {
                 padding: 15px;
@@ -1643,7 +1705,6 @@
     <header class="header" id="mainHeader" style="display:none;">
         <div class="header-title">
             <h1 id="companyName" contenteditable="true">Controle de Estoque</h1>
-            <span class="edit-hint">(clique no nome para editar)</span>
         </div>
         <div class="header-user">
             <span id="userDisplay"></span>
@@ -1783,6 +1844,7 @@
                         <div class="estoque-stats">
                             <span id="totalPneus">Total: 0</span>
                             <span id="totalItensPneus">Itens: 0</span>
+                            <button class="btn-pdf" onclick="gerarPDFPneus()">📄 PDF</button>
                         </div>
                     </div>
 
@@ -1897,6 +1959,7 @@
                         <div class="estoque-stats">
                             <span id="totalPecas">Total: 0</span>
                             <span id="totalItensPecas">Itens: 0</span>
+                            <button class="btn-pdf" onclick="gerarPDFPecas()">📄 PDF</button>
                         </div>
                     </div>
 
@@ -1951,8 +2014,8 @@
                             </div>
                             <div class="form-group">
                                 <label>Motorista</label>
-                                <select id="veiculoMotorista" required>
-                                    <option value="">Selecione um motorista...</option>
+                                <select id="veiculoMotorista">
+                                    <option value="">Selecione um motorista (opcional)...</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -1965,6 +2028,14 @@
                                     <option value="veiculos">Veículos</option>
                                     <option value="outros">Outros</option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Valor da Carga (R$)</label>
+                                <input type="number" id="veiculoValorCarga" value="0" min="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Valor do Frete (R$)</label>
+                                <input type="number" id="veiculoValorFrete" value="0" min="0" step="0.01">
                             </div>
                             <div class="form-group">
                                 <label>Quilometragem Atual (KM)</label>
@@ -2002,6 +2073,7 @@
                         <div class="veiculos-stats">
                             <span id="totalVeiculos">Total: 0</span>
                             <span id="veiculosAtivos">Ativos: 0</span>
+                            <button class="btn-pdf" onclick="gerarPDFVeiculos()">📄 PDF</button>
                         </div>
                     </div>
 
@@ -2076,6 +2148,7 @@
                         <h2>Rotas Cadastradas</h2>
                         <div class="veiculos-stats">
                             <span id="totalRotas">Total: 0</span>
+                            <button class="btn-pdf" onclick="gerarPDFRotas()">📄 PDF</button>
                         </div>
                     </div>
 
@@ -2096,7 +2169,12 @@
 
                 <!-- TAB MANUTENÇÃO -->
                 <div id="tab-manutencao" class="tab-pane">
-                    <h2 style="color:#1a3a5c; margin-bottom:20px;">🔧 Manutenção de Veículos</h2>
+                    <div class="veiculos-header">
+                        <h2>🔧 Manutenção de Veículos</h2>
+                        <div class="veiculos-stats">
+                            <button class="btn-pdf" onclick="gerarPDFManutencoes()">📄 PDF</button>
+                        </div>
+                    </div>
 
                     <div class="filtros-container" id="filtrosManutencao">
                         <div class="form-group">
@@ -2174,6 +2252,7 @@
                         <h2>Motoristas Cadastrados</h2>
                         <div class="veiculos-stats">
                             <span id="totalMotoristas">Total: 0</span>
+                            <button class="btn-pdf" onclick="gerarPDFMotoristas()">📄 PDF</button>
                         </div>
                     </div>
 
@@ -2198,6 +2277,7 @@
                         <h2>Pneus Descartados</h2>
                         <div class="estoque-stats">
                             <span id="totalDescartados">Total: 0</span>
+                            <button class="btn-pdf" onclick="gerarPDFDescartados()">📄 PDF</button>
                         </div>
                     </div>
 
@@ -2248,7 +2328,12 @@
 
                 <!-- TAB RELATÓRIOS -->
                 <div id="tab-relatorios" class="tab-pane">
-                    <h2 style="color:#1a3a5c; margin-bottom:20px;">📊 Relatórios</h2>
+                    <div class="veiculos-header">
+                        <h2>📊 Relatórios</h2>
+                        <div class="veiculos-stats">
+                            <button class="btn-pdf" onclick="gerarPDFRelatorios()">📄 PDF Completo</button>
+                        </div>
+                    </div>
 
                     <!-- FILTROS DOS RELATÓRIOS -->
                     <div class="filtros-container" id="filtrosRelatorios">
@@ -2816,7 +2901,6 @@
 
             document.getElementById('userDisplay').textContent = `👤 ${user.name}`;
 
-            // Atualizar selects de motoristas
             atualizarSelectMotoristas();
             atualizarSelectVeiculosRotas();
 
@@ -2863,7 +2947,7 @@
         function atualizarSelectMotoristas() {
             const motoristas = getMotoristas();
             const select = document.getElementById('veiculoMotorista');
-            select.innerHTML = '<option value="">Selecione um motorista...</option>';
+            select.innerHTML = '<option value="">Selecione um motorista (opcional)...</option>';
             motoristas.forEach(m => {
                 select.innerHTML += `<option value="${m.nome}">${m.nome}</option>`;
             });
@@ -3225,11 +3309,13 @@
             const placa = document.getElementById('veiculoPlaca').value.trim().toUpperCase();
             const motorista = document.getElementById('veiculoMotorista').value;
             const carga = document.getElementById('veiculoCarga').value;
+            const valorCarga = parseFloat(document.getElementById('veiculoValorCarga').value) || 0;
+            const valorFrete = parseFloat(document.getElementById('veiculoValorFrete').value) || 0;
             const km = parseInt(document.getElementById('veiculoKm').value) || 0;
             const eixos = parseInt(document.getElementById('veiculoEixos').value);
             const status = document.getElementById('veiculoStatus').value;
 
-            if (!marca || !modelo || !placa || !motorista) {
+            if (!marca || !modelo || !placa) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
                 return;
             }
@@ -3245,8 +3331,10 @@
                 marca: marca,
                 modelo: modelo,
                 placa: placa,
-                motorista: motorista,
+                motorista: motorista || 'Não vinculado',
                 carga: carga,
+                valorCarga: valorCarga,
+                valorFrete: valorFrete,
                 km: km,
                 eixos: eixos,
                 status: status,
@@ -3261,6 +3349,8 @@
 
             document.getElementById('veiculoForm').reset();
             document.getElementById('veiculoKm').value = '0';
+            document.getElementById('veiculoValorCarga').value = '0';
+            document.getElementById('veiculoValorFrete').value = '0';
 
             atualizarSelectVeiculosRotas();
             renderVeiculos();
@@ -3295,14 +3385,12 @@
                 return;
             }
 
-            // Atualiza KM do veículo
             const idx = veiculos.findIndex(v => v.id === veiculoId);
             if (idx !== -1) {
                 veiculos[idx].km += km;
                 setVeiculos(veiculos);
             }
 
-            // Registra a rota
             const rotas = getRotas();
             const rota = {
                 id: Date.now() + Math.random() * 1000,
@@ -3316,12 +3404,12 @@
                 km: km,
                 data: data,
                 obs: obs || 'Nenhuma',
+                status: 'andamento',
                 dataRegistro: new Date().toLocaleString('pt-BR')
             };
             rotas.push(rota);
             setRotas(rotas);
 
-            // Adiciona rota ao veículo
             if (!veiculos[idx].rotas) veiculos[idx].rotas = [];
             veiculos[idx].rotas.push(rota.id);
             setVeiculos(veiculos);
@@ -3334,6 +3422,41 @@
             renderVeiculos();
             renderRelatorios();
             alert('✅ Rota cadastrada com sucesso!');
+        }
+
+        // ============================================
+        //  CONCLUIR ROTA E ALTERAR CARGA
+        // ============================================
+        function concluirRota(id) {
+            if (!confirm('Confirmar conclusão desta rota?')) return;
+
+            const rotas = getRotas();
+            const rota = rotas.find(r => r.id === id);
+            if (!rota) return;
+
+            rota.status = 'concluida';
+            setRotas(rotas);
+            renderRotas();
+            renderRelatorios();
+            alert('✅ Rota concluída com sucesso!');
+        }
+
+        function alterarCargaVeiculo(veiculoId) {
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo) return;
+
+            const novaCarga = prompt('Informe o novo tipo de carga:', veiculo.carga || 'geral');
+            if (novaCarga === null) return;
+            if (novaCarga.trim() === '') {
+                alert('O tipo de carga não pode ficar vazio.');
+                return;
+            }
+
+            veiculo.carga = novaCarga.trim();
+            setVeiculos(veiculos);
+            renderVeiculos();
+            alert('✅ Tipo de carga alterado com sucesso!');
         }
 
         // ============================================
@@ -3365,22 +3488,27 @@
 
             let html = '';
             rotasFiltradas.forEach((r) => {
+                const statusBadge = r.status === 'concluida' ? 'badge-rota-concluida' : 'badge-rota-andamento';
+                const statusLabel = r.status === 'concluida' ? '✅ Concluída' : '🔄 Em Andamento';
+
                 html += `
                     <div class="veiculo-card" style="cursor:default;">
                         <div class="veiculo-card-header">
                             <h3>${r.veiculoMarca} ${r.veiculoModelo}</h3>
-                            <span class="badge badge-route">${r.veiculoPlaca}</span>
+                            <span class="badge ${statusBadge}">${statusLabel}</span>
                         </div>
                         <div class="veiculo-card-info">
-                            <span><span class="label">Saída:</span> ${r.saida}</span>
-                            <span><span class="label">Entrega:</span> ${r.entrega}</span>
-                            <span style="grid-column:1/-1;"><span class="label">Locais Adicionais:</span> ${r.adicionais}</span>
+                            <span><span class="label">Placa:</span> ${r.veiculoPlaca}</span>
                             <span><span class="label">KM:</span> ${r.km.toLocaleString('pt-BR')}</span>
+                            <span style="grid-column:1/-1;"><span class="label">Saída:</span> ${r.saida}</span>
+                            <span style="grid-column:1/-1;"><span class="label">Entrega:</span> ${r.entrega}</span>
+                            ${r.adicionais && r.adicionais !== 'Nenhum' ? `<span style="grid-column:1/-1;"><span class="label">Adicionais:</span> ${r.adicionais}</span>` : ''}
                             <span><span class="label">Data:</span> ${r.data}</span>
+                            <span><span class="label">Registro:</span> ${r.dataRegistro}</span>
                             ${r.obs && r.obs !== 'Nenhuma' ? `<span style="grid-column:1/-1;"><span class="label">Obs:</span> ${r.obs}</span>` : ''}
-                            <span style="grid-column:1/-1; font-size:12px; color:#999;">Registrado em: ${r.dataRegistro}</span>
                         </div>
                         <div class="veiculo-card-actions">
+                            ${r.status !== 'concluida' ? `<button class="btn-success" onclick="concluirRota(${r.id})">✅ Concluir</button>` : ''}
                             <button class="btn-danger" onclick="excluirRota(${r.id})">🗑️</button>
                         </div>
                     </div>
@@ -3409,13 +3537,11 @@
             rotas = rotas.filter(r => r.id !== id);
             setRotas(rotas);
 
-            // Remove da lista de rotas do veículo
             if (rota) {
                 const veiculos = getVeiculos();
                 const idx = veiculos.findIndex(v => v.id === rota.veiculoId);
                 if (idx !== -1 && veiculos[idx].rotas) {
                     veiculos[idx].rotas = veiculos[idx].rotas.filter(rid => rid !== id);
-                    // Reverte o KM
                     veiculos[idx].km -= rota.km;
                     setVeiculos(veiculos);
                 }
@@ -3435,12 +3561,9 @@
             const pneu = pneus.find(p => p.id === pneuId);
             if (!pneu) return;
 
-            // Se o pneu está instalado e tem KM de instalação
             if (pneu.status === 'instalado' && pneu.kmInstalacao !== null) {
                 const kmRodado = Math.max(0, kmAtual - pneu.kmInstalacao);
-                // Soma ao KM total
                 pneu.kmTotal = (pneu.kmTotal || 0) + kmRodado;
-                // Atualiza a KM de instalação para a atual (para não contar novamente)
                 pneu.kmInstalacao = kmAtual;
                 setPneus(pneus);
             }
@@ -3839,10 +3962,13 @@
                             <span><span class="label">KM:</span> ${v.km.toLocaleString('pt-BR')}</span>
                             <span><span class="label">Eixos:</span> ${v.eixos}</span>
                             <span><span class="label">Rotas:</span> ${totalRotas}</span>
+                            <span style="grid-column:1/-1;"><span class="label">Valor Carga:</span> R$ ${(v.valorCarga || 0).toFixed(2)}</span>
+                            <span style="grid-column:1/-1;"><span class="label">Valor Frete:</span> R$ ${(v.valorFrete || 0).toFixed(2)}</span>
                             <span style="grid-column:1/-1;"><span class="label">Pneus:</span> ${pneusInstalados} / ${totalPneus}</span>
                             <span style="grid-column:1/-1;"><span class="label">Peças:</span> ${pecasInstaladas}</span>
                         </div>
                         <div class="veiculo-card-actions">
+                            <button class="btn-warning" onclick="event.stopPropagation(); alterarCargaVeiculo(${v.id})" title="Alterar Carga">📦 Carga</button>
                             <button class="btn-route" onclick="event.stopPropagation(); abrirModalRotas(${v.id})" title="Ver Rotas">🗺️</button>
                             <button class="btn-purple" onclick="event.stopPropagation(); abrirModalSelecaoPeca(${v.id})" title="Instalar Peça">🔧</button>
                             <button class="btn-danger" onclick="event.stopPropagation(); excluirVeiculo(${v.id})">🗑️</button>
@@ -3854,7 +3980,7 @@
 
             grid.innerHTML = html;
             document.getElementById('totalVeiculos').textContent = `Total: ${veiculos.length}`;
-            document.getElementById('veiculosAtivos').textContent = `Ativos: ${veiculos.filter(v => v.status === 'ativo').length}`;
+            document.getElementById('veiculosAtivos').textContent = `Ativos: ${ativos}`;
         }
 
         function filtrarVeiculos() {
@@ -3899,17 +4025,22 @@
             `;
 
             rotasVeiculo.sort((a, b) => new Date(b.data) - new Date(a.data)).forEach((r, index) => {
+                const statusBadge = r.status === 'concluida' ? 'badge-rota-concluida' : 'badge-rota-andamento';
+                const statusLabel = r.status === 'concluida' ? '✅ Concluída' : '🔄 Em Andamento';
+
                 html += `
                     <div style="background:#f8f9fa; padding:12px 15px; border-radius:8px; margin-bottom:10px; border-left:4px solid #00695c;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
                             <span style="font-weight:600; color:#004d40;">#${index + 1} - ${r.data}</span>
                             <span style="font-weight:600; color:#00695c;">${r.km} km</span>
+                            <span class="badge ${statusBadge}">${statusLabel}</span>
                         </div>
                         <div style="font-size:14px; color:#333;">
                             <strong>Saída:</strong> ${r.saida} → <strong>Entrega:</strong> ${r.entrega}
                         </div>
                         ${r.adicionais && r.adicionais !== 'Nenhum' ? `<div style="font-size:13px; color:#666;">📌 ${r.adicionais}</div>` : ''}
                         ${r.obs && r.obs !== 'Nenhuma' ? `<div style="font-size:13px; color:#666;">📝 ${r.obs}</div>` : ''}
+                        ${r.status !== 'concluida' ? `<button class="btn-success" onclick="concluirRota(${r.id})" style="margin-top:8px; padding:4px 12px; font-size:12px;">✅ Concluir</button>` : ''}
                     </div>
                 `;
             });
@@ -4812,7 +4943,6 @@
                 return;
             }
 
-            // Atualiza posição do pneu
             const pneus = getPneus();
             const pneu = pneus.find(p => p.id === pneuOrigemId);
             if (pneu) {
@@ -4925,8 +5055,67 @@
                 </div>
             `;
 
+            // Peças instaladas no veículo
+            const pecas = getPecas();
+            const pecasInstaladas = pecas.filter(p => p.veiculoId === veiculo.id && p.status === 'instalado');
+
+            if (pecasInstaladas.length > 0) {
+                html += `
+                    <div style="margin-top:20px; padding-top:20px; border-top:2px solid #e8ecf0; width:100%;">
+                        <div style="font-weight:600; color:#7b1fa2; margin-bottom:10px; text-align:center;">🔧 Peças Instaladas</div>
+                        <div class="pecas-instaladas-grid">
+                `;
+                pecasInstaladas.forEach(p => {
+                    html += `
+                        <div class="peca-instalada-item">
+                            <div class="nome">${p.nome}</div>
+                            <div class="detalhe">${p.categoria} • R$ ${p.valor.toFixed(2)} • ${p.posicao || 'N/A'}</div>
+                            <div class="detalhe">Instalado em: ${p.dataInstalacao || 'N/A'}</div>
+                            <button class="btn-danger" onclick="event.stopPropagation(); removerPecaInstalada(${p.id})" style="margin-top:5px; padding:2px 10px; font-size:11px;">🗑️ Remover</button>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+
             html += `</div>`;
             container.innerHTML = html;
+        }
+
+        function removerPecaInstalada(pecaId) {
+            if (!confirm('Remover esta peça do veículo?')) return;
+
+            const pecas = getPecas();
+            const peca = pecas.find(p => p.id === pecaId);
+            if (!peca) return;
+
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === peca.veiculoId);
+            if (veiculo && veiculo.pecas) {
+                const key = Object.keys(veiculo.pecas).find(k => veiculo.pecas[k] === pecaId);
+                if (key) delete veiculo.pecas[key];
+                setVeiculos(veiculos);
+            }
+
+            peca.status = 'disponivel';
+            peca.veiculoInstalado = null;
+            peca.veiculoId = null;
+            peca.posicao = null;
+            peca.dataInstalacao = null;
+            peca.kmInstalacao = null;
+            peca.historico = peca.historico || [];
+            peca.historico.push({
+                data: new Date().toLocaleString('pt-BR'),
+                acao: 'Remoção',
+                detalhes: `Peça removida do veículo ${veiculo?.placa || 'Não identificado'}`
+            });
+            setPecas(pecas);
+
+            renderCaminhao(veiculoAtual);
+            renderVeiculos();
+            renderPecas();
+            renderRelatorios();
+            alert('✅ Peça removida com sucesso!');
         }
 
         function renderPneuSlot(veiculo, slotId, pneuId, isEstepe = false) {
@@ -5097,7 +5286,6 @@
                 return;
             }
 
-            // Salva o KM total atual antes de instalar
             pneu.kmTotal = pneu.kmTotal || 0;
             pneu.status = 'instalado';
             pneu.veiculoInstalado = veiculoAtual.placa;
@@ -5213,11 +5401,9 @@
                 return;
             }
 
-            // Atualiza KM total do pneu antes de remover
             const pneus = getPneus();
             const pneu = pneus.find(p => p.id === pneuId);
             if (pneu) {
-                // Calcula KM rodado nesta instalação
                 if (pneu.kmInstalacao !== null) {
                     const kmRodado = Math.max(0, km - pneu.kmInstalacao);
                     pneu.kmTotal = (pneu.kmTotal || 0) + kmRodado;
@@ -5307,7 +5493,7 @@
         }
 
         // ============================================
-        //  SELEÇÃO DE PEÇA PARA INSTALAÇÃO (CORRIGIDO)
+        //  SELEÇÃO DE PEÇA PARA INSTALAÇÃO
         // ============================================
         let veiculoPecaId = null;
         let pecaSelecionadoId = null;
@@ -5598,6 +5784,696 @@
             document.getElementById('acaoEdicao').value = '';
 
             document.getElementById('modalEdicao').classList.add('show');
+        }
+
+        // ============================================
+        //  FUNÇÕES DE GERAÇÃO DE PDF
+        // ============================================
+        function gerarPDFPneus() {
+            const pneus = getPneus();
+            if (pneus.length === 0) {
+                alert('Não há pneus para gerar o PDF.');
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Relatório de Pneus</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; }
+                        h1 { color: #1a3a5c; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                        th { background: #1a3a5c; color: white; padding: 10px; text-align: left; }
+                        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .header .empresa { font-size: 20px; font-weight: bold; color: #1a3a5c; }
+                        .header .data { color: #666; font-size: 14px; }
+                        .badge-pdf { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="empresa">${empresa}</div>
+                        <div class="data">Relatório de Estoque de Pneus - ${new Date().toLocaleString('pt-BR')}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>DOT/Fogo</th>
+                                <th>Tamanho</th>
+                                <th>Tipo</th>
+                                <th>Situação</th>
+                                <th>Status</th>
+                                <th>Valor (R$)</th>
+                                <th>KM Total</th>
+                                <th>Data Entrada</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            pneus.forEach((p, index) => {
+                const statusLabel = p.status === 'instalado' ? `Instalado${p.veiculoInstalado ? ` (${p.veiculoInstalado})` : ''}` : 
+                                   p.status === 'recapagem' ? 'Em Recapagem' :
+                                   p.status === 'vulcanizacao' ? 'Em Vulcanização' : 'Disponível';
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>#${p.id.toString().slice(-6)}</td>
+                        <td>${p.nome}</td>
+                        <td>${p.dot || '-'}</td>
+                        <td>${p.tamanho}</td>
+                        <td>${p.tipo}</td>
+                        <td>${p.situacao}</td>
+                        <td>${statusLabel}</td>
+                        <td>${p.valor.toFixed(2)}</td>
+                        <td>${(p.kmTotal || 0).toLocaleString('pt-BR')}</td>
+                        <td>${p.dataEntrada || p.dataCadastro}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                    <div style="margin-top:20px; text-align:center; color:#666; font-size:12px;">
+                        Total de pneus: ${pneus.length}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            abrirPDF(html, `Relatorio_Pneus_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFPecas() {
+            const pecas = getPecas();
+            if (pecas.length === 0) {
+                alert('Não há peças para gerar o PDF.');
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Relatório de Peças</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; }
+                        h1 { color: #1a3a5c; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                        th { background: #7b1fa2; color: white; padding: 10px; text-align: left; }
+                        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .header .empresa { font-size: 20px; font-weight: bold; color: #1a3a5c; }
+                        .header .data { color: #666; font-size: 14px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="empresa">${empresa}</div>
+                        <div class="data">Relatório de Estoque de Peças - ${new Date().toLocaleString('pt-BR')}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Valor (R$)</th>
+                                <th>Status</th>
+                                <th>Veículo</th>
+                                <th>Fornecedor</th>
+                                <th>Data Cadastro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            pecas.forEach((p, index) => {
+                const statusLabel = p.status === 'instalado' ? `Instalado${p.veiculoInstalado ? ` (${p.veiculoInstalado})` : ''}` : 'Disponível';
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${p.nome}</td>
+                        <td>${p.categoria}</td>
+                        <td>${p.valor.toFixed(2)}</td>
+                        <td>${statusLabel}</td>
+                        <td>${p.veiculoInstalado || '-'}</td>
+                        <td>${p.fornecedor || '-'}</td>
+                        <td>${p.dataCadastro || '-'}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                    <div style="margin-top:20px; text-align:center; color:#666; font-size:12px;">
+                        Total de peças: ${pecas.length}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            abrirPDF(html, `Relatorio_Pecas_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFVeiculos() {
+            const veiculos = getVeiculos();
+            if (veiculos.length === 0) {
+                alert('Não há veículos para gerar o PDF.');
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Relatório de Veículos</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; }
+                        h1 { color: #1a3a5c; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                        th { background: #00695c; color: white; padding: 10px; text-align: left; }
+                        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .header .empresa { font-size: 20px; font-weight: bold; color: #1a3a5c; }
+                        .header .data { color: #666; font-size: 14px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="empresa">${empresa}</div>
+                        <div class="data">Relatório de Veículos - ${new Date().toLocaleString('pt-BR')}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Placa</th>
+                                <th>Motorista</th>
+                                <th>Carga</th>
+                                <th>Valor Carga</th>
+                                <th>Valor Frete</th>
+                                <th>KM</th>
+                                <th>Eixos</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            veiculos.forEach((v, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${v.marca}</td>
+                        <td>${v.modelo}</td>
+                        <td>${v.placa}</td>
+                        <td>${v.motorista || 'Não vinculado'}</td>
+                        <td>${v.carga || 'Geral'}</td>
+                        <td>R$ ${(v.valorCarga || 0).toFixed(2)}</td>
+                        <td>R$ ${(v.valorFrete || 0).toFixed(2)}</td>
+                        <td>${v.km.toLocaleString('pt-BR')}</td>
+                        <td>${v.eixos}</td>
+                        <td>${v.status}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                    <div style="margin-top:20px; text-align:center; color:#666; font-size:12px;">
+                        Total de veículos: ${veiculos.length}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            abrirPDF(html, `Relatorio_Veiculos_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFMotoristas() {
+            const motoristas = getMotoristas();
+            if (motoristas.length === 0) {
+                alert('Não há motoristas para gerar o PDF.');
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Relatório de Motoristas</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; }
+                        h1 { color: #1a3a5c; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                        th { background: #f57c00; color: white; padding: 10px; text-align: left; }
+                        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .header .empresa { font-size: 20px; font-weight: bold; color: #1a3a5c; }
+                        .header .data { color: #666; font-size: 14px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="empresa">${empresa}</div>
+                        <div class="data">Relatório de Motoristas - ${new Date().toLocaleString('pt-BR')}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Tipo Sanguíneo</th>
+                                <th>Celular</th>
+                                <th>Emergência</th>
+                                <th>Observações</th>
+                                <th>Data Cadastro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            motoristas.forEach((m, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${m.nome}</td>
+                        <td>${m.cpf || 'Não informado'}</td>
+                        <td>${m.sangue || 'Não informado'}</td>
+                        <td>${m.celular || 'Não informado'}</td>
+                        <td>${m.emergencia || 'Não informado'}</td>
+                        <td>${m.obs || '-'}</td>
+                        <td>${m.dataCadastro || '-'}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                    <div style="margin-top:20px; text-align:center; color:#666; font-size:12px;">
+                        Total de motoristas: ${motoristas.length}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            abrirPDF(html, `Relatorio_Motoristas_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFRotas() {
+            const rotas = getRotas();
+            if (rotas.length === 0) {
+                alert('Não há rotas para gerar o PDF.');
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Relatório de Rotas</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; }
+                        h1 { color: #1a3a5c; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                        th { background: #00695c; color: white; padding: 10px; text-align: left; }
+                        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .header .empresa { font-size: 20px; font-weight: bold; color: #1a3a5c; }
+                        .header .data { color: #666; font-size: 14px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="empresa">${empresa}</div>
+                        <div class="data">Relatório de Rotas - ${new Date().toLocaleString('pt-BR')}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Veículo</th>
+                                <th>Placa</th>
+                                <th>Saída</th>
+                                <th>Entrega</th>
+                                <th>KM</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            rotas.forEach((r, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${r.veiculoMarca || ''} ${r.veiculoModelo || ''}</td>
+                        <td>${r.veiculoPlaca || '-'}</td>
+                        <td>${r.saida}</td>
+                        <td>${r.entrega}</td>
+                        <td>${r.km}</td>
+                        <td>${r.data}</td>
+                        <td>${r.status === 'concluida' ? 'Concluída' : 'Em Andamento'}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                    <div style="margin-top:20px; text-align:center; color:#666; font-size:12px;">
+                        Total de rotas: ${rotas.length}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            abrirPDF(html, `Relatorio_Rotas_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFManutencoes() {
+            const manutencoes = getManutencoes();
+            if (manutencoes.length === 0) {
+                alert('Não há manutenções para gerar o PDF.');
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Relatório de Manutenções</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; }
+                        h1 { color: #1a3a5c; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                        th { background: #e65100; color: white; padding: 10px; text-align: left; }
+                        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .header .empresa { font-size: 20px; font-weight: bold; color: #1a3a5c; }
+                        .header .data { color: #666; font-size: 14px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="empresa">${empresa}</div>
+                        <div class="data">Relatório de Manutenções - ${new Date().toLocaleString('pt-BR')}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Veículo</th>
+                                <th>Placa</th>
+                                <th>Tipo</th>
+                                <th>Data</th>
+                                <th>KM</th>
+                                <th>Descrição</th>
+                                <th>Valor (R$)</th>
+                                <th>Fornecedor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            manutencoes.forEach((m, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${m.veiculoMarca || ''} ${m.veiculoModelo || ''}</td>
+                        <td>${m.veiculoPlaca || '-'}</td>
+                        <td>${m.tipo}</td>
+                        <td>${m.data}</td>
+                        <td>${m.km}</td>
+                        <td>${m.descricao}</td>
+                        <td>${m.valor.toFixed(2)}</td>
+                        <td>${m.fornecedor || '-'}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                    <div style="margin-top:20px; text-align:center; color:#666; font-size:12px;">
+                        Total de manutenções: ${manutencoes.length}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            abrirPDF(html, `Relatorio_Manutencoes_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFDescartados() {
+            const descartados = getDescartados();
+            if (descartados.length === 0) {
+                alert('Não há pneus descartados para gerar o PDF.');
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Relatório de Pneus Descartados</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; }
+                        h1 { color: #1a3a5c; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                        th { background: #c62828; color: white; padding: 10px; text-align: left; }
+                        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .header .empresa { font-size: 20px; font-weight: bold; color: #1a3a5c; }
+                        .header .data { color: #666; font-size: 14px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="empresa">${empresa}</div>
+                        <div class="data">Relatório de Pneus Descartados - ${new Date().toLocaleString('pt-BR')}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nome</th>
+                                <th>DOT/Fogo</th>
+                                <th>Tamanho</th>
+                                <th>Tipo</th>
+                                <th>Veículo</th>
+                                <th>Eixo/Posição</th>
+                                <th>Motivo</th>
+                                <th>Data Descarte</th>
+                                <th>Valor (R$)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            descartados.forEach((p, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${p.nome}</td>
+                        <td>${p.dot || '-'}</td>
+                        <td>${p.tamanho}</td>
+                        <td>${p.tipo}</td>
+                        <td>${p.veiculoInstalado || 'Não informado'}</td>
+                        <td>${p.posicao || 'Não informado'}</td>
+                        <td>${p.motivoDescarte || 'Descarte'}</td>
+                        <td>${p.dataDescarte || p.dataCadastro}</td>
+                        <td>${p.valor.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                    <div style="margin-top:20px; text-align:center; color:#666; font-size:12px;">
+                        Total de pneus descartados: ${descartados.length}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            abrirPDF(html, `Relatorio_Descartados_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFRelatorios() {
+            const pneus = getPneus();
+            const veiculos = getVeiculos();
+            const pecas = getPecas();
+            const manutencoes = getManutencoes();
+            const motoristas = getMotoristas();
+            const rotas = getRotas();
+            const descartados = getDescartados();
+            
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Relatório Completo</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; }
+                        h1 { color: #1a3a5c; text-align: center; }
+                        h2 { color: #1a3a5c; margin-top: 30px; border-bottom: 2px solid #1a3a5c; padding-bottom: 5px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 11px; }
+                        th { background: #1a3a5c; color: white; padding: 8px; text-align: left; }
+                        td { padding: 6px 8px; border-bottom: 1px solid #ddd; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .header .empresa { font-size: 22px; font-weight: bold; color: #1a3a5c; }
+                        .header .data { color: #666; font-size: 14px; }
+                        .resumo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+                        .resumo-item { background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; }
+                        .resumo-item .valor { font-size: 20px; font-weight: bold; color: #1a3a5c; }
+                        .resumo-item .label { font-size: 12px; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="empresa">${empresa}</div>
+                        <div class="data">Relatório Completo - ${new Date().toLocaleString('pt-BR')}</div>
+                    </div>
+                    
+                    <div class="resumo-grid">
+                        <div class="resumo-item">
+                            <div class="valor">${pneus.length}</div>
+                            <div class="label">Total de Pneus</div>
+                        </div>
+                        <div class="resumo-item">
+                            <div class="valor">${veiculos.length}</div>
+                            <div class="label">Total de Veículos</div>
+                        </div>
+                        <div class="resumo-item">
+                            <div class="valor">${pecas.length}</div>
+                            <div class="label">Total de Peças</div>
+                        </div>
+                        <div class="resumo-item">
+                            <div class="valor">${motoristas.length}</div>
+                            <div class="label">Total de Motoristas</div>
+                        </div>
+                    </div>
+                    
+                    <h2>📦 Pneus (${pneus.length})</h2>
+                    ${pneus.length > 0 ? `
+                    <table>
+                        <thead><tr><th>#</th><th>Nome</th><th>Tamanho</th><th>Situação</th><th>Status</th><th>Valor (R$)</th><th>KM Total</th></tr></thead>
+                        <tbody>
+                            ${pneus.slice(0, 50).map((p, i) => `
+                                <tr>
+                                    <td>${i + 1}</td>
+                                    <td>${p.nome}</td>
+                                    <td>${p.tamanho}</td>
+                                    <td>${p.situacao}</td>
+                                    <td>${p.status === 'instalado' ? 'Instalado' : p.status === 'recapagem' ? 'Em Recapagem' : p.status === 'vulcanizacao' ? 'Em Vulcanização' : 'Disponível'}</td>
+                                    <td>${p.valor.toFixed(2)}</td>
+                                    <td>${(p.kmTotal || 0).toLocaleString('pt-BR')}</td>
+                                </tr>
+                            `).join('')}
+                            ${pneus.length > 50 ? `<tr><td colspan="7" style="text-align:center; color:#666;">... e mais ${pneus.length - 50} pneus</td></tr>` : ''}
+                        </tbody>
+                    </table>` : '<p style="color:#666;">Nenhum pneu cadastrado.</p>'}
+                    
+                    <h2>🚗 Veículos (${veiculos.length})</h2>
+                    ${veiculos.length > 0 ? `
+                    <table>
+                        <thead><tr><th>#</th><th>Placa</th><th>Veículo</th><th>Motorista</th><th>Carga</th><th>KM</th><th>Status</th></tr></thead>
+                        <tbody>
+                            ${veiculos.slice(0, 30).map((v, i) => `
+                                <tr>
+                                    <td>${i + 1}</td>
+                                    <td>${v.placa}</td>
+                                    <td>${v.marca} ${v.modelo}</td>
+                                    <td>${v.motorista || 'Não vinculado'}</td>
+                                    <td>${v.carga || 'Geral'}</td>
+                                    <td>${v.km.toLocaleString('pt-BR')}</td>
+                                    <td>${v.status}</td>
+                                </tr>
+                            `).join('')}
+                            ${veiculos.length > 30 ? `<tr><td colspan="7" style="text-align:center; color:#666;">... e mais ${veiculos.length - 30} veículos</td></tr>` : ''}
+                        </tbody>
+                    </table>` : '<p style="color:#666;">Nenhum veículo cadastrado.</p>'}
+                    
+                    <h2>🔧 Manutenções (${manutencoes.length})</h2>
+                    ${manutencoes.length > 0 ? `
+                    <table>
+                        <thead><tr><th>#</th><th>Veículo</th><th>Tipo</th><th>Data</th><th>KM</th><th>Valor (R$)</th></tr></thead>
+                        <tbody>
+                            ${manutencoes.slice(0, 30).map((m, i) => `
+                                <tr>
+                                    <td>${i + 1}</td>
+                                    <td>${m.veiculoMarca || ''} ${m.veiculoModelo || ''}</td>
+                                    <td>${m.tipo}</td>
+                                    <td>${m.data}</td>
+                                    <td>${m.km}</td>
+                                    <td>${m.valor.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                            ${manutencoes.length > 30 ? `<tr><td colspan="6" style="text-align:center; color:#666;">... e mais ${manutencoes.length - 30} manutenções</td></tr>` : ''}
+                        </tbody>
+                    </table>` : '<p style="color:#666;">Nenhuma manutenção registrada.</p>'}
+                    
+                    <div style="margin-top:30px; text-align:center; color:#666; font-size:11px;">
+                        Relatório gerado automaticamente em ${new Date().toLocaleString('pt-BR')}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            abrirPDF(html, `Relatorio_Completo_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function abrirPDF(html, nomeArquivo) {
+            const win = window.open('', '_blank', 'width=1000,height=800');
+            if (!win) {
+                alert('Por favor, permita pop-ups para gerar o PDF.');
+                return;
+            }
+            win.document.write(html);
+            win.document.close();
+            win.focus();
+            win.print();
         }
 
         // ============================================
