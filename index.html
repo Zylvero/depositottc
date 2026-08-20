@@ -469,21 +469,6 @@
             background: #b71c1c;
         }
 
-        .btn-export {
-            background: #2a5f7a;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-size: 13px;
-        }
-
-        .btn-export:hover {
-            background: #1a3a5c;
-        }
-
         .estoque-header,
         .veiculos-header {
             display: flex;
@@ -1608,27 +1593,191 @@
 
         .pecas-instaladas-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
             margin-top: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 5px 0;
         }
 
         .peca-instalada-item {
             background: #f8f9fa;
-            padding: 10px 14px;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border-radius: 10px;
             border-left: 4px solid #7b1fa2;
             font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .peca-instalada-item:hover {
+            background: #f0f0f5;
+            transform: translateX(3px);
         }
 
         .peca-instalada-item .nome {
             font-weight: 600;
             color: #1a3a5c;
+            font-size: 14px;
         }
 
         .peca-instalada-item .detalhe {
             color: #666;
             font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .peca-instalada-item .detalhe strong {
+            color: #333;
+        }
+
+        .peca-instalada-item .btn-remover-peca {
+            margin-top: 8px;
+            padding: 3px 12px;
+            font-size: 11px;
+            background: #c62828;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .peca-instalada-item .btn-remover-peca:hover {
+            background: #b71c1c;
+        }
+
+        .pecas-titulo-modal {
+            font-weight: 600;
+            color: #7b1fa2;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid #e8ecf0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+        }
+
+        .pecas-titulo-modal span:last-child {
+            background: #7b1fa2;
+            color: white;
+            padding: 2px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .sem-pecas-modal {
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .sem-pecas-modal span {
+            display: block;
+            font-size: 12px;
+            color: #bbb;
+            margin-top: 5px;
+        }
+
+        /* Modal de Carga */
+        .modal-carga {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1600;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-carga.show {
+            display: flex;
+        }
+
+        .modal-carga-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            padding: 30px;
+        }
+
+        .modal-carga-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 10px;
+        }
+
+        .modal-carga-content .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .modal-carga-content .form-group {
+            margin-bottom: 15px;
+        }
+
+        .modal-carga-content label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .modal-carga-content input,
+        .modal-carga-content select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #dce0e5;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .modal-carga-content input:focus,
+        .modal-carga-content select:focus {
+            outline: none;
+            border-color: #2a5f7a;
+        }
+
+        .modal-carga-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-carga-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-carga-actions .btn-confirmar {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .modal-carga-actions .btn-confirmar:hover {
+            background: #1b5e20;
+        }
+
+        .modal-carga-actions .btn-cancelar {
+            background: #e8ecf0;
+            color: #333;
+        }
+
+        .modal-carga-actions .btn-cancelar:hover {
+            background: #d0d4d9;
         }
 
         @media (max-width: 768px) {
@@ -1693,6 +1842,9 @@
             }
             .relatorio-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+            .pecas-instaladas-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -2335,7 +2487,6 @@
                         </div>
                     </div>
 
-                    <!-- FILTROS DOS RELATÓRIOS -->
                     <div class="filtros-container" id="filtrosRelatorios">
                         <div class="form-group">
                             <label>Veículo (Placa)</label>
@@ -2375,7 +2526,6 @@
                         <button class="btn-limpar" onclick="limparFiltrosRelatorios()">Limpar Filtros</button>
                     </div>
 
-                    <!-- Resumo Geral -->
                     <div class="relatorio-card">
                         <h3>Resumo Geral</h3>
                         <div class="relatorio-grid" id="resumoGeral">
@@ -2398,7 +2548,6 @@
                         </div>
                     </div>
 
-                    <!-- Custo por KM dos Pneus -->
                     <div class="relatorio-card">
                         <h3>📈 Custo por KM dos Pneus</h3>
                         <p style="color:#666; margin-bottom:15px; font-size:14px;">Cálculo baseado no valor do pneu e quilometragem total percorrida</p>
@@ -2423,7 +2572,6 @@
                         </div>
                     </div>
 
-                    <!-- Custo de Peças por Veículo -->
                     <div class="relatorio-card">
                         <h3>🔧 Custos de Peças por Veículo</h3>
                         <p style="color:#666; margin-bottom:15px; font-size:14px;">Total de custos com peças instaladas em cada veículo</p>
@@ -2445,7 +2593,6 @@
                         </div>
                     </div>
 
-                    <!-- Custos de Manutenção por Veículo -->
                     <div class="relatorio-card">
                         <h3>🔧 Custos de Manutenção por Veículo</h3>
                         <p style="color:#666; margin-bottom:15px; font-size:14px;">Total de custos com manutenção em cada veículo</p>
@@ -2467,7 +2614,6 @@
                         </div>
                     </div>
 
-                    <!-- Histórico de Pneus Removidos/Descartados -->
                     <div class="relatorio-card">
                         <h3>📋 Histórico de Pneus Removidos</h3>
                         <p style="color:#666; margin-bottom:15px; font-size:14px;">Histórico completo de pneus removidos dos veículos</p>
@@ -2726,6 +2872,41 @@
             <div class="modal-manutencao-actions">
                 <button class="btn-confirmar" onclick="confirmarCadastroMultiplo()">✅ Salvar Todos</button>
                 <button class="btn-cancelar" onclick="fecharModalCadastroMultiplo()">❌ Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Carga -->
+    <div id="modalCarga" class="modal-carga">
+        <div class="modal-carga-content">
+            <h3>📦 Alterar Dados da Carga</h3>
+            <p class="subtitle" id="modalCargaSubtitle">Atualize as informações de carga do veículo</p>
+            
+            <div class="form-group">
+                <label>Tipo de Carga</label>
+                <select id="cargaTipo">
+                    <option value="geral">Geral</option>
+                    <option value="granel">Granel</option>
+                    <option value="frigorificada">Frigorificada</option>
+                    <option value="perigosa">Perigosa</option>
+                    <option value="veiculos">Veículos</option>
+                    <option value="outros">Outros</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Valor da Carga (R$)</label>
+                <input type="number" id="cargaValor" placeholder="0,00" min="0" step="0.01">
+            </div>
+            
+            <div class="form-group">
+                <label>Valor do Frete (R$)</label>
+                <input type="number" id="cargaFrete" placeholder="0,00" min="0" step="0.01">
+            </div>
+            
+            <div class="modal-carga-actions">
+                <button class="btn-confirmar" onclick="confirmarAlteracaoCarga()">✅ Salvar</button>
+                <button class="btn-cancelar" onclick="fecharModalCarga()">❌ Cancelar</button>
             </div>
         </div>
     </div>
@@ -3425,7 +3606,7 @@
         }
 
         // ============================================
-        //  CONCLUIR ROTA E ALTERAR CARGA
+        //  CONCLUIR ROTA
         // ============================================
         function concluirRota(id) {
             if (!confirm('Confirmar conclusão desta rota?')) return;
@@ -3439,118 +3620,6 @@
             renderRotas();
             renderRelatorios();
             alert('✅ Rota concluída com sucesso!');
-        }
-
-        function alterarCargaVeiculo(veiculoId) {
-            const veiculos = getVeiculos();
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo) return;
-
-            const novaCarga = prompt('Informe o novo tipo de carga:', veiculo.carga || 'geral');
-            if (novaCarga === null) return;
-            if (novaCarga.trim() === '') {
-                alert('O tipo de carga não pode ficar vazio.');
-                return;
-            }
-
-            veiculo.carga = novaCarga.trim();
-            setVeiculos(veiculos);
-            renderVeiculos();
-            alert('✅ Tipo de carga alterado com sucesso!');
-        }
-
-        // ============================================
-        //  RENDER ROTAS
-        // ============================================
-        let rotasFiltradas = [];
-
-        function renderRotas() {
-            const rotas = getRotas();
-            const filtroVeiculo = document.getElementById('filtroRotaVeiculo')?.value.toLowerCase() || '';
-            const filtroLocal = document.getElementById('filtroRotaLocal')?.value.toLowerCase() || '';
-
-            rotasFiltradas = rotas.filter(r => {
-                const matchVeiculo = r.veiculoPlaca.toLowerCase().includes(filtroVeiculo) || 
-                                    `${r.veiculoMarca} ${r.veiculoModelo}`.toLowerCase().includes(filtroVeiculo);
-                const matchLocal = r.saida.toLowerCase().includes(filtroLocal) || 
-                                  r.entrega.toLowerCase().includes(filtroLocal) ||
-                                  (r.adicionais && r.adicionais.toLowerCase().includes(filtroLocal));
-                return matchVeiculo && matchLocal;
-            });
-
-            const grid = document.getElementById('rotasGrid');
-
-            if (rotasFiltradas.length === 0) {
-                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>${rotas.length === 0 ? 'Nenhuma rota cadastrada ainda.' : 'Nenhuma rota encontrada com os filtros aplicados.'}</p></div>`;
-                document.getElementById('totalRotas').textContent = `Total: ${rotas.length}`;
-                return;
-            }
-
-            let html = '';
-            rotasFiltradas.forEach((r) => {
-                const statusBadge = r.status === 'concluida' ? 'badge-rota-concluida' : 'badge-rota-andamento';
-                const statusLabel = r.status === 'concluida' ? '✅ Concluída' : '🔄 Em Andamento';
-
-                html += `
-                    <div class="veiculo-card" style="cursor:default;">
-                        <div class="veiculo-card-header">
-                            <h3>${r.veiculoMarca} ${r.veiculoModelo}</h3>
-                            <span class="badge ${statusBadge}">${statusLabel}</span>
-                        </div>
-                        <div class="veiculo-card-info">
-                            <span><span class="label">Placa:</span> ${r.veiculoPlaca}</span>
-                            <span><span class="label">KM:</span> ${r.km.toLocaleString('pt-BR')}</span>
-                            <span style="grid-column:1/-1;"><span class="label">Saída:</span> ${r.saida}</span>
-                            <span style="grid-column:1/-1;"><span class="label">Entrega:</span> ${r.entrega}</span>
-                            ${r.adicionais && r.adicionais !== 'Nenhum' ? `<span style="grid-column:1/-1;"><span class="label">Adicionais:</span> ${r.adicionais}</span>` : ''}
-                            <span><span class="label">Data:</span> ${r.data}</span>
-                            <span><span class="label">Registro:</span> ${r.dataRegistro}</span>
-                            ${r.obs && r.obs !== 'Nenhuma' ? `<span style="grid-column:1/-1;"><span class="label">Obs:</span> ${r.obs}</span>` : ''}
-                        </div>
-                        <div class="veiculo-card-actions">
-                            ${r.status !== 'concluida' ? `<button class="btn-success" onclick="concluirRota(${r.id})">✅ Concluir</button>` : ''}
-                            <button class="btn-danger" onclick="excluirRota(${r.id})">🗑️</button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            grid.innerHTML = html;
-            document.getElementById('totalRotas').textContent = `Total: ${rotas.length}`;
-        }
-
-        function filtrarRotas() {
-            renderRotas();
-        }
-
-        function limparFiltrosRotas() {
-            document.getElementById('filtroRotaVeiculo').value = '';
-            document.getElementById('filtroRotaLocal').value = '';
-            renderRotas();
-        }
-
-        function excluirRota(id) {
-            if (!confirm('Tem certeza que deseja excluir esta rota?')) return;
-
-            let rotas = getRotas();
-            const rota = rotas.find(r => r.id === id);
-            rotas = rotas.filter(r => r.id !== id);
-            setRotas(rotas);
-
-            if (rota) {
-                const veiculos = getVeiculos();
-                const idx = veiculos.findIndex(v => v.id === rota.veiculoId);
-                if (idx !== -1 && veiculos[idx].rotas) {
-                    veiculos[idx].rotas = veiculos[idx].rotas.filter(rid => rid !== id);
-                    veiculos[idx].km -= rota.km;
-                    setVeiculos(veiculos);
-                }
-            }
-
-            renderRotas();
-            renderVeiculos();
-            renderRelatorios();
-            alert('✅ Rota excluída com sucesso!');
         }
 
         // ============================================
@@ -3915,7 +3984,7 @@
         }
 
         // ============================================
-        //  RENDER VEÍCULOS
+        //  RENDER VEÍCULOS (ATUALIZADO)
         // ============================================
         function renderVeiculos() {
             const veiculos = getVeiculos();
@@ -3957,7 +4026,7 @@
                         </div>
                         <div class="veiculo-card-info">
                             <span><span class="label">Placa:</span> ${v.placa}</span>
-                            <span><span class="label">Motorista:</span> ${v.motorista}</span>
+                            <span><span class="label">Motorista:</span> ${v.motorista || 'Não vinculado'}</span>
                             <span><span class="label">Carga:</span> ${v.carga || 'Geral'}</span>
                             <span><span class="label">KM:</span> ${v.km.toLocaleString('pt-BR')}</span>
                             <span><span class="label">Eixos:</span> ${v.eixos}</span>
@@ -3968,7 +4037,7 @@
                             <span style="grid-column:1/-1;"><span class="label">Peças:</span> ${pecasInstaladas}</span>
                         </div>
                         <div class="veiculo-card-actions">
-                            <button class="btn-warning" onclick="event.stopPropagation(); alterarCargaVeiculo(${v.id})" title="Alterar Carga">📦 Carga</button>
+                            <button class="btn-warning" onclick="event.stopPropagation(); abrirModalCarga(${v.id})" title="Alterar Carga">📦 Carga</button>
                             <button class="btn-route" onclick="event.stopPropagation(); abrirModalRotas(${v.id})" title="Ver Rotas">🗺️</button>
                             <button class="btn-purple" onclick="event.stopPropagation(); abrirModalSelecaoPeca(${v.id})" title="Instalar Peça">🔧</button>
                             <button class="btn-danger" onclick="event.stopPropagation(); excluirVeiculo(${v.id})">🗑️</button>
@@ -3992,6 +4061,71 @@
             document.getElementById('filtroVeiculoMotorista').value = '';
             document.getElementById('filtroVeiculoStatus').value = '';
             renderVeiculos();
+        }
+
+        // ============================================
+        //  MODAL DE CARGA
+        // ============================================
+        let veiculoCargaEditando = null;
+
+        function abrirModalCarga(veiculoId) {
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo) {
+                alert('Veículo não encontrado.');
+                return;
+            }
+
+            veiculoCargaEditando = veiculo;
+
+            document.getElementById('modalCargaSubtitle').textContent = 
+                `${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
+
+            document.getElementById('cargaTipo').value = veiculo.carga || 'geral';
+            document.getElementById('cargaValor').value = veiculo.valorCarga || 0;
+            document.getElementById('cargaFrete').value = veiculo.valorFrete || 0;
+
+            document.getElementById('modalCarga').classList.add('show');
+        }
+
+        function fecharModalCarga() {
+            document.getElementById('modalCarga').classList.remove('show');
+            veiculoCargaEditando = null;
+        }
+
+        function confirmarAlteracaoCarga() {
+            if (!veiculoCargaEditando) {
+                alert('Erro: Veículo não identificado.');
+                return;
+            }
+
+            const tipo = document.getElementById('cargaTipo').value;
+            const valorCarga = parseFloat(document.getElementById('cargaValor').value) || 0;
+            const valorFrete = parseFloat(document.getElementById('cargaFrete').value) || 0;
+
+            if (!tipo) {
+                alert('Por favor, selecione um tipo de carga.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const idx = veiculos.findIndex(v => v.id === veiculoCargaEditando.id);
+
+            if (idx !== -1) {
+                veiculos[idx].carga = tipo;
+                veiculos[idx].valorCarga = valorCarga;
+                veiculos[idx].valorFrete = valorFrete;
+                setVeiculos(veiculos);
+
+                veiculoCargaEditando.carga = tipo;
+                veiculoCargaEditando.valorCarga = valorCarga;
+                veiculoCargaEditando.valorFrete = valorFrete;
+            }
+
+            fecharModalCarga();
+            renderVeiculos();
+            renderRelatorios();
+            alert('✅ Dados da carga atualizados com sucesso!');
         }
 
         // ============================================
@@ -4989,7 +5123,11 @@
             if (!veiculo) return;
 
             veiculoAtual = veiculo;
-            document.getElementById('modalVeiculoTitle').textContent = `${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
+            
+            const totalPecas = getPecas().filter(p => p.veiculoId === id && p.status === 'instalado').length;
+            document.getElementById('modalVeiculoTitle').textContent = 
+                `${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}  |  🔧 ${totalPecas} peça(s)  |  🚛 ${veiculo.eixos} eixos`;
+            
             document.getElementById('modalCaminhao').classList.add('show');
             renderCaminhao(veiculo);
         }
@@ -5010,6 +5148,7 @@
 
             let html = `<div class="caminhao">`;
 
+            // Eixo Dianteiro
             html += `
                 <div class="eixos-row">
                     <div class="eixo eixo-dianteiro">
@@ -5022,6 +5161,7 @@
                 </div>
             `;
 
+            // Eixos Traseiros
             for (let i = 1; i < eixos; i++) {
                 const label = i === 1 ? '1º Eixo Traseiro' : `${i}º Eixo Traseiro`;
                 html += `
@@ -5039,6 +5179,7 @@
                 `;
             }
 
+            // Estepes
             html += `
                 <div class="estepe-section">
                     <div class="eixos-row">
@@ -5055,46 +5196,70 @@
                 </div>
             `;
 
-            // Peças instaladas no veículo
+            // Peças Instaladas
             const pecas = getPecas();
             const pecasInstaladas = pecas.filter(p => p.veiculoId === veiculo.id && p.status === 'instalado');
 
-            if (pecasInstaladas.length > 0) {
+            html += `
+                <div style="width:100%; margin-top:25px;">
+                    <div class="pecas-titulo-modal">
+                        <span>🔧 Peças Instaladas</span>
+                        <span>${pecasInstaladas.length}</span>
+                    </div>
+            `;
+
+            if (pecasInstaladas.length === 0) {
                 html += `
-                    <div style="margin-top:20px; padding-top:20px; border-top:2px solid #e8ecf0; width:100%;">
-                        <div style="font-weight:600; color:#7b1fa2; margin-bottom:10px; text-align:center;">🔧 Peças Instaladas</div>
-                        <div class="pecas-instaladas-grid">
+                    <div class="sem-pecas-modal">
+                        Nenhuma peça instalada neste veículo.
+                        <span>Clique em 🔧 no card do veículo para instalar peças</span>
+                    </div>
                 `;
+            } else {
+                html += `<div class="pecas-instaladas-grid">`;
                 pecasInstaladas.forEach(p => {
                     html += `
                         <div class="peca-instalada-item">
                             <div class="nome">${p.nome}</div>
-                            <div class="detalhe">${p.categoria} • R$ ${p.valor.toFixed(2)} • ${p.posicao || 'N/A'}</div>
-                            <div class="detalhe">Instalado em: ${p.dataInstalacao || 'N/A'}</div>
-                            <button class="btn-danger" onclick="event.stopPropagation(); removerPecaInstalada(${p.id})" style="margin-top:5px; padding:2px 10px; font-size:11px;">🗑️ Remover</button>
+                            <div class="detalhe"><strong>Categoria:</strong> ${p.categoria}</div>
+                            <div class="detalhe"><strong>Valor:</strong> R$ ${p.valor.toFixed(2)}</div>
+                            <div class="detalhe"><strong>Posição:</strong> ${p.posicao || 'N/A'}</div>
+                            <div class="detalhe"><strong>Instalado em:</strong> ${p.dataInstalacao || 'N/A'}</div>
+                            <div class="detalhe"><strong>KM na instalação:</strong> ${p.kmInstalacao || 'N/A'}</div>
+                            <button class="btn-remover-peca" onclick="event.stopPropagation(); removerPecaInstalada(${p.id})">
+                                🗑️ Remover Peça
+                            </button>
                         </div>
                     `;
                 });
-                html += `</div></div>`;
+                html += `</div>`;
             }
+
+            html += `</div>`;
 
             html += `</div>`;
             container.innerHTML = html;
         }
 
         function removerPecaInstalada(pecaId) {
-            if (!confirm('Remover esta peça do veículo?')) return;
+            if (!confirm('Tem certeza que deseja remover esta peça do veículo?')) return;
 
             const pecas = getPecas();
             const peca = pecas.find(p => p.id === pecaId);
-            if (!peca) return;
+            if (!peca) {
+                alert('Peça não encontrada.');
+                return;
+            }
 
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === peca.veiculoId);
+            
             if (veiculo && veiculo.pecas) {
                 const key = Object.keys(veiculo.pecas).find(k => veiculo.pecas[k] === pecaId);
-                if (key) delete veiculo.pecas[key];
-                setVeiculos(veiculos);
+                if (key) {
+                    delete veiculo.pecas[key];
+                    setVeiculos(veiculos);
+                }
             }
 
             peca.status = 'disponivel';
@@ -5103,19 +5268,24 @@
             peca.posicao = null;
             peca.dataInstalacao = null;
             peca.kmInstalacao = null;
+            
             peca.historico = peca.historico || [];
             peca.historico.push({
                 data: new Date().toLocaleString('pt-BR'),
                 acao: 'Remoção',
-                detalhes: `Peça removida do veículo ${veiculo?.placa || 'Não identificado'}`
+                detalhes: `Peça removida do veículo ${veiculo?.placa || 'Não identificado'} (${veiculo?.marca || ''} ${veiculo?.modelo || ''})`
             });
+            
             setPecas(pecas);
 
-            renderCaminhao(veiculoAtual);
+            if (veiculoAtual && veiculoAtual.id === veiculo?.id) {
+                renderCaminhao(veiculoAtual);
+            }
             renderVeiculos();
             renderPecas();
             renderRelatorios();
-            alert('✅ Peça removida com sucesso!');
+            
+            alert(`✅ Peça "${peca.nome}" removida com sucesso!`);
         }
 
         function renderPneuSlot(veiculo, slotId, pneuId, isEstepe = false) {
@@ -5813,7 +5983,6 @@
                         .header { text-align: center; margin-bottom: 20px; }
                         .header .empresa { font-size: 20px; font-weight: bold; color: #1a3a5c; }
                         .header .data { color: #666; font-size: 14px; }
-                        .badge-pdf { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; }
                     </style>
                 </head>
                 <body>
@@ -6513,6 +6682,7 @@
                 fecharModalInstalacaoPeca();
                 fecharModalManutencao();
                 fecharModalCadastroMultiplo();
+                fecharModalCarga();
             }
         });
 
@@ -6546,6 +6716,13 @@
         document.getElementById('modalCadastroMultiplo').addEventListener('click', function(e) {
             if (e.target === this) fecharModalCadastroMultiplo();
         });
+        document.getElementById('modalCarga').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalCarga();
+        });
+
+        console.log('✅ Sistema atualizado com sucesso!');
+        console.log('📦 Modal de Carga implementado');
+        console.log('🔧 Peças instaladas visíveis no modal do veículo');
     </script>
 </body>
 </html>
