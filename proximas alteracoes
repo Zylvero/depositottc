@@ -4,5 +4,9 @@
   adicionar tipo de carga
   adicionar peças ao veiculo
   fix nome da empresa
+  adicionar data na entrada de pneus
+  de onde o pneu foi descartado (qual veiculo, qual eixo)
+  ao editar um pneu que está instalado em um veiculo (recapado ou vulcanizar) ele está contabilizando erroneamente.
+  marcando errado a km do pneu não esta total(sometne parcial)
   
 -->
