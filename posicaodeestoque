@@ -151,87 +151,154 @@
             display: block;
         }
 
-        /* Ambientes */
-        .ambientes-container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
+        /* Ambientes - agora como botões */
+        .ambientes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
-        .ambiente-card {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            flex: 1;
-            min-width: 300px;
+        .ambiente-btn {
+            background: white;
             border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px 15px;
+            cursor: pointer;
             transition: all 0.3s;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .ambiente-card:hover {
+        .ambiente-btn:hover {
             border-color: #3498db;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
         }
 
-        .ambiente-header {
+        .ambiente-btn.active {
+            border-color: #3498db;
+            background: #ebf5fb;
+        }
+
+        .ambiente-btn .ambiente-nome {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .ambiente-btn .ambiente-count {
+            font-size: 12px;
+            color: #7f8c8d;
+            display: block;
+        }
+
+        .ambiente-btn .btn-remover-ambiente {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .ambiente-btn:hover .btn-remover-ambiente {
+            display: flex;
+        }
+
+        .ambiente-btn .btn-renomear-ambiente {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .ambiente-btn:hover .btn-renomear-ambiente {
+            display: flex;
+        }
+
+        /* Painel do ambiente selecionado */
+        .ambiente-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        .ambiente-panel.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f2f5;
             flex-wrap: wrap;
             gap: 10px;
         }
 
-        .ambiente-header-left {
+        .panel-header h3 {
+            color: #2c3e50;
+            font-size: 18px;
+        }
+
+        .panel-header .panel-actions {
             display: flex;
-            align-items: center;
             gap: 10px;
-            flex: 1;
-        }
-
-        .ambiente-header h3 {
-            color: #2c3e50;
-            font-size: 16px;
-            margin: 0;
-        }
-
-        .ambiente-header .ambiente-nome-input {
-            font-size: 16px;
-            font-weight: 600;
-            padding: 5px 10px;
-            border: 2px solid #dfe6e9;
-            border-radius: 6px;
-            background: white;
-            color: #2c3e50;
-            flex: 1;
-            min-width: 120px;
-        }
-
-        .ambiente-header .ambiente-nome-input:focus {
-            border-color: #3498db;
-            outline: none;
-        }
-
-        .ambiente-actions {
-            display: flex;
-            gap: 5px;
             flex-wrap: wrap;
         }
 
-        .ambiente-actions .btn {
-            padding: 5px 10px;
-            font-size: 11px;
+        .panel-header .panel-actions .btn {
+            padding: 8px 15px;
+            font-size: 12px;
         }
 
         .ambiente-filtro {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .ambiente-filtro input {
             width: 100%;
-            padding: 8px 12px;
+            padding: 10px 15px;
             border: 2px solid #dfe6e9;
             border-radius: 6px;
             font-size: 13px;
@@ -243,14 +310,10 @@
             outline: none;
         }
 
-        .ambiente-filtro input::placeholder {
-            color: #95a5a6;
-        }
-
         .ambiente-content {
             position: relative;
             min-height: 300px;
-            background: white;
+            background: #f8f9fa;
             border-radius: 8px;
             border: 2px dashed #dee2e6;
             padding: 20px;
@@ -549,12 +612,8 @@
             .tab-btn {
                 text-align: center;
             }
-            .ambiente-card {
-                min-width: 100%;
-            }
-            .ambiente-header {
-                flex-direction: column;
-                align-items: stretch;
+            .ambientes-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -579,12 +638,29 @@
     <div class="tab-content active" id="tab1">
         <div class="instructions">
             💡 <strong>Como usar:</strong> Clique em "Novo Ambiente" para criar um novo espaço de trabalho. 
-            Clique no nome do ambiente para renomeá-lo. 
-            Use o filtro de cada ambiente para buscar clientes - os botões encontrados ficarão <strong>azuis</strong>.
-            Clique em "Criar Botão Vermelho" para adicionar botões ao ambiente selecionado.
+            Clique em um ambiente para abrir seu conteúdo na parte inferior. 
+            Use o filtro para buscar clientes - os botões encontrados ficarão <strong>azuis</strong>.
         </div>
-        <div id="ambientesContainer" class="ambientes-container">
+        
+        <!-- Grid de ambientes como botões -->
+        <div id="ambientesGrid" class="ambientes-grid">
             <!-- Ambientes serão criados dinamicamente -->
+        </div>
+
+        <!-- Painel do ambiente selecionado -->
+        <div id="ambientePanel" class="ambiente-panel">
+            <div class="panel-header">
+                <h3 id="panelTitle">Ambiente</h3>
+                <div class="panel-actions">
+                    <button class="btn btn-primary" id="criarBtnPanel">➕ Criar Botão</button>
+                </div>
+            </div>
+            <div class="ambiente-filtro">
+                <input type="text" id="filtroCliente" placeholder="🔍 Filtrar cliente neste ambiente...">
+            </div>
+            <div class="ambiente-content" id="ambienteContent">
+                <div class="ambiente-empty">Nenhum botão neste ambiente. Clique em "Criar Botão" para adicionar.</div>
+            </div>
         </div>
     </div>
 
@@ -635,8 +711,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Elementos
-            const ambientesContainer = document.getElementById('ambientesContainer');
+            const ambientesGrid = document.getElementById('ambientesGrid');
+            const ambientePanel = document.getElementById('ambientePanel');
+            const panelTitle = document.getElementById('panelTitle');
+            const ambienteContent = document.getElementById('ambienteContent');
+            const filtroCliente = document.getElementById('filtroCliente');
             const criarBtn = document.getElementById('criarBtn');
+            const criarBtnPanel = document.getElementById('criarBtnPanel');
             const novoAmbienteBtn = document.getElementById('novoAmbienteBtn');
             const modal = document.getElementById('modalCadastro');
             const formPneu = document.getElementById('formPneu');
@@ -654,6 +735,7 @@
             let contadorBotoes = parseInt(localStorage.getItem('contadorBotoes')) || 0;
             let botaoEditando = null;
             let ambienteAtual = null;
+            let ambienteSelecionado = null;
 
             // Funções
             function salvarAmbientes() {
@@ -710,7 +792,6 @@
                         const pneuRemovido = pneus[index];
                         pneus.splice(index, 1);
                         
-                        // Remover o botão associado
                         const ambiente = ambientes.find(a => a.id === pneuRemovido.ambienteId);
                         if (ambiente) {
                             const botaoIndex = ambiente.botoes.findIndex(b => b.id === pneuRemovido.botaoId);
@@ -722,259 +803,251 @@
                         
                         salvarPneus();
                         renderizarAmbientes();
+                        if (ambienteSelecionado) {
+                            abrirAmbiente(ambienteSelecionado);
+                        }
                     });
                 });
             }
 
+            function abrirAmbiente(ambienteId) {
+                const ambiente = ambientes.find(a => a.id === ambienteId);
+                if (!ambiente) return;
+
+                ambienteSelecionado = ambienteId;
+                ambientePanel.classList.add('active');
+                panelTitle.textContent = `🏢 ${ambiente.nome}`;
+
+                // Atualizar botões ativos
+                document.querySelectorAll('.ambiente-btn').forEach(btn => {
+                    btn.classList.toggle('active', parseInt(btn.dataset.ambienteId) === ambienteId);
+                });
+
+                renderizarBotoesAmbiente(ambiente);
+            }
+
+            function renderizarBotoesAmbiente(ambiente) {
+                ambienteContent.innerHTML = '';
+
+                if (ambiente.botoes && ambiente.botoes.length > 0) {
+                    ambiente.botoes.forEach((botao, index) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'draggable-btn';
+                        if (botao.cadastrado) {
+                            btn.classList.add('cadastrado');
+                            const pneuAssociado = pneus.find(p => p.botaoId === botao.id && p.ambienteId === ambiente.id);
+                            btn.textContent = pneuAssociado ? pneuAssociado.cliente : `Pneu ${index + 1}`;
+                            btn.dataset.cliente = pneuAssociado ? pneuAssociado.cliente.toLowerCase() : '';
+                        } else {
+                            btn.textContent = `Novo ${index + 1}`;
+                            btn.dataset.cliente = '';
+                        }
+                        btn.dataset.index = index;
+                        btn.dataset.id = botao.id;
+                        btn.dataset.ambienteId = ambiente.id;
+                        btn.draggable = true;
+
+                        if (botao.left !== undefined && botao.top !== undefined && 
+                            (botao.left !== 0 || botao.top !== 0)) {
+                            btn.style.left = botao.left + 'px';
+                            btn.style.top = botao.top + 'px';
+                        } else {
+                            btn.style.left = '10px';
+                            btn.style.top = '10px';
+                            botao.left = 10;
+                            botao.top = 10;
+                            salvarAmbientes();
+                        }
+
+                        const deleteBtn = document.createElement('span');
+                        deleteBtn.className = 'delete-btn';
+                        deleteBtn.textContent = '×';
+                        deleteBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            if (confirm(`Deseja remover este botão e todos os dados associados?`)) {
+                                const botaoId = parseInt(btn.dataset.id);
+                                const ambienteId = parseInt(btn.dataset.ambienteId);
+                                
+                                pneus = pneus.filter(p => !(p.botaoId === botaoId && p.ambienteId === ambienteId));
+                                salvarPneus();
+                                
+                                const ambiente = ambientes.find(a => a.id === ambienteId);
+                                if (ambiente) {
+                                    ambiente.botoes = ambiente.botoes.filter(b => b.id !== botaoId);
+                                    salvarAmbientes();
+                                }
+                                
+                                renderizarAmbientes();
+                                if (ambienteSelecionado) {
+                                    abrirAmbiente(ambienteSelecionado);
+                                }
+                            }
+                        });
+                        btn.appendChild(deleteBtn);
+
+                        btn.addEventListener('click', function(e) {
+                            if (e.target.classList.contains('delete-btn')) return;
+                            
+                            const botaoId = parseInt(this.dataset.id);
+                            const ambienteId = parseInt(this.dataset.ambienteId);
+                            const ambiente = ambientes.find(a => a.id === ambienteId);
+                            
+                            if (ambiente) {
+                                const botao = ambiente.botoes.find(b => b.id === botaoId);
+                                if (botao && !botao.cadastrado) {
+                                    botaoEditando = botaoId;
+                                    ambienteAtual = ambienteId;
+                                    document.getElementById('cliente').value = '';
+                                    document.getElementById('marca').value = '';
+                                    document.getElementById('tamanho').value = '';
+                                    document.getElementById('observacoes').value = '';
+                                    modal.classList.add('active');
+                                } else if (botao && botao.cadastrado) {
+                                    const pneu = pneus.find(p => p.botaoId === botaoId && p.ambienteId === ambienteId);
+                                    if (pneu) {
+                                        alert(`📋 Dados do Pneu:\n\nCliente: ${pneu.cliente}\nMarca: ${pneu.marca}\nTamanho: ${pneu.tamanho}\nObservações: ${pneu.observacoes || 'Nenhuma'}`);
+                                    }
+                                }
+                            }
+                        });
+
+                        btn.addEventListener('mousedown', function(e) {
+                            if (e.target.classList.contains('delete-btn')) return;
+                            
+                            const container = this.parentElement;
+                            const startX = e.clientX;
+                            const startY = e.clientY;
+                            const btnLeft = parseInt(this.style.left) || 0;
+                            const btnTop = parseInt(this.style.top) || 0;
+                            
+                            const onMouseMove = (e) => {
+                                const dx = e.clientX - startX;
+                                const dy = e.clientY - startY;
+                                
+                                const containerRect = container.getBoundingClientRect();
+                                const newLeft = Math.max(0, Math.min(btnLeft + dx, containerRect.width - this.offsetWidth));
+                                const newTop = Math.max(0, Math.min(btnTop + dy, containerRect.height - this.offsetHeight));
+                                
+                                this.style.left = newLeft + 'px';
+                                this.style.top = newTop + 'px';
+                                
+                                const botaoId = parseInt(this.dataset.id);
+                                const ambienteId = parseInt(this.dataset.ambienteId);
+                                const ambiente = ambientes.find(a => a.id === ambienteId);
+                                if (ambiente) {
+                                    const botao = ambiente.botoes.find(b => b.id === botaoId);
+                                    if (botao) {
+                                        botao.left = newLeft;
+                                        botao.top = newTop;
+                                    }
+                                }
+                            };
+                            
+                            const onMouseUp = () => {
+                                document.removeEventListener('mousemove', onMouseMove);
+                                document.removeEventListener('mouseup', onMouseUp);
+                                salvarAmbientes();
+                            };
+                            
+                            document.addEventListener('mousemove', onMouseMove);
+                            document.addEventListener('mouseup', onMouseUp);
+                        });
+
+                        ambienteContent.appendChild(btn);
+                    });
+                } else {
+                    ambienteContent.innerHTML = '<div class="ambiente-empty">Nenhum botão neste ambiente. Clique em "Criar Botão" para adicionar.</div>';
+                }
+            }
+
             function renderizarAmbientes() {
+                // Renderizar grid de ambientes
                 if (ambientes.length === 0) {
-                    ambientesContainer.innerHTML = `
-                        <div style="width:100%; text-align:center; padding:40px; color:#95a5a6;">
+                    ambientesGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align:center; padding:40px; color:#95a5a6;">
                             <p style="font-size:18px; margin-bottom:10px;">🏗️ Nenhum ambiente criado</p>
                             <p>Clique em "Novo Ambiente" para começar a organizar seus pneus.</p>
                         </div>
                     `;
+                    ambientePanel.classList.remove('active');
                     atualizarFiltroAmbientes();
                     return;
                 }
 
-                ambientesContainer.innerHTML = ambientes.map(ambiente => `
-                    <div class="ambiente-card" data-ambiente-id="${ambiente.id}">
-                        <div class="ambiente-header">
-                            <div class="ambiente-header-left">
-                                <span style="font-size:20px;">🏢</span>
-                                <input type="text" class="ambiente-nome-input" value="${ambiente.nome}" data-id="${ambiente.id}" placeholder="Nome do ambiente">
-                            </div>
-                            <div class="ambiente-actions">
-                                <button class="btn btn-danger btn-remover-ambiente" data-id="${ambiente.id}">🗑️</button>
-                            </div>
-                        </div>
-                        <div class="ambiente-filtro">
-                            <input type="text" class="filtro-cliente" placeholder="🔍 Filtrar cliente neste ambiente..." data-ambiente-id="${ambiente.id}">
-                        </div>
-                        <div class="ambiente-content" id="ambiente-${ambiente.id}">
-                            ${ambiente.botoes && ambiente.botoes.length > 0 ? '' : '<div class="ambiente-empty">Nenhum botão neste ambiente. Clique em "Criar Botão" para adicionar.</div>'}
-                        </div>
+                ambientesGrid.innerHTML = ambientes.map(ambiente => `
+                    <div class="ambiente-btn ${ambienteSelecionado === ambiente.id ? 'active' : ''}" data-ambiente-id="${ambiente.id}">
+                        <button class="btn-remover-ambiente" data-id="${ambiente.id}" title="Remover ambiente">×</button>
+                        <button class="btn-renomear-ambiente" data-id="${ambiente.id}" title="Renomear ambiente">✎</button>
+                        <span class="ambiente-nome">${ambiente.nome}</span>
+                        <span class="ambiente-count">${ambiente.botoes ? ambiente.botoes.length : 0} botões</span>
                     </div>
                 `).join('');
 
-                // Evento para renomear ambiente
-                document.querySelectorAll('.ambiente-nome-input').forEach(input => {
-                    input.addEventListener('change', function() {
-                        const id = parseInt(this.dataset.id);
-                        const novoNome = this.value.trim();
-                        if (novoNome) {
-                            const ambiente = ambientes.find(a => a.id === id);
-                            if (ambiente) {
-                                ambiente.nome = novoNome;
-                                salvarAmbientes();
-                                atualizarFiltroAmbientes();
-                            }
-                        } else {
-                            // Se estiver vazio, volta ao nome anterior
-                            const ambiente = ambientes.find(a => a.id === id);
-                            if (ambiente) {
-                                this.value = ambiente.nome;
-                            }
-                        }
-                    });
-
-                    input.addEventListener('keypress', function(e) {
-                        if (e.key === 'Enter') {
-                            this.blur();
-                        }
+                // Eventos dos botões de ambiente
+                document.querySelectorAll('.ambiente-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        if (e.target.classList.contains('btn-remover-ambiente') || 
+                            e.target.classList.contains('btn-renomear-ambiente')) return;
+                        const id = parseInt(this.dataset.ambienteId);
+                        abrirAmbiente(id);
                     });
                 });
 
-                // Evento de filtro por cliente
-                document.querySelectorAll('.filtro-cliente').forEach(input => {
-                    input.addEventListener('input', function() {
-                        const ambienteId = parseInt(this.dataset.ambienteId);
-                        const filtro = this.value.toLowerCase().trim();
-                        aplicarFiltroAmbiente(ambienteId, filtro);
-                    });
-                });
-
-                // Adicionar eventos de remover ambiente
+                // Evento remover ambiente
                 document.querySelectorAll('.btn-remover-ambiente').forEach(btn => {
-                    btn.addEventListener('click', function() {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
                         const id = parseInt(this.dataset.id);
                         if (confirm('Deseja remover este ambiente e todos os seus botões?')) {
                             const ambiente = ambientes.find(a => a.id === id);
                             if (ambiente) {
-                                // Remover pneus associados
                                 pneus = pneus.filter(p => p.ambienteId !== id);
                                 salvarPneus();
-                                // Remover ambiente
                                 ambientes = ambientes.filter(a => a.id !== id);
                                 salvarAmbientes();
+                                if (ambienteSelecionado === id) {
+                                    ambienteSelecionado = null;
+                                    ambientePanel.classList.remove('active');
+                                }
                                 renderizarAmbientes();
                             }
                         }
                     });
                 });
 
-                // Renderizar botões em cada ambiente
-                ambientes.forEach(ambiente => {
-                    const container = document.getElementById(`ambiente-${ambiente.id}`);
-                    if (!container) return;
-
-                    // Limpar conteúdo exceto mensagem vazia
-                    const emptyMsg = container.querySelector('.ambiente-empty');
-                    if (emptyMsg) emptyMsg.remove();
-
-                    if (ambiente.botoes && ambiente.botoes.length > 0) {
-                        ambiente.botoes.forEach((botao, index) => {
-                            const btn = document.createElement('button');
-                            btn.className = 'draggable-btn';
-                            if (botao.cadastrado) {
-                                btn.classList.add('cadastrado');
-                                const pneuAssociado = pneus.find(p => p.botaoId === botao.id && p.ambienteId === ambiente.id);
-                                btn.textContent = pneuAssociado ? pneuAssociado.cliente : `Pneu ${index + 1}`;
-                                btn.dataset.cliente = pneuAssociado ? pneuAssociado.cliente.toLowerCase() : '';
-                            } else {
-                                btn.textContent = `Novo ${index + 1}`;
-                                btn.dataset.cliente = '';
-                            }
-                            btn.dataset.index = index;
-                            btn.dataset.id = botao.id;
-                            btn.dataset.ambienteId = ambiente.id;
-                            btn.draggable = true;
-
-                            // Posição - sempre no canto superior esquerdo (10px, 10px)
-                            if (botao.left !== undefined && botao.top !== undefined && 
-                                (botao.left !== 0 || botao.top !== 0)) {
-                                btn.style.left = botao.left + 'px';
-                                btn.style.top = botao.top + 'px';
-                            } else {
-                                btn.style.left = '10px';
-                                btn.style.top = '10px';
-                                botao.left = 10;
-                                botao.top = 10;
+                // Evento renomear ambiente
+                document.querySelectorAll('.btn-renomear-ambiente').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const id = parseInt(this.dataset.id);
+                        const ambiente = ambientes.find(a => a.id === id);
+                        if (ambiente) {
+                            const novoNome = prompt('Digite o novo nome do ambiente:', ambiente.nome);
+                            if (novoNome && novoNome.trim()) {
+                                ambiente.nome = novoNome.trim();
                                 salvarAmbientes();
+                                renderizarAmbientes();
+                                if (ambienteSelecionado === id) {
+                                    panelTitle.textContent = `🏢 ${ambiente.nome}`;
+                                }
                             }
-
-                            // Botão de deletar
-                            const deleteBtn = document.createElement('span');
-                            deleteBtn.className = 'delete-btn';
-                            deleteBtn.textContent = '×';
-                            deleteBtn.addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                if (confirm(`Deseja remover este botão e todos os dados associados?`)) {
-                                    const botaoId = parseInt(btn.dataset.id);
-                                    const ambienteId = parseInt(btn.dataset.ambienteId);
-                                    
-                                    // Remover pneu associado
-                                    pneus = pneus.filter(p => !(p.botaoId === botaoId && p.ambienteId === ambienteId));
-                                    salvarPneus();
-                                    
-                                    // Remover botão
-                                    const ambiente = ambientes.find(a => a.id === ambienteId);
-                                    if (ambiente) {
-                                        ambiente.botoes = ambiente.botoes.filter(b => b.id !== botaoId);
-                                        salvarAmbientes();
-                                    }
-                                    
-                                    renderizarAmbientes();
-                                }
-                            });
-                            btn.appendChild(deleteBtn);
-
-                            // Evento de clique para abrir modal
-                            btn.addEventListener('click', function(e) {
-                                if (e.target.classList.contains('delete-btn')) return;
-                                
-                                const botaoId = parseInt(this.dataset.id);
-                                const ambienteId = parseInt(this.dataset.ambienteId);
-                                const ambiente = ambientes.find(a => a.id === ambienteId);
-                                
-                                if (ambiente) {
-                                    const botao = ambiente.botoes.find(b => b.id === botaoId);
-                                    if (botao && !botao.cadastrado) {
-                                        botaoEditando = botaoId;
-                                        ambienteAtual = ambienteId;
-                                        document.getElementById('cliente').value = '';
-                                        document.getElementById('marca').value = '';
-                                        document.getElementById('tamanho').value = '';
-                                        document.getElementById('observacoes').value = '';
-                                        modal.classList.add('active');
-                                    } else if (botao && botao.cadastrado) {
-                                        const pneu = pneus.find(p => p.botaoId === botaoId && p.ambienteId === ambienteId);
-                                        if (pneu) {
-                                            alert(`📋 Dados do Pneu:\n\nCliente: ${pneu.cliente}\nMarca: ${pneu.marca}\nTamanho: ${pneu.tamanho}\nObservações: ${pneu.observacoes || 'Nenhuma'}`);
-                                        }
-                                    }
-                                }
-                            });
-
-                            // Drag and drop
-                            btn.addEventListener('mousedown', function(e) {
-                                if (e.target.classList.contains('delete-btn')) return;
-                                
-                                const container = this.parentElement;
-                                const startX = e.clientX;
-                                const startY = e.clientY;
-                                const btnLeft = parseInt(this.style.left) || 0;
-                                const btnTop = parseInt(this.style.top) || 0;
-                                
-                                const onMouseMove = (e) => {
-                                    const dx = e.clientX - startX;
-                                    const dy = e.clientY - startY;
-                                    
-                                    const containerRect = container.getBoundingClientRect();
-                                    const newLeft = Math.max(0, Math.min(btnLeft + dx, containerRect.width - this.offsetWidth));
-                                    const newTop = Math.max(0, Math.min(btnTop + dy, containerRect.height - this.offsetHeight));
-                                    
-                                    this.style.left = newLeft + 'px';
-                                    this.style.top = newTop + 'px';
-                                    
-                                    const botaoId = parseInt(this.dataset.id);
-                                    const ambienteId = parseInt(this.dataset.ambienteId);
-                                    const ambiente = ambientes.find(a => a.id === ambienteId);
-                                    if (ambiente) {
-                                        const botao = ambiente.botoes.find(b => b.id === botaoId);
-                                        if (botao) {
-                                            botao.left = newLeft;
-                                            botao.top = newTop;
-                                        }
-                                    }
-                                };
-                                
-                                const onMouseUp = () => {
-                                    document.removeEventListener('mousemove', onMouseMove);
-                                    document.removeEventListener('mouseup', onMouseUp);
-                                    salvarAmbientes();
-                                };
-                                
-                                document.addEventListener('mousemove', onMouseMove);
-                                document.addEventListener('mouseup', onMouseUp);
-                            });
-
-                            container.appendChild(btn);
-                        });
-                    }
+                        }
+                    });
                 });
 
                 // Atualizar filtro de ambientes
                 atualizarFiltroAmbientes();
-            }
 
-            function aplicarFiltroAmbiente(ambienteId, filtro) {
-                const container = document.getElementById(`ambiente-${ambienteId}`);
-                if (!container) return;
-
-                const botoes = container.querySelectorAll('.draggable-btn');
-                botoes.forEach(btn => {
-                    const cliente = btn.dataset.cliente || '';
-                    if (filtro === '' || cliente.includes(filtro)) {
-                        btn.classList.add('destaque-azul');
-                        // Remover destaque após 3 segundos
-                        clearTimeout(btn.timeoutId);
-                        btn.timeoutId = setTimeout(() => {
-                            btn.classList.remove('destaque-azul');
-                        }, 3000);
-                    }
-                });
+                // Se havia um ambiente selecionado, reabrir
+                if (ambienteSelecionado && ambientes.some(a => a.id === ambienteSelecionado)) {
+                    abrirAmbiente(ambienteSelecionado);
+                } else if (ambientes.length > 0 && !ambienteSelecionado) {
+                    // Se não há selecionado, abre o primeiro
+                    abrirAmbiente(ambientes[0].id);
+                } else if (ambientes.length > 0 && ambienteSelecionado) {
+                    // Se o selecionado foi removido, abre o primeiro
+                    abrirAmbiente(ambientes[0].id);
+                }
             }
 
             function atualizarFiltroAmbientes() {
@@ -1004,22 +1077,43 @@
                     ambientes.push(novoAmbiente);
                     salvarAmbientes();
                     renderizarAmbientes();
+                    abrirAmbiente(novoAmbiente.id);
                 }
             });
 
-            // Criar novo botão no ambiente ativo
+            // Criar novo botão
+            function criarBotaoNoAmbiente(ambienteId) {
+                const ambiente = ambientes.find(a => a.id === ambienteId);
+                if (!ambiente) {
+                    alert('Selecione um ambiente primeiro!');
+                    return;
+                }
+
+                const novoBotao = {
+                    id: ++contadorBotoes,
+                    cadastrado: false,
+                    left: 10,
+                    top: 10
+                };
+                ambiente.botoes.push(novoBotao);
+                salvarAmbientes();
+                salvarContadorBotoes();
+                renderizarAmbientes();
+                abrirAmbiente(ambienteId);
+            }
+
             criarBtn.addEventListener('click', function() {
                 if (ambientes.length === 0) {
                     alert('Crie um ambiente primeiro!');
                     return;
                 }
 
-                // Se há apenas um ambiente, usa ele
                 let ambienteId = null;
                 if (ambientes.length === 1) {
                     ambienteId = ambientes[0].id;
+                } else if (ambienteSelecionado && ambientes.some(a => a.id === ambienteSelecionado)) {
+                    ambienteId = ambienteSelecionado;
                 } else {
-                    // Pergunta em qual ambiente criar
                     const ambienteNomes = ambientes.map((a, i) => `${i + 1}. ${a.nome}`).join('\n');
                     const escolha = prompt(`Escolha o ambiente para criar o botão:\n${ambienteNomes}\n\nDigite o número do ambiente:`);
                     if (escolha) {
@@ -1031,20 +1125,32 @@
                 }
 
                 if (ambienteId) {
-                    const ambiente = ambientes.find(a => a.id === ambienteId);
-                    if (ambiente) {
-                        const novoBotao = {
-                            id: ++contadorBotoes,
-                            cadastrado: false,
-                            left: 10,
-                            top: 10
-                        };
-                        ambiente.botoes.push(novoBotao);
-                        salvarAmbientes();
-                        salvarContadorBotoes();
-                        renderizarAmbientes();
-                    }
+                    criarBotaoNoAmbiente(ambienteId);
                 }
+            });
+
+            criarBtnPanel.addEventListener('click', function() {
+                if (ambienteSelecionado) {
+                    criarBotaoNoAmbiente(ambienteSelecionado);
+                } else {
+                    alert('Selecione um ambiente primeiro!');
+                }
+            });
+
+            // Filtro de cliente no painel
+            filtroCliente.addEventListener('input', function() {
+                const filtro = this.value.toLowerCase().trim();
+                const botoes = ambienteContent.querySelectorAll('.draggable-btn');
+                botoes.forEach(btn => {
+                    const cliente = btn.dataset.cliente || '';
+                    if (filtro === '' || cliente.includes(filtro)) {
+                        btn.classList.add('destaque-azul');
+                        clearTimeout(btn.timeoutId);
+                        btn.timeoutId = setTimeout(() => {
+                            btn.classList.remove('destaque-azul');
+                        }, 3000);
+                    }
+                });
             });
 
             // Fechar modal
@@ -1078,10 +1184,8 @@
                 if (ambiente) {
                     const botao = ambiente.botoes.find(b => b.id === botaoEditando);
                     if (botao) {
-                        // Remover pneu antigo se existir
                         pneus = pneus.filter(p => !(p.botaoId === botao.id && p.ambienteId === ambiente.id));
                         
-                        // Adicionar novo pneu
                         pneus.push({ 
                             botaoId: botao.id,
                             ambienteId: ambiente.id,
@@ -1096,6 +1200,9 @@
                         salvarAmbientes();
                         salvarPneus();
                         renderizarAmbientes();
+                        if (ambienteSelecionado) {
+                            abrirAmbiente(ambienteSelecionado);
+                        }
                         fecharModal();
                     }
                 }
@@ -1119,6 +1226,9 @@
                     salvarPneus();
                     salvarAmbientes();
                     renderizarAmbientes();
+                    if (ambienteSelecionado) {
+                        abrirAmbiente(ambienteSelecionado);
+                    }
                 }
             });
 
