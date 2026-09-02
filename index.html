@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Controle de Estoque</title>
+    <title>Sistema de Controle de Estoque Profissional</title>
     <style>
         * {
             margin: 0;
@@ -31,25 +31,23 @@
         .header {
             background: linear-gradient(135deg, #1a3a5c, #2a5f7a);
             color: white;
-            padding: 20px 30px;
+            padding: 15px 30px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            position: relative;
         }
 
         .header-title h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 300;
             cursor: pointer;
-            padding: 5px 20px;
+            padding: 5px 15px;
             border-radius: 8px;
             transition: background 0.3s;
             border: 2px solid transparent;
-            text-align: center;
         }
 
         .header-title h1:hover {
@@ -57,23 +55,26 @@
             border-color: rgba(255,255,255,0.3);
         }
 
-        .header-title h1:focus {
-            outline: none;
-            background: rgba(255,255,255,0.15);
-            border-color: #ffd700;
-        }
-
         .header-user {
-            position: absolute;
-            right: 30px;
             display: flex;
             align-items: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .header-user span {
             font-size: 14px;
             opacity: 0.9;
+        }
+
+        .badge-master {
+            background: #ffd700;
+            color: #1a3a5c;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         .btn-logout {
@@ -224,8 +225,8 @@
         .tabs button {
             background: none;
             border: none;
-            padding: 14px 24px;
-            font-size: 15px;
+            padding: 12px 20px;
+            font-size: 14px;
             font-weight: 600;
             color: #888;
             cursor: pointer;
@@ -241,6 +242,11 @@
         .tabs button.active {
             color: #1a3a5c;
             border-bottom-color: #2a5f7a;
+        }
+
+        .tabs button.blocked {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .tab-content {
@@ -409,21 +415,6 @@
             background: #4a148c;
         }
 
-        .btn-teal {
-            background: #00695c;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-size: 13px;
-        }
-
-        .btn-teal:hover {
-            background: #004d40;
-        }
-
         .btn-orange {
             background: #e65100;
             color: white;
@@ -437,21 +428,6 @@
 
         .btn-orange:hover {
             background: #bf360c;
-        }
-
-        .btn-route {
-            background: #00695c;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-size: 13px;
-        }
-
-        .btn-route:hover {
-            background: #004d40;
         }
 
         .btn-pdf {
@@ -469,6 +445,22 @@
             background: #b71c1c;
         }
 
+        .btn-master {
+            background: #ffd700;
+            color: #1a3a5c;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .btn-master:hover {
+            background: #ffc107;
+        }
+
         .estoque-header,
         .veiculos-header {
             display: flex;
@@ -482,12 +474,13 @@
         .estoque-header h2,
         .veiculos-header h2 {
             color: #1a3a5c;
+            font-size: 20px;
         }
 
         .estoque-stats,
         .veiculos-stats {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -599,101 +592,28 @@
             font-weight: 600;
         }
 
-        .badge-novo {
-            background: #c8e6c9;
-            color: #1b5e20;
-        }
-        .badge-meia {
-            background: #fff9c4;
-            color: #f57f17;
-        }
-        .badge-recap {
-            background: #ffccbc;
-            color: #bf360c;
-        }
-        .badge-carcaça {
-            background: #d1c4e9;
-            color: #4a148c;
-        }
-        .badge-descarte {
-            background: #ffcdd2;
-            color: #b71c1c;
-        }
-        .badge-vulcanizado {
-            background: #e1bee7;
-            color: #4a148c;
-        }
-        .badge-instalado {
-            background: #b3e5fc;
-            color: #01579b;
-        }
-        .badge-disponivel {
-            background: #c8e6c9;
-            color: #1b5e20;
-        }
-        .badge-instalado-peca {
-            background: #b3e5fc;
-            color: #01579b;
-        }
-        .badge-em-uso {
-            background: #ffccbc;
-            color: #bf360c;
-        }
-        .badge-manutencao {
-            background: #ffab91;
-            color: #bf360c;
-        }
-        .badge-preventiva {
-            background: #a5d6a7;
-            color: #1b5e20;
-        }
-        .badge-corretiva {
-            background: #ffcdd2;
-            color: #b71c1c;
-        }
-        .badge-revisao {
-            background: #b3e5fc;
-            color: #01579b;
-        }
-        .badge-route {
-            background: #b2dfdb;
-            color: #004d40;
-        }
+        .badge-novo { background: #c8e6c9; color: #1b5e20; }
+        .badge-meia { background: #fff9c4; color: #f57f17; }
+        .badge-recap { background: #ffccbc; color: #bf360c; }
+        .badge-carcaça { background: #d1c4e9; color: #4a148c; }
+        .badge-descarte { background: #ffcdd2; color: #b71c1c; }
+        .badge-vulcanizado { background: #e1bee7; color: #4a148c; }
+        .badge-instalado { background: #b3e5fc; color: #01579b; }
+        .badge-disponivel { background: #c8e6c9; color: #1b5e20; }
+        .badge-instalado-peca { background: #b3e5fc; color: #01579b; }
+        .badge-em-uso { background: #ffccbc; color: #bf360c; }
+        .badge-manutencao { background: #ffab91; color: #bf360c; }
+        .badge-preventiva { background: #a5d6a7; color: #1b5e20; }
+        .badge-corretiva { background: #ffcdd2; color: #b71c1c; }
+        .badge-revisao { background: #b3e5fc; color: #01579b; }
 
-        .badge-liso {
-            background: #e0e0e0;
-            color: #333;
-        }
-        .badge-misto {
-            background: #b3e5fc;
-            color: #01579b;
-        }
-        .badge-borrachudo {
-            background: #a5d6a7;
-            color: #1b5e20;
-        }
+        .badge-liso { background: #e0e0e0; color: #333; }
+        .badge-misto { background: #b3e5fc; color: #01579b; }
+        .badge-borrachudo { background: #a5d6a7; color: #1b5e20; }
 
-        .badge-ativo {
-            background: #c8e6c9;
-            color: #1b5e20;
-        }
-        .badge-inativo {
-            background: #ffcdd2;
-            color: #b71c1c;
-        }
-        .badge-estepe {
-            background: #fff3e0;
-            color: #e65100;
-        }
-
-        .badge-rota-concluida {
-            background: #c8e6c9;
-            color: #1b5e20;
-        }
-        .badge-rota-andamento {
-            background: #fff9c4;
-            color: #f57f17;
-        }
+        .badge-ativo { background: #c8e6c9; color: #1b5e20; }
+        .badge-inativo { background: #ffcdd2; color: #b71c1c; }
+        .badge-estepe { background: #fff3e0; color: #e65100; }
 
         .empty-state {
             text-align: center;
@@ -865,8 +785,8 @@
         }
 
         .pneu-slot {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             border: 3px dashed #b0bec5;
             border-radius: 50%;
             display: flex;
@@ -881,6 +801,7 @@
             word-break: break-all;
             position: relative;
             user-select: none;
+            flex-direction: column;
         }
 
         .pneu-slot:hover {
@@ -967,6 +888,46 @@
         .estepe-section .eixo-label {
             color: #f57c00;
             font-size: 14px;
+        }
+
+        /* Faixas de desgaste do pneu */
+        .pneu-faixas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            margin-top: 4px;
+            width: 100%;
+        }
+
+        .pneu-faixa {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 7px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .pneu-faixa input {
+            width: 24px;
+            height: 14px;
+            padding: 1px 2px;
+            font-size: 7px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .pneu-faixa input:focus {
+            outline: none;
+            border-color: #2a5f7a;
+        }
+
+        .pneu-faixa .faixa-label {
+            font-size: 6px;
+            color: #666;
+            font-weight: 600;
         }
 
         .pecas-grid {
@@ -1108,21 +1069,6 @@
             font-size: 13px;
             font-weight: 600;
             white-space: nowrap;
-        }
-
-        .modal-selecao-close {
-            margin-top: 15px;
-            width: 100%;
-            padding: 10px;
-            background: #e8ecf0;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .modal-selecao-close:hover {
-            background: #d0d4d9;
         }
 
         .modal-instalacao-peca {
@@ -1273,151 +1219,6 @@
             transition: all 0.3s;
         }
 
-        .modal-servico {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1400;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-servico.show {
-            display: flex;
-        }
-
-        .modal-servico-content {
-            background: white;
-            border-radius: 16px;
-            max-width: 500px;
-            width: 90%;
-            padding: 30px;
-        }
-
-        .modal-servico-content h3 {
-            color: #1a3a5c;
-            margin-bottom: 10px;
-        }
-
-        .modal-servico-content .subtitle {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .modal-servico-content .form-group {
-            margin-bottom: 15px;
-        }
-
-        .modal-servico-content label {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .modal-servico-content input,
-        .modal-servico-content select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 2px solid #dce0e5;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .modal-servico-content input:focus,
-        .modal-servico-content select:focus {
-            outline: none;
-            border-color: #2a5f7a;
-        }
-
-        .modal-servico-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .modal-servico-actions button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-confirmar {
-            background: #2e7d32;
-            color: white;
-        }
-
-        .btn-confirmar:hover {
-            background: #1b5e20;
-        }
-
-        .btn-cancelar {
-            background: #e8ecf0;
-            color: #333;
-        }
-
-        .btn-cancelar:hover {
-            background: #d0d4d9;
-        }
-
-        .relatorio-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid #e8ecf0;
-        }
-
-        .relatorio-card h3 {
-            color: #1a3a5c;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        .relatorio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .relatorio-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .relatorio-item .valor {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a3a5c;
-        }
-
-        .relatorio-item .label {
-            font-size: 13px;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .relatorio-item .destaque {
-            color: #c62828;
-        }
-
-        .relatorio-item .positivo {
-            color: #2e7d32;
-        }
-
         .modal-manutencao {
             display: none;
             position: fixed;
@@ -1426,7 +1227,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 1500;
+            z-index: 1400;
             justify-content: center;
             align-items: center;
         }
@@ -1501,24 +1302,23 @@
             transition: all 0.3s;
         }
 
-        #modalCadastroMultiplo .modal-manutencao-content {
-            max-width: 700px;
+        .btn-confirmar {
+            background: #2e7d32;
+            color: white;
         }
 
-        #modalCadastroMultiplo .modal-manutencao-content input:focus,
-        #modalCadastroMultiplo .modal-manutencao-content select:focus {
-            outline: none;
-            border-color: #2a5f7a;
+        .btn-confirmar:hover {
+            background: #1b5e20;
         }
 
-        #modalCadastroMultiplo .modal-manutencao-content input {
-            transition: border 0.3s;
+        .btn-cancelar {
+            background: #e8ecf0;
+            color: #333;
         }
 
-        .status-disponivel { color: #1b5e20; font-weight: 600; }
-        .status-instalado { color: #01579b; font-weight: 600; }
-        .status-recapagem { color: #bf360c; font-weight: 600; }
-        .status-vulcanizacao { color: #4a148c; font-weight: 600; }
+        .btn-cancelar:hover {
+            background: #d0d4d9;
+        }
 
         .manutencao-item {
             background: #f8f9fa;
@@ -1576,19 +1376,6 @@
             font-size: 12px;
             color: #555;
             font-weight: 400;
-        }
-
-        .route-info {
-            background: #e0f2f1;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            margin-top: 8px;
-        }
-
-        .route-info .label {
-            font-weight: 600;
-            color: #004d40;
         }
 
         .pecas-instaladas-grid {
@@ -1682,176 +1469,147 @@
             margin-top: 5px;
         }
 
-        /* Modal de Carga */
-        .modal-carga {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1600;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-carga.show {
-            display: flex;
-        }
-
-        .modal-carga-content {
-            background: white;
-            border-radius: 16px;
-            max-width: 500px;
-            width: 90%;
-            padding: 30px;
-        }
-
-        .modal-carga-content h3 {
-            color: #1a3a5c;
-            margin-bottom: 10px;
-        }
-
-        .modal-carga-content .subtitle {
-            color: #666;
-            font-size: 14px;
+        /* Master Control */
+        .master-container {
+            background: #fff8e1;
+            border: 2px solid #ffd700;
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 20px;
         }
 
-        .modal-carga-content .form-group {
+        .master-container h3 {
+            color: #1a3a5c;
             margin-bottom: 15px;
         }
 
-        .modal-carga-content label {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-            display: block;
-            margin-bottom: 5px;
+        .master-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
         }
 
-        .modal-carga-content input,
-        .modal-carga-content select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 2px solid #dce0e5;
+        .master-card {
+            background: white;
             border-radius: 8px;
-            font-size: 14px;
+            padding: 15px;
+            border: 1px solid #e8ecf0;
         }
 
-        .modal-carga-content input:focus,
-        .modal-carga-content select:focus {
-            outline: none;
-            border-color: #2a5f7a;
+        .master-card .empresa-nome {
+            font-weight: 700;
+            color: #1a3a5c;
+            font-size: 16px;
         }
 
-        .modal-carga-actions {
+        .master-card .empresa-info {
+            font-size: 13px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .master-card .empresa-status {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 10px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        .modal-carga-actions button {
-            flex: 1;
-            padding: 10px;
-            border: none;
+        .master-card .empresa-status .badge {
+            font-size: 11px;
+        }
+
+        .master-card .empresa-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Modal Master */
+        .modal-master-content {
+            max-width: 800px;
+        }
+
+        /* Relatório de desgaste */
+        .desgaste-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .desgaste-item {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+            text-align: center;
         }
 
-        .modal-carga-actions .btn-confirmar {
+        .desgaste-item .valor {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a3a5c;
+        }
+
+        .desgaste-item .label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .desgaste-item .faixa-indicador {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .desgaste-item .faixa-indicador .barra {
+            width: 20px;
+            height: 8px;
+            border-radius: 2px;
+            background: #e0e0e0;
+        }
+
+        .desgaste-item .faixa-indicador .barra.preenchida {
             background: #2e7d32;
-            color: white;
         }
 
-        .modal-carga-actions .btn-confirmar:hover {
-            background: #1b5e20;
+        .desgaste-item .faixa-indicador .barra.media {
+            background: #f57c00;
         }
 
-        .modal-carga-actions .btn-cancelar {
-            background: #e8ecf0;
-            color: #333;
-        }
-
-        .modal-carga-actions .btn-cancelar:hover {
-            background: #d0d4d9;
+        .desgaste-item .faixa-indicador .barra.baixa {
+            background: #c62828;
         }
 
         @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .form-grid-3 {
-                grid-template-columns: 1fr;
-            }
-            .header {
-                padding: 15px 20px;
-                flex-direction: column;
-            }
-            .header-title h1 {
-                font-size: 18px;
-            }
-            .header-user {
-                position: static;
-                width: 100%;
-                justify-content: center;
-                margin-top: 10px;
-            }
-            .container {
-                padding: 15px;
-            }
-            .tab-content {
-                padding: 20px 15px;
-            }
-            .tabs button {
-                padding: 10px 14px;
-                font-size: 13px;
-            }
-            .auth-container {
-                margin: 30px 15px;
-                padding: 25px;
-            }
-            .veiculos-grid {
-                grid-template-columns: 1fr;
-            }
-            .pecas-grid {
-                grid-template-columns: 1fr;
-            }
-            .eixos-row {
-                gap: 15px;
-            }
-            .pneu-slot {
-                width: 45px;
-                height: 45px;
-                font-size: 8px;
-            }
-            .caminhao {
-                min-width: 300px;
-            }
-            .modal-content {
-                padding: 20px;
-            }
-            .filtros-container {
-                flex-direction: column;
-            }
-            .filtros-container .form-group {
-                min-width: 100%;
-            }
-            .relatorio-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .pecas-instaladas-grid {
-                grid-template-columns: 1fr;
-            }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-grid-3 { grid-template-columns: 1fr; }
+            .header { padding: 15px 20px; flex-direction: column; }
+            .header-title h1 { font-size: 18px; }
+            .header-user { width: 100%; justify-content: center; }
+            .container { padding: 15px; }
+            .tab-content { padding: 20px 15px; }
+            .tabs button { padding: 10px 14px; font-size: 13px; }
+            .auth-container { margin: 30px 15px; padding: 25px; }
+            .veiculos-grid { grid-template-columns: 1fr; }
+            .pecas-grid { grid-template-columns: 1fr; }
+            .eixos-row { gap: 15px; }
+            .pneu-slot { width: 50px; height: 50px; font-size: 8px; }
+            .caminhao { min-width: 300px; }
+            .modal-content { padding: 20px; }
+            .filtros-container { flex-direction: column; }
+            .filtros-container .form-group { min-width: 100%; }
+            .master-grid { grid-template-columns: 1fr; }
+            .desgaste-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Linha vermelha no topo -->
     <div class="top-bar"></div>
 
     <header class="header" id="mainHeader" style="display:none;">
@@ -1860,6 +1618,7 @@
         </div>
         <div class="header-user">
             <span id="userDisplay"></span>
+            <span id="masterBadge" class="badge-master" style="display:none;">👑 Master</span>
             <button class="btn-logout" onclick="logout()">Sair</button>
         </div>
     </header>
@@ -1900,16 +1659,16 @@
 
         <div id="appContainer" class="app-container">
 
-            <div class="tabs">
+            <div class="tabs" id="mainTabs">
                 <button class="active" data-tab="tab-cadastro" onclick="switchTab('tab-cadastro')">📦 Cadastrar Pneu</button>
                 <button data-tab="tab-estoque" onclick="switchTab('tab-estoque')">📋 Estoque de Pneus</button>
-                <button data-tab="tab-pecas" onclick="switchTab('tab-pecas')">🔧 Estoque de Peças</button>
-                <button data-tab="tab-veiculos" onclick="switchTab('tab-veiculos')">🚗 Veículos</button>
-                <button data-tab="tab-rotas" onclick="switchTab('tab-rotas')">🗺️ Rotas</button>
-                <button data-tab="tab-manutencao" onclick="switchTab('tab-manutencao')">🔧 Manutenção</button>
-                <button data-tab="tab-motoristas" onclick="switchTab('tab-motoristas')">👤 Motoristas</button>
-                <button data-tab="tab-descartados" onclick="switchTab('tab-descartados')">🗑️ Descartados</button>
-                <button data-tab="tab-relatorios" onclick="switchTab('tab-relatorios')">📊 Relatórios</button>
+                <button data-tab="tab-pecas" onclick="switchTab('tab-pecas')" id="tabBtnPecas">🔧 Estoque de Peças</button>
+                <button data-tab="tab-veiculos" onclick="switchTab('tab-veiculos')" id="tabBtnVeiculos">🚗 Veículos</button>
+                <button data-tab="tab-manutencao" onclick="switchTab('tab-manutencao')" id="tabBtnManutencao">🔧 Manutenção</button>
+                <button data-tab="tab-motoristas" onclick="switchTab('tab-motoristas')" id="tabBtnMotoristas">👤 Motoristas</button>
+                <button data-tab="tab-descartados" onclick="switchTab('tab-descartados')" id="tabBtnDescartados">🗑️ Descartados</button>
+                <button data-tab="tab-relatorios" onclick="switchTab('tab-relatorios')" id="tabBtnRelatorios">📊 Relatórios</button>
+                <button data-tab="tab-master" onclick="switchTab('tab-master')" id="tabBtnMaster" style="display:none;">👑 Master</button>
             </div>
 
             <div class="tab-content">
@@ -1917,6 +1676,10 @@
                 <!-- TAB CADASTRO PNEU -->
                 <div id="tab-cadastro" class="tab-pane active">
                     <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Novo Pneu</h3>
+                    <div id="pneuLimitWarning" style="display:none; background:#fff3e0; padding:12px 16px; border-radius:8px; margin-bottom:15px; border-left:4px solid #f57c00;">
+                        <strong>⚠️ Limite de Pneus:</strong> Sua conta permite apenas <span id="pneuLimitCount">10</span> pneus no estoque.
+                        <span id="pneuLimitCurrent" style="display:block; font-size:13px; color:#666; margin-top:4px;"></span>
+                    </div>
                     <form id="pneuForm" onsubmit="cadastrarPneu(event)">
                         <div class="form-grid">
                             <div class="form-group">
@@ -1935,7 +1698,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>DOT / Fogo (opcional)</label>
+                                <label>DOT / Fogo</label>
                                 <input type="text" id="pneuDot" placeholder="Ex: DOT 1234">
                             </div>
                             <div class="form-group">
@@ -2066,24 +1829,70 @@
 
                 <!-- TAB ESTOQUE DE PEÇAS -->
                 <div id="tab-pecas" class="tab-pane">
-                    <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Nova Peça/Item</h3>
-                    <form id="pecaForm" onsubmit="cadastrarPeca(event)">
-                        <div class="form-grid">
-                            <div class="form-group full">
-                                <label>Nome do Item/Peça</label>
-                                <input type="text" id="pecaNome" placeholder="Ex: Filtro de Óleo, Pastilha de Freio, Óleo Motor..." required>
+                    <div id="pecasBlocked" style="display:none; background:#ffebee; padding:20px; border-radius:12px; text-align:center;">
+                        <h3 style="color:#c62828;">🔒 Acesso Bloqueado</h3>
+                        <p style="color:#666; margin-top:10px;">O estoque de peças está bloqueado para sua conta.</p>
+                        <p style="color:#999; font-size:14px;">Entre em contato com o administrador para liberar acesso.</p>
+                    </div>
+                    <div id="pecasContent" style="display:none;">
+                        <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Nova Peça/Item</h3>
+                        <form id="pecaForm" onsubmit="cadastrarPeca(event)">
+                            <div class="form-grid">
+                                <div class="form-group full">
+                                    <label>Nome do Item/Peça</label>
+                                    <input type="text" id="pecaNome" placeholder="Ex: Filtro de Óleo, Pastilha de Freio, Óleo Motor..." required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Valor (R$)</label>
+                                    <input type="number" id="pecaValor" value="0" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Quantidade</label>
+                                    <input type="number" id="pecaQuantidade" value="1" min="1" step="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Categoria</label>
+                                    <select id="pecaCategoria">
+                                        <option value="filtro">Filtro</option>
+                                        <option value="freio">Freio</option>
+                                        <option value="oleo">Óleo</option>
+                                        <option value="suspensao">Suspensão</option>
+                                        <option value="motor">Motor</option>
+                                        <option value="eletrica">Elétrica</option>
+                                        <option value="outros">Outros</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Fornecedor (opcional)</label>
+                                    <input type="text" id="pecaFornecedor" placeholder="Nome do fornecedor">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-success">Cadastrar Peça</button>
+                                    <button type="reset" class="btn-secondary">Limpar</button>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Valor (R$)</label>
-                                <input type="number" id="pecaValor" value="0" min="0" step="0.01" required>
+                        </form>
+
+                        <hr style="margin: 30px 0; border-color: #e8ecf0;">
+
+                        <div class="estoque-header">
+                            <h2>Peças em Estoque</h2>
+                            <div class="estoque-stats">
+                                <span id="totalPecas">Total: 0</span>
+                                <span id="totalItensPecas">Itens: 0</span>
+                                <button class="btn-pdf" onclick="gerarPDFPecas()">📄 PDF</button>
                             </div>
+                        </div>
+
+                        <div class="filtros-container" id="filtrosPecas">
                             <div class="form-group">
-                                <label>Quantidade</label>
-                                <input type="number" id="pecaQuantidade" value="1" min="1" step="1" required>
+                                <label>Buscar por Nome</label>
+                                <input type="text" id="filtroPecaNome" placeholder="Digite o nome..." oninput="filtrarPecas()">
                             </div>
                             <div class="form-group">
                                 <label>Categoria</label>
-                                <select id="pecaCategoria">
+                                <select id="filtroPecaCategoria" onchange="filtrarPecas()">
+                                    <option value="">Todos</option>
                                     <option value="filtro">Filtro</option>
                                     <option value="freio">Freio</option>
                                     <option value="oleo">Óleo</option>
@@ -2094,549 +1903,519 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Fornecedor (opcional)</label>
-                                <input type="text" id="pecaFornecedor" placeholder="Nome do fornecedor">
+                                <label>Status</label>
+                                <select id="filtroPecaStatus" onchange="filtrarPecas()">
+                                    <option value="">Todos</option>
+                                    <option value="disponivel">Disponível</option>
+                                    <option value="instalado">Instalado</option>
+                                </select>
                             </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn-success">Cadastrar Peça</button>
-                                <button type="reset" class="btn-secondary">Limpar</button>
-                            </div>
+                            <button class="btn-limpar" onclick="limparFiltrosPecas()">Limpar Filtros</button>
                         </div>
-                    </form>
 
-                    <hr style="margin: 30px 0; border-color: #e8ecf0;">
-
-                    <div class="estoque-header">
-                        <h2>Peças em Estoque</h2>
-                        <div class="estoque-stats">
-                            <span id="totalPecas">Total: 0</span>
-                            <span id="totalItensPecas">Itens: 0</span>
-                            <button class="btn-pdf" onclick="gerarPDFPecas()">📄 PDF</button>
-                        </div>
+                        <div id="pecasGrid" class="pecas-grid"></div>
                     </div>
-
-                    <div class="filtros-container" id="filtrosPecas">
-                        <div class="form-group">
-                            <label>Buscar por Nome</label>
-                            <input type="text" id="filtroPecaNome" placeholder="Digite o nome..." oninput="filtrarPecas()">
-                        </div>
-                        <div class="form-group">
-                            <label>Categoria</label>
-                            <select id="filtroPecaCategoria" onchange="filtrarPecas()">
-                                <option value="">Todos</option>
-                                <option value="filtro">Filtro</option>
-                                <option value="freio">Freio</option>
-                                <option value="oleo">Óleo</option>
-                                <option value="suspensao">Suspensão</option>
-                                <option value="motor">Motor</option>
-                                <option value="eletrica">Elétrica</option>
-                                <option value="outros">Outros</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select id="filtroPecaStatus" onchange="filtrarPecas()">
-                                <option value="">Todos</option>
-                                <option value="disponivel">Disponível</option>
-                                <option value="instalado">Instalado</option>
-                            </select>
-                        </div>
-                        <button class="btn-limpar" onclick="limparFiltrosPecas()">Limpar Filtros</button>
-                    </div>
-
-                    <div id="pecasGrid" class="pecas-grid"></div>
                 </div>
 
                 <!-- TAB VEÍCULOS -->
                 <div id="tab-veiculos" class="tab-pane">
-                    <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Veículo</h3>
-                    <form id="veiculoForm" onsubmit="cadastrarVeiculo(event)">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Marca</label>
-                                <input type="text" id="veiculoMarca" placeholder="Ex: Ford" required>
+                    <div id="veiculosBlocked" style="display:none; background:#ffebee; padding:20px; border-radius:12px; text-align:center;">
+                        <h3 style="color:#c62828;">🔒 Acesso Bloqueado</h3>
+                        <p style="color:#666; margin-top:10px;">O módulo de veículos está bloqueado para sua conta.</p>
+                        <p style="color:#999; font-size:14px;">Entre em contato com o administrador para liberar acesso.</p>
+                    </div>
+                    <div id="veiculosContent" style="display:none;">
+                        <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Veículo</h3>
+                        <div id="veiculoLimitWarning" style="display:none; background:#fff3e0; padding:12px 16px; border-radius:8px; margin-bottom:15px; border-left:4px solid #f57c00;">
+                            <strong>⚠️ Limite de Veículos:</strong> Sua conta permite apenas <span id="veiculoLimitCount">1</span> veículo.
+                            <span id="veiculoLimitCurrent" style="display:block; font-size:13px; color:#666; margin-top:4px;"></span>
+                        </div>
+                        <form id="veiculoForm" onsubmit="cadastrarVeiculo(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Marca</label>
+                                    <input type="text" id="veiculoMarca" placeholder="Ex: Ford" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Modelo</label>
+                                    <input type="text" id="veiculoModelo" placeholder="Ex: F-4000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Placa</label>
+                                    <input type="text" id="veiculoPlaca" placeholder="Ex: ABC-1234" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Motorista</label>
+                                    <select id="veiculoMotorista">
+                                        <option value="">Selecione um motorista (opcional)...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tipo de Carga</label>
+                                    <select id="veiculoCarga">
+                                        <option value="geral">Geral</option>
+                                        <option value="granel">Granel</option>
+                                        <option value="frigorificada">Frigorificada</option>
+                                        <option value="perigosa">Perigosa</option>
+                                        <option value="veiculos">Veículos</option>
+                                        <option value="outros">Outros</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Valor da Carga (R$)</label>
+                                    <input type="number" id="veiculoValorCarga" value="0" min="0" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label>Valor do Frete (R$)</label>
+                                    <input type="number" id="veiculoValorFrete" value="0" min="0" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label>Quilometragem Atual (KM)</label>
+                                    <input type="number" id="veiculoKm" placeholder="0" min="0" value="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tipo de Veículo (Eixos)</label>
+                                    <select id="veiculoEixos" required>
+                                        <option value="3">3 Eixos</option>
+                                        <option value="4">4 Eixos</option>
+                                        <option value="5" selected>5 Eixos</option>
+                                        <option value="6">6 Eixos</option>
+                                        <option value="7">7 Eixos</option>
+                                        <option value="9">9 Eixos</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select id="veiculoStatus">
+                                        <option value="ativo">Ativo</option>
+                                        <option value="inativo">Inativo</option>
+                                    </select>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-success">Cadastrar Veículo</button>
+                                    <button type="reset" class="btn-secondary">Limpar</button>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Modelo</label>
-                                <input type="text" id="veiculoModelo" placeholder="Ex: F-4000" required>
+                        </form>
+
+                        <hr style="margin: 30px 0; border-color: #e8ecf0;">
+
+                        <div class="veiculos-header">
+                            <h2>Veículos Cadastrados</h2>
+                            <div class="veiculos-stats">
+                                <span id="totalVeiculos">Total: 0</span>
+                                <span id="veiculosAtivos">Ativos: 0</span>
+                                <button class="btn-pdf" onclick="gerarPDFVeiculos()">📄 PDF</button>
                             </div>
+                        </div>
+
+                        <div class="filtros-container" id="filtrosVeiculos">
                             <div class="form-group">
-                                <label>Placa</label>
-                                <input type="text" id="veiculoPlaca" placeholder="Ex: ABC-1234" required>
+                                <label>Buscar por Placa</label>
+                                <input type="text" id="filtroVeiculoPlaca" placeholder="Digite a placa..." oninput="filtrarVeiculos()">
                             </div>
                             <div class="form-group">
                                 <label>Motorista</label>
-                                <select id="veiculoMotorista">
-                                    <option value="">Selecione um motorista (opcional)...</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Tipo de Carga</label>
-                                <select id="veiculoCarga">
-                                    <option value="geral">Geral</option>
-                                    <option value="granel">Granel</option>
-                                    <option value="frigorificada">Frigorificada</option>
-                                    <option value="perigosa">Perigosa</option>
-                                    <option value="veiculos">Veículos</option>
-                                    <option value="outros">Outros</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Valor da Carga (R$)</label>
-                                <input type="number" id="veiculoValorCarga" value="0" min="0" step="0.01">
-                            </div>
-                            <div class="form-group">
-                                <label>Valor do Frete (R$)</label>
-                                <input type="number" id="veiculoValorFrete" value="0" min="0" step="0.01">
-                            </div>
-                            <div class="form-group">
-                                <label>Quilometragem Atual (KM)</label>
-                                <input type="number" id="veiculoKm" placeholder="0" min="0" value="0" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Tipo de Veículo (Eixos)</label>
-                                <select id="veiculoEixos" required>
-                                    <option value="3">3 Eixos</option>
-                                    <option value="4">4 Eixos</option>
-                                    <option value="5" selected>5 Eixos</option>
-                                    <option value="6">6 Eixos</option>
-                                    <option value="7">7 Eixos</option>
-                                    <option value="9">9 Eixos</option>
-                                </select>
+                                <input type="text" id="filtroVeiculoMotorista" placeholder="Nome do motorista..." oninput="filtrarVeiculos()">
                             </div>
                             <div class="form-group">
                                 <label>Status</label>
-                                <select id="veiculoStatus">
+                                <select id="filtroVeiculoStatus" onchange="filtrarVeiculos()">
+                                    <option value="">Todos</option>
                                     <option value="ativo">Ativo</option>
                                     <option value="inativo">Inativo</option>
                                 </select>
                             </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn-success">Cadastrar Veículo</button>
-                                <button type="reset" class="btn-secondary">Limpar</button>
-                            </div>
+                            <button class="btn-limpar" onclick="limparFiltrosVeiculos()">Limpar Filtros</button>
                         </div>
-                    </form>
 
-                    <hr style="margin: 30px 0; border-color: #e8ecf0;">
-
-                    <div class="veiculos-header">
-                        <h2>Veículos Cadastrados</h2>
-                        <div class="veiculos-stats">
-                            <span id="totalVeiculos">Total: 0</span>
-                            <span id="veiculosAtivos">Ativos: 0</span>
-                            <button class="btn-pdf" onclick="gerarPDFVeiculos()">📄 PDF</button>
-                        </div>
+                        <div id="veiculosGrid" class="veiculos-grid"></div>
                     </div>
-
-                    <div class="filtros-container" id="filtrosVeiculos">
-                        <div class="form-group">
-                            <label>Buscar por Placa</label>
-                            <input type="text" id="filtroVeiculoPlaca" placeholder="Digite a placa..." oninput="filtrarVeiculos()">
-                        </div>
-                        <div class="form-group">
-                            <label>Motorista</label>
-                            <input type="text" id="filtroVeiculoMotorista" placeholder="Nome do motorista..." oninput="filtrarVeiculos()">
-                        </div>
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select id="filtroVeiculoStatus" onchange="filtrarVeiculos()">
-                                <option value="">Todos</option>
-                                <option value="ativo">Ativo</option>
-                                <option value="inativo">Inativo</option>
-                            </select>
-                        </div>
-                        <button class="btn-limpar" onclick="limparFiltrosVeiculos()">Limpar Filtros</button>
-                    </div>
-
-                    <div id="veiculosGrid" class="veiculos-grid"></div>
-                </div>
-
-                <!-- TAB ROTAS -->
-                <div id="tab-rotas" class="tab-pane">
-                    <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Rota</h3>
-                    <form id="rotaForm" onsubmit="cadastrarRota(event)">
-                        <div class="form-grid">
-                            <div class="form-group full">
-                                <label>Veículo</label>
-                                <select id="rotaVeiculo" required>
-                                    <option value="">Selecione um veículo...</option>
-                                </select>
-                            </div>
-                            <div class="form-group full">
-                                <label>Local de Saída</label>
-                                <input type="text" id="rotaSaida" placeholder="Ex: São Paulo - SP" required>
-                            </div>
-                            <div class="form-group full">
-                                <label>Local de Entrega</label>
-                                <input type="text" id="rotaEntrega" placeholder="Ex: Rio de Janeiro - RJ" required>
-                            </div>
-                            <div class="form-group full">
-                                <label>Locais Adicionais (opcional)</label>
-                                <input type="text" id="rotaAdicionais" placeholder="Ex: Campinas - SP, Sorocaba - SP">
-                            </div>
-                            <div class="form-group">
-                                <label>KM Total</label>
-                                <input type="number" id="rotaKm" placeholder="0" min="0" step="0.1" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Data da Rota</label>
-                                <input type="date" id="rotaData">
-                            </div>
-                            <div class="form-group full">
-                                <label>Observações</label>
-                                <input type="text" id="rotaObs" placeholder="Observações sobre a rota">
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn-success">Cadastrar Rota</button>
-                                <button type="reset" class="btn-secondary">Limpar</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <hr style="margin: 30px 0; border-color: #e8ecf0;">
-
-                    <div class="veiculos-header">
-                        <h2>Rotas Cadastradas</h2>
-                        <div class="veiculos-stats">
-                            <span id="totalRotas">Total: 0</span>
-                            <button class="btn-pdf" onclick="gerarPDFRotas()">📄 PDF</button>
-                        </div>
-                    </div>
-
-                    <div class="filtros-container" id="filtrosRotas">
-                        <div class="form-group">
-                            <label>Buscar por Veículo</label>
-                            <input type="text" id="filtroRotaVeiculo" placeholder="Digite a placa..." oninput="filtrarRotas()">
-                        </div>
-                        <div class="form-group">
-                            <label>Buscar por Local</label>
-                            <input type="text" id="filtroRotaLocal" placeholder="Digite o local..." oninput="filtrarRotas()">
-                        </div>
-                        <button class="btn-limpar" onclick="limparFiltrosRotas()">Limpar Filtros</button>
-                    </div>
-
-                    <div id="rotasGrid" class="veiculos-grid"></div>
                 </div>
 
                 <!-- TAB MANUTENÇÃO -->
                 <div id="tab-manutencao" class="tab-pane">
-                    <div class="veiculos-header">
-                        <h2>🔧 Manutenção de Veículos</h2>
-                        <div class="veiculos-stats">
-                            <button class="btn-pdf" onclick="gerarPDFManutencoes()">📄 PDF</button>
-                        </div>
+                    <div id="manutencaoBlocked" style="display:none; background:#ffebee; padding:20px; border-radius:12px; text-align:center;">
+                        <h3 style="color:#c62828;">🔒 Acesso Bloqueado</h3>
+                        <p style="color:#666; margin-top:10px;">O módulo de manutenção está bloqueado para sua conta.</p>
+                        <p style="color:#999; font-size:14px;">Entre em contato com o administrador para liberar acesso.</p>
                     </div>
+                    <div id="manutencaoContent" style="display:none;">
+                        <div class="veiculos-header">
+                            <h2>🔧 Manutenção de Veículos</h2>
+                            <div class="veiculos-stats">
+                                <button class="btn-pdf" onclick="gerarPDFManutencoes()">📄 PDF</button>
+                            </div>
+                        </div>
 
-                    <div class="filtros-container" id="filtrosManutencao">
-                        <div class="form-group">
-                            <label>Buscar por Placa</label>
-                            <input type="text" id="filtroManutencaoPlaca" placeholder="Digite a placa..." oninput="filtrarManutencao()">
+                        <div class="filtros-container" id="filtrosManutencao">
+                            <div class="form-group">
+                                <label>Buscar por Placa</label>
+                                <input type="text" id="filtroManutencaoPlaca" placeholder="Digite a placa..." oninput="filtrarManutencao()">
+                            </div>
+                            <div class="form-group">
+                                <label>Motorista</label>
+                                <input type="text" id="filtroManutencaoMotorista" placeholder="Nome do motorista..." oninput="filtrarManutencao()">
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Manutenção</label>
+                                <select id="filtroManutencaoTipo" onchange="filtrarManutencao()">
+                                    <option value="">Todos</option>
+                                    <option value="preventiva">Preventiva</option>
+                                    <option value="corretiva">Corretiva</option>
+                                    <option value="revisao">Revisão</option>
+                                    <option value="alinhamento">Alinhamento</option>
+                                    <option value="balanceamento">Balanceamento</option>
+                                </select>
+                            </div>
+                            <button class="btn-limpar" onclick="limparFiltrosManutencao()">Limpar Filtros</button>
                         </div>
-                        <div class="form-group">
-                            <label>Motorista</label>
-                            <input type="text" id="filtroManutencaoMotorista" placeholder="Nome do motorista..." oninput="filtrarManutencao()">
-                        </div>
-                        <div class="form-group">
-                            <label>Tipo de Manutenção</label>
-                            <select id="filtroManutencaoTipo" onchange="filtrarManutencao()">
-                                <option value="">Todos</option>
-                                <option value="preventiva">Preventiva</option>
-                                <option value="corretiva">Corretiva</option>
-                                <option value="revisao">Revisão</option>
-                            </select>
-                        </div>
-                        <button class="btn-limpar" onclick="limparFiltrosManutencao()">Limpar Filtros</button>
+
+                        <div id="manutencaoGrid" class="veiculos-grid"></div>
                     </div>
-
-                    <div id="manutencaoGrid" class="veiculos-grid"></div>
                 </div>
 
                 <!-- TAB MOTORISTAS -->
                 <div id="tab-motoristas" class="tab-pane">
-                    <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Motorista</h3>
-                    <form id="motoristaForm" onsubmit="cadastrarMotorista(event)">
-                        <div class="form-grid">
-                            <div class="form-group full">
-                                <label>Nome Completo</label>
-                                <input type="text" id="motoristaNome" placeholder="Ex: João Silva" required>
-                            </div>
-                            <div class="form-group">
-                                <label>CPF</label>
-                                <input type="text" id="motoristaCpf" placeholder="Ex: 123.456.789-00">
-                            </div>
-                            <div class="form-group">
-                                <label>Tipo Sanguíneo</label>
-                                <select id="motoristaSangue">
-                                    <option value="">Não informado</option>
-                                    <option value="A+">A+</option>
-                                    <option value="A-">A-</option>
-                                    <option value="B+">B+</option>
-                                    <option value="B-">B-</option>
-                                    <option value="AB+">AB+</option>
-                                    <option value="AB-">AB-</option>
-                                    <option value="O+">O+</option>
-                                    <option value="O-">O-</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Telefone (Celular)</label>
-                                <input type="tel" id="motoristaCelular" placeholder="Ex: (11) 99999-9999">
-                            </div>
-                            <div class="form-group">
-                                <label>Telefone de Emergência</label>
-                                <input type="tel" id="motoristaEmergencia" placeholder="Ex: (11) 98888-8888">
-                            </div>
-                            <div class="form-group">
-                                <label>Observações</label>
-                                <input type="text" id="motoristaObs" placeholder="Observações adicionais">
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn-success">Cadastrar Motorista</button>
-                                <button type="reset" class="btn-secondary">Limpar</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <hr style="margin: 30px 0; border-color: #e8ecf0;">
-
-                    <div class="veiculos-header">
-                        <h2>Motoristas Cadastrados</h2>
-                        <div class="veiculos-stats">
-                            <span id="totalMotoristas">Total: 0</span>
-                            <button class="btn-pdf" onclick="gerarPDFMotoristas()">📄 PDF</button>
-                        </div>
+                    <div id="motoristasBlocked" style="display:none; background:#ffebee; padding:20px; border-radius:12px; text-align:center;">
+                        <h3 style="color:#c62828;">🔒 Acesso Bloqueado</h3>
+                        <p style="color:#666; margin-top:10px;">O módulo de motoristas está bloqueado para sua conta.</p>
+                        <p style="color:#999; font-size:14px;">Entre em contato com o administrador para liberar acesso.</p>
                     </div>
+                    <div id="motoristasContent" style="display:none;">
+                        <h3 style="color:#1a3a5c; margin-bottom:20px;">Cadastrar Motorista</h3>
+                        <form id="motoristaForm" onsubmit="cadastrarMotorista(event)">
+                            <div class="form-grid">
+                                <div class="form-group full">
+                                    <label>Nome Completo</label>
+                                    <input type="text" id="motoristaNome" placeholder="Ex: João Silva" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>CPF</label>
+                                    <input type="text" id="motoristaCpf" placeholder="Ex: 123.456.789-00">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tipo Sanguíneo</label>
+                                    <select id="motoristaSangue">
+                                        <option value="">Não informado</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Telefone (Celular)</label>
+                                    <input type="tel" id="motoristaCelular" placeholder="Ex: (11) 99999-9999">
+                                </div>
+                                <div class="form-group">
+                                    <label>Telefone de Emergência</label>
+                                    <input type="tel" id="motoristaEmergencia" placeholder="Ex: (11) 98888-8888">
+                                </div>
+                                <div class="form-group">
+                                    <label>Observações</label>
+                                    <input type="text" id="motoristaObs" placeholder="Observações adicionais">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-success">Cadastrar Motorista</button>
+                                    <button type="reset" class="btn-secondary">Limpar</button>
+                                </div>
+                            </div>
+                        </form>
 
-                    <div class="filtros-container" id="filtrosMotoristas">
-                        <div class="form-group">
-                            <label>Buscar por Nome</label>
-                            <input type="text" id="filtroMotoristaNome" placeholder="Digite o nome..." oninput="filtrarMotoristas()">
+                        <hr style="margin: 30px 0; border-color: #e8ecf0;">
+
+                        <div class="veiculos-header">
+                            <h2>Motoristas Cadastrados</h2>
+                            <div class="veiculos-stats">
+                                <span id="totalMotoristas">Total: 0</span>
+                                <button class="btn-pdf" onclick="gerarPDFMotoristas()">📄 PDF</button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Buscar por CPF</label>
-                            <input type="text" id="filtroMotoristaCpf" placeholder="Digite o CPF..." oninput="filtrarMotoristas()">
+
+                        <div class="filtros-container" id="filtrosMotoristas">
+                            <div class="form-group">
+                                <label>Buscar por Nome</label>
+                                <input type="text" id="filtroMotoristaNome" placeholder="Digite o nome..." oninput="filtrarMotoristas()">
+                            </div>
+                            <div class="form-group">
+                                <label>Buscar por CPF</label>
+                                <input type="text" id="filtroMotoristaCpf" placeholder="Digite o CPF..." oninput="filtrarMotoristas()">
+                            </div>
+                            <button class="btn-limpar" onclick="limparFiltrosMotoristas()">Limpar Filtros</button>
                         </div>
-                        <button class="btn-limpar" onclick="limparFiltrosMotoristas()">Limpar Filtros</button>
+
+                        <div id="motoristasGrid" class="veiculos-grid"></div>
                     </div>
-
-                    <div id="motoristasGrid" class="veiculos-grid"></div>
                 </div>
 
                 <!-- TAB DESCARTADOS -->
                 <div id="tab-descartados" class="tab-pane">
-                    <div class="estoque-header">
-                        <h2>Pneus Descartados</h2>
-                        <div class="estoque-stats">
-                            <span id="totalDescartados">Total: 0</span>
-                            <button class="btn-pdf" onclick="gerarPDFDescartados()">📄 PDF</button>
-                        </div>
+                    <div id="descartadosBlocked" style="display:none; background:#ffebee; padding:20px; border-radius:12px; text-align:center;">
+                        <h3 style="color:#c62828;">🔒 Acesso Bloqueado</h3>
+                        <p style="color:#666; margin-top:10px;">O módulo de descartados está bloqueado para sua conta.</p>
+                        <p style="color:#999; font-size:14px;">Entre em contato com o administrador para liberar acesso.</p>
                     </div>
+                    <div id="descartadosContent" style="display:none;">
+                        <div class="estoque-header">
+                            <h2>Pneus Descartados</h2>
+                            <div class="estoque-stats">
+                                <span id="totalDescartados">Total: 0</span>
+                                <button class="btn-pdf" onclick="gerarPDFDescartados()">📄 PDF</button>
+                            </div>
+                        </div>
 
-                    <div class="filtros-container" id="filtrosDescartados">
-                        <div class="form-group">
-                            <label>Buscar por Nome</label>
-                            <input type="text" id="filtroDescarteNome" placeholder="Digite o nome..." oninput="filtrarDescartados()">
+                        <div class="filtros-container" id="filtrosDescartados">
+                            <div class="form-group">
+                                <label>Buscar por Nome</label>
+                                <input type="text" id="filtroDescarteNome" placeholder="Digite o nome..." oninput="filtrarDescartados()">
+                            </div>
+                            <div class="form-group">
+                                <label>Tamanho</label>
+                                <select id="filtroDescarteTamanho" onchange="filtrarDescartados()">
+                                    <option value="">Todos</option>
+                                    <option value="215">215</option>
+                                    <option value="235">235</option>
+                                    <option value="275">275</option>
+                                    <option value="295">295</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Motivo</label>
+                                <input type="text" id="filtroDescarteMotivo" placeholder="Motivo..." oninput="filtrarDescartados()">
+                            </div>
+                            <button class="btn-limpar" onclick="limparFiltrosDescartados()">Limpar Filtros</button>
                         </div>
-                        <div class="form-group">
-                            <label>Tamanho</label>
-                            <select id="filtroDescarteTamanho" onchange="filtrarDescartados()">
-                                <option value="">Todos</option>
-                                <option value="215">215</option>
-                                <option value="235">235</option>
-                                <option value="275">275</option>
-                                <option value="295">295</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Motivo</label>
-                            <input type="text" id="filtroDescarteMotivo" placeholder="Motivo..." oninput="filtrarDescartados()">
-                        </div>
-                        <button class="btn-limpar" onclick="limparFiltrosDescartados()">Limpar Filtros</button>
-                    </div>
 
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nome</th>
-                                    <th>DOT/Fogo</th>
-                                    <th>Tamanho</th>
-                                    <th>Tipo</th>
-                                    <th>Veículo</th>
-                                    <th>Eixo/Posição</th>
-                                    <th>Motivo</th>
-                                    <th>Data Descarte</th>
-                                    <th>Valor (R$)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="descartadosTableBody">
-                                <tr><td colspan="10" class="empty-state"><p>Nenhum pneu descartado ainda.</p></td></tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nome</th>
+                                        <th>DOT/Fogo</th>
+                                        <th>Tamanho</th>
+                                        <th>Tipo</th>
+                                        <th>Veículo</th>
+                                        <th>Eixo/Posição</th>
+                                        <th>Motivo</th>
+                                        <th>Data Descarte</th>
+                                        <th>Valor (R$)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="descartadosTableBody">
+                                    <tr><td colspan="10" class="empty-state"><p>Nenhum pneu descartado ainda.</p></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <!-- TAB RELATÓRIOS -->
                 <div id="tab-relatorios" class="tab-pane">
-                    <div class="veiculos-header">
-                        <h2>📊 Relatórios</h2>
-                        <div class="veiculos-stats">
-                            <button class="btn-pdf" onclick="gerarPDFRelatorios()">📄 PDF Completo</button>
-                        </div>
+                    <div id="relatoriosBlocked" style="display:none; background:#ffebee; padding:20px; border-radius:12px; text-align:center;">
+                        <h3 style="color:#c62828;">🔒 Acesso Bloqueado</h3>
+                        <p style="color:#666; margin-top:10px;">O módulo de relatórios está bloqueado para sua conta.</p>
+                        <p style="color:#999; font-size:14px;">Entre em contato com o administrador para liberar acesso.</p>
                     </div>
-
-                    <div class="filtros-container" id="filtrosRelatorios">
-                        <div class="form-group">
-                            <label>Veículo (Placa)</label>
-                            <select id="filtroRelatorioVeiculo" onchange="renderRelatorios()">
-                                <option value="">Todos</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Motorista</label>
-                            <select id="filtroRelatorioMotorista" onchange="renderRelatorios()">
-                                <option value="">Todos</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Data Inicial</label>
-                            <input type="date" id="filtroRelatorioDataInicio" onchange="renderRelatorios()">
-                        </div>
-                        <div class="form-group">
-                            <label>Data Final</label>
-                            <input type="date" id="filtroRelatorioDataFim" onchange="renderRelatorios()">
-                        </div>
-                        <div class="form-group">
-                            <label>Pneu</label>
-                            <select id="filtroRelatorioPneu" onchange="renderRelatorios()">
-                                <option value="">Todos</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Eixo</label>
-                            <select id="filtroRelatorioEixo" onchange="renderRelatorios()">
-                                <option value="">Todos</option>
-                                <option value="dianteiro">Dianteiro</option>
-                                <option value="traseiro">Traseiro</option>
-                                <option value="estepe">Estepe</option>
-                            </select>
-                        </div>
-                        <button class="btn-limpar" onclick="limparFiltrosRelatorios()">Limpar Filtros</button>
-                    </div>
-
-                    <div class="relatorio-card">
-                        <h3>Resumo Geral</h3>
-                        <div class="relatorio-grid" id="resumoGeral">
-                            <div class="relatorio-item">
-                                <div class="valor" id="totalPneusRelatorio">0</div>
-                                <div class="label">Total de Pneus</div>
-                            </div>
-                            <div class="relatorio-item">
-                                <div class="valor" id="totalPneusInstalados">0</div>
-                                <div class="label">Pneus Instalados</div>
-                            </div>
-                            <div class="relatorio-item">
-                                <div class="valor" id="totalPneusDisponiveis">0</div>
-                                <div class="label">Pneus Disponíveis</div>
-                            </div>
-                            <div class="relatorio-item">
-                                <div class="valor" id="valorTotalPneus">R$ 0,00</div>
-                                <div class="label">Valor Total em Estoque</div>
+                    <div id="relatoriosContent" style="display:none;">
+                        <div class="veiculos-header">
+                            <h2>📊 Relatórios</h2>
+                            <div class="veiculos-stats">
+                                <button class="btn-pdf" onclick="gerarPDFRelatorios()">📄 PDF Completo</button>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="relatorio-card">
-                        <h3>📈 Custo por KM dos Pneus</h3>
-                        <p style="color:#666; margin-bottom:15px; font-size:14px;">Cálculo baseado no valor do pneu e quilometragem total percorrida</p>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Pneu</th>
-                                        <th>Veículo</th>
-                                        <th>Eixo/Posição</th>
-                                        <th>Valor (R$)</th>
-                                        <th>KM Total</th>
-                                        <th>Custo por KM (R$)</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="relatorioCustoKmBody">
-                                    <tr><td colspan="8" class="empty-state"><p>Nenhum pneu com KM registrado.</p></td></tr>
-                                </tbody>
-                            </table>
+                        <div class="filtros-container" id="filtrosRelatorios">
+                            <div class="form-group">
+                                <label>Veículo (Placa)</label>
+                                <select id="filtroRelatorioVeiculo" onchange="renderRelatorios()">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Motorista</label>
+                                <select id="filtroRelatorioMotorista" onchange="renderRelatorios()">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Data Inicial</label>
+                                <input type="date" id="filtroRelatorioDataInicio" onchange="renderRelatorios()">
+                            </div>
+                            <div class="form-group">
+                                <label>Data Final</label>
+                                <input type="date" id="filtroRelatorioDataFim" onchange="renderRelatorios()">
+                            </div>
+                            <div class="form-group">
+                                <label>Pneu</label>
+                                <select id="filtroRelatorioPneu" onchange="renderRelatorios()">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Eixo</label>
+                                <select id="filtroRelatorioEixo" onchange="renderRelatorios()">
+                                    <option value="">Todos</option>
+                                    <option value="dianteiro">Dianteiro</option>
+                                    <option value="traseiro">Traseiro</option>
+                                    <option value="estepe">Estepe</option>
+                                </select>
+                            </div>
+                            <button class="btn-limpar" onclick="limparFiltrosRelatorios()">Limpar Filtros</button>
+                        </div>
+
+                        <div class="relatorio-card">
+                            <h3>Resumo Geral</h3>
+                            <div class="relatorio-grid" id="resumoGeral">
+                                <div class="relatorio-item">
+                                    <div class="valor" id="totalPneusRelatorio">0</div>
+                                    <div class="label">Total de Pneus</div>
+                                </div>
+                                <div class="relatorio-item">
+                                    <div class="valor" id="totalPneusInstalados">0</div>
+                                    <div class="label">Pneus Instalados</div>
+                                </div>
+                                <div class="relatorio-item">
+                                    <div class="valor" id="totalPneusDisponiveis">0</div>
+                                    <div class="label">Pneus Disponíveis</div>
+                                </div>
+                                <div class="relatorio-item">
+                                    <div class="valor" id="valorTotalPneus">R$ 0,00</div>
+                                    <div class="label">Valor Total em Estoque</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relatorio-card">
+                            <h3>📈 Custo por KM dos Pneus</h3>
+                            <p style="color:#666; margin-bottom:15px; font-size:14px;">Cálculo baseado no valor do pneu e quilometragem total percorrida</p>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Pneu</th>
+                                            <th>Veículo</th>
+                                            <th>Eixo/Posição</th>
+                                            <th>Valor (R$)</th>
+                                            <th>KM Total</th>
+                                            <th>Custo por KM (R$)</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="relatorioCustoKmBody">
+                                        <tr><td colspan="8" class="empty-state"><p>Nenhum pneu com KM registrado.</p></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="relatorio-card">
+                            <h3>🔧 Custos de Peças por Veículo</h3>
+                            <p style="color:#666; margin-bottom:15px; font-size:14px;">Total de custos com peças instaladas em cada veículo</p>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Veículo</th>
+                                            <th>Placa</th>
+                                            <th>Total de Peças</th>
+                                            <th>Valor Total (R$)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="relatorioCustoPecasBody">
+                                        <tr><td colspan="5" class="empty-state"><p>Nenhuma peça instalada em veículos.</p></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="relatorio-card">
+                            <h3>🔧 Custos de Manutenção por Veículo</h3>
+                            <p style="color:#666; margin-bottom:15px; font-size:14px;">Total de custos com manutenção em cada veículo</p>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Veículo</th>
+                                            <th>Placa</th>
+                                            <th>Total de Manutenções</th>
+                                            <th>Valor Total (R$)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="relatorioCustoManutencaoBody">
+                                        <tr><td colspan="5" class="empty-state"><p>Nenhuma manutenção registrada.</p></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="relatorio-card">
+                            <h3>📋 Histórico de Pneus Removidos</h3>
+                            <p style="color:#666; margin-bottom:15px; font-size:14px;">Histórico completo de pneus removidos dos veículos</p>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Pneu</th>
+                                            <th>Veículo</th>
+                                            <th>Eixo/Posição</th>
+                                            <th>Valor (R$)</th>
+                                            <th>KM Total</th>
+                                            <th>Custo por KM (R$)</th>
+                                            <th>Destino</th>
+                                            <th>Data</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="relatorioHistoricoBody">
+                                        <tr><td colspan="9" class="empty-state"><p>Nenhum pneu removido ainda.</p></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="relatorio-card">
+                            <h3>📊 Relatório de Desgaste de Pneus</h3>
+                            <p style="color:#666; margin-bottom:15px; font-size:14px;">Acompanhamento da altura dos pneus (mm) e desgaste estimado</p>
+                            <div id="desgasteRelatorioContainer">
+                                <div class="empty-state"><p>Nenhum dado de desgaste registrado.</p></div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="relatorio-card">
-                        <h3>🔧 Custos de Peças por Veículo</h3>
-                        <p style="color:#666; margin-bottom:15px; font-size:14px;">Total de custos com peças instaladas em cada veículo</p>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Veículo</th>
-                                        <th>Placa</th>
-                                        <th>Total de Peças</th>
-                                        <th>Valor Total (R$)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="relatorioCustoPecasBody">
-                                    <tr><td colspan="5" class="empty-state"><p>Nenhuma peça instalada em veículos.</p></td></tr>
-                                </tbody>
-                            </table>
+                <!-- TAB MASTER -->
+                <div id="tab-master" class="tab-pane">
+                    <div class="master-container">
+                        <h3>👑 Controle Master</h3>
+                        <p style="color:#666; margin-bottom:15px;">Gerencie todas as empresas cadastradas no sistema.</p>
+                        
+                        <div class="filtros-container">
+                            <div class="form-group">
+                                <label>Buscar Empresa</label>
+                                <input type="text" id="filtroMasterEmpresa" placeholder="Digite o nome da empresa..." oninput="renderMaster()">
+                            </div>
+                            <div class="form-group">
+                                <label>Filtrar por Status</label>
+                                <select id="filtroMasterStatus" onchange="renderMaster()">
+                                    <option value="">Todos</option>
+                                    <option value="aprovado">Aprovado</option>
+                                    <option value="pendente">Pendente</option>
+                                    <option value="bloqueado">Bloqueado</option>
+                                </select>
+                            </div>
+                            <button class="btn-limpar" onclick="limparFiltrosMaster()">Limpar Filtros</button>
                         </div>
-                    </div>
 
-                    <div class="relatorio-card">
-                        <h3>🔧 Custos de Manutenção por Veículo</h3>
-                        <p style="color:#666; margin-bottom:15px; font-size:14px;">Total de custos com manutenção em cada veículo</p>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Veículo</th>
-                                        <th>Placa</th>
-                                        <th>Total de Manutenções</th>
-                                        <th>Valor Total (R$)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="relatorioCustoManutencaoBody">
-                                    <tr><td colspan="5" class="empty-state"><p>Nenhuma manutenção registrada.</p></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="relatorio-card">
-                        <h3>📋 Histórico de Pneus Removidos</h3>
-                        <p style="color:#666; margin-bottom:15px; font-size:14px;">Histórico completo de pneus removidos dos veículos</p>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Pneu</th>
-                                        <th>Veículo</th>
-                                        <th>Eixo/Posição</th>
-                                        <th>Valor (R$)</th>
-                                        <th>KM Total</th>
-                                        <th>Custo por KM (R$)</th>
-                                        <th>Destino</th>
-                                        <th>Data</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="relatorioHistoricoBody">
-                                    <tr><td colspan="9" class="empty-state"><p>Nenhum pneu removido ainda.</p></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <div id="masterGrid" class="master-grid"></div>
                     </div>
                 </div>
 
@@ -2758,6 +2537,11 @@
             <div id="pneuEdicaoInfo" class="pneu-info-box"></div>
             
             <div class="form-group">
+                <label>DOT / Fogo</label>
+                <input type="text" id="editPneuDot" placeholder="Ex: DOT 1234">
+            </div>
+            
+            <div class="form-group">
                 <label>Valor de Recapagem (R$)</label>
                 <input type="number" id="valorRecapagem" placeholder="0,00" min="0" step="0.01">
             </div>
@@ -2784,35 +2568,6 @@
         </div>
     </div>
 
-    <!-- Modal de Serviço -->
-    <div id="modalServico" class="modal-servico">
-        <div class="modal-servico-content">
-            <h3>Adicionar Serviço</h3>
-            <p class="subtitle">Adicione serviços realizados neste pneu</p>
-            
-            <div id="pneuServicoInfo" class="pneu-info-box"></div>
-            
-            <div class="form-group">
-                <label>Tipo de Serviço</label>
-                <select id="tipoServico" required>
-                    <option value="">Selecione...</option>
-                    <option value="rodizio">Rodízio</option>
-                    <option value="remendo">Remendo</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Valor do Serviço (R$)</label>
-                <input type="number" id="valorServico" placeholder="0,00" min="0" step="0.01" required>
-            </div>
-            
-            <div class="modal-servico-actions">
-                <button class="btn-confirmar" onclick="confirmarServico()">Adicionar Serviço</button>
-                <button class="btn-cancelar" onclick="fecharModalServico()">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal de Manutenção -->
     <div id="modalManutencao" class="modal-manutencao">
         <div class="modal-manutencao-content">
@@ -2826,6 +2581,8 @@
                     <option value="preventiva">Preventiva</option>
                     <option value="corretiva">Corretiva</option>
                     <option value="revisao">Revisão</option>
+                    <option value="alinhamento">Alinhamento</option>
+                    <option value="balanceamento">Balanceamento</option>
                 </select>
             </div>
             
@@ -2853,6 +2610,23 @@
                 <label>Fornecedor/Oficina (opcional)</label>
                 <input type="text" id="manutencaoFornecedor" placeholder="Nome da oficina ou fornecedor">
             </div>
+
+            <hr style="margin: 20px 0; border-color: #e8ecf0;">
+
+            <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
+                <div class="form-group" style="flex:1; min-width:150px;">
+                    <label>Alinhamento (R$)</label>
+                    <input type="number" id="manutencaoAlinhamento" placeholder="0,00" min="0" step="0.01" value="0">
+                </div>
+                <div class="form-group" style="flex:1; min-width:150px;">
+                    <label>Balanceamento (R$)</label>
+                    <input type="number" id="manutencaoBalanceamento" placeholder="0,00" min="0" step="0.01" value="0">
+                </div>
+                <div class="form-group" style="flex:0 0 auto;">
+                    <label>&nbsp;</label>
+                    <button type="button" class="btn-info" onclick="renovarServico()" style="padding:10px 20px;">🔄 Renovar Serviço</button>
+                </div>
+            </div>
             
             <div class="modal-manutencao-actions">
                 <button class="btn-confirmar" onclick="confirmarManutencao()">Registrar Manutenção</button>
@@ -2872,41 +2646,6 @@
             <div class="modal-manutencao-actions">
                 <button class="btn-confirmar" onclick="confirmarCadastroMultiplo()">✅ Salvar Todos</button>
                 <button class="btn-cancelar" onclick="fecharModalCadastroMultiplo()">❌ Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Carga -->
-    <div id="modalCarga" class="modal-carga">
-        <div class="modal-carga-content">
-            <h3>📦 Alterar Dados da Carga</h3>
-            <p class="subtitle" id="modalCargaSubtitle">Atualize as informações de carga do veículo</p>
-            
-            <div class="form-group">
-                <label>Tipo de Carga</label>
-                <select id="cargaTipo">
-                    <option value="geral">Geral</option>
-                    <option value="granel">Granel</option>
-                    <option value="frigorificada">Frigorificada</option>
-                    <option value="perigosa">Perigosa</option>
-                    <option value="veiculos">Veículos</option>
-                    <option value="outros">Outros</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Valor da Carga (R$)</label>
-                <input type="number" id="cargaValor" placeholder="0,00" min="0" step="0.01">
-            </div>
-            
-            <div class="form-group">
-                <label>Valor do Frete (R$)</label>
-                <input type="number" id="cargaFrete" placeholder="0,00" min="0" step="0.01">
-            </div>
-            
-            <div class="modal-carga-actions">
-                <button class="btn-confirmar" onclick="confirmarAlteracaoCarga()">✅ Salvar</button>
-                <button class="btn-cancelar" onclick="fecharModalCarga()">❌ Cancelar</button>
             </div>
         </div>
     </div>
@@ -2971,14 +2710,6 @@
             localStorage.setItem('estoque_motoristas', JSON.stringify(motoristas));
         }
 
-        function getRotas() {
-            return JSON.parse(localStorage.getItem('estoque_rotas')) || [];
-        }
-
-        function setRotas(rotas) {
-            localStorage.setItem('estoque_rotas', JSON.stringify(rotas));
-        }
-
         function getCurrentUser() {
             return JSON.parse(localStorage.getItem('estoque_current_user'));
         }
@@ -2989,6 +2720,183 @@
 
         function clearCurrentUser() {
             localStorage.removeItem('estoque_current_user');
+        }
+
+        // ============================================
+        //  MASTER CONTROL
+        // ============================================
+        function isMaster() {
+            const user = getCurrentUser();
+            return user && user.isMaster === true;
+        }
+
+        function getMasterPassword() {
+            return 'Master@2024'; // Senha para acessar o master
+        }
+
+        function promoverParaMaster(userId) {
+            const users = getUsers();
+            const idx = users.findIndex(u => u.id === userId);
+            if (idx !== -1) {
+                users[idx].isMaster = true;
+                setUsers(users);
+                if (getCurrentUser() && getCurrentUser().id === userId) {
+                    setCurrentUser(users[idx]);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        function alterarPermissao(userId, permissao, valor) {
+            const users = getUsers();
+            const idx = users.findIndex(u => u.id === userId);
+            if (idx !== -1) {
+                if (!users[idx].permissoes) users[idx].permissoes = {};
+                users[idx].permissoes[permissao] = valor;
+                setUsers(users);
+                if (getCurrentUser() && getCurrentUser().id === userId) {
+                    setCurrentUser(users[idx]);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        function getPermissoes(user) {
+            if (!user) return {};
+            if (user.isMaster) {
+                return {
+                    pneus: { limite: Infinity },
+                    veiculos: { limite: Infinity },
+                    pecas: true,
+                    manutencao: true,
+                    motoristas: true,
+                    descartados: true,
+                    relatorios: true
+                };
+            }
+            const permissoes = user.permissoes || {};
+            return {
+                pneus: { limite: permissoes.pneusLimite || 10 },
+                veiculos: { limite: permissoes.veiculosLimite || 1 },
+                pecas: permissoes.pecas || false,
+                manutencao: permissoes.manutencao || false,
+                motoristas: permissoes.motoristas || false,
+                descartados: permissoes.descartados || false,
+                relatorios: permissoes.relatorios || false
+            };
+        }
+
+        function verificarLimitePneus() {
+            const user = getCurrentUser();
+            if (!user) return true;
+            if (isMaster()) return true;
+            const permissoes = getPermissoes(user);
+            const pneus = getPneus();
+            return pneus.length < permissoes.pneus.limite;
+        }
+
+        function verificarLimiteVeiculos() {
+            const user = getCurrentUser();
+            if (!user) return true;
+            if (isMaster()) return true;
+            const permissoes = getPermissoes(user);
+            const veiculos = getVeiculos();
+            return veiculos.length < permissoes.veiculos.limite;
+        }
+
+        function atualizarLimitesUI() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            const permissoes = getPermissoes(user);
+            
+            // Pneus
+            const pneus = getPneus();
+            const pneuLimitWarning = document.getElementById('pneuLimitWarning');
+            const pneuLimitCount = document.getElementById('pneuLimitCount');
+            const pneuLimitCurrent = document.getElementById('pneuLimitCurrent');
+            
+            if (!isMaster() && permissoes.pneus.limite < Infinity) {
+                pneuLimitWarning.style.display = 'block';
+                pneuLimitCount.textContent = permissoes.pneus.limite;
+                pneuLimitCurrent.textContent = `Atualmente: ${pneus.length} pneu(s) cadastrado(s)`;
+                if (pneus.length >= permissoes.pneus.limite) {
+                    pneuLimitWarning.style.borderLeftColor = '#c62828';
+                    pneuLimitWarning.style.background = '#ffebee';
+                } else {
+                    pneuLimitWarning.style.borderLeftColor = '#f57c00';
+                    pneuLimitWarning.style.background = '#fff3e0';
+                }
+            } else {
+                pneuLimitWarning.style.display = 'none';
+            }
+
+            // Veículos
+            const veiculos = getVeiculos();
+            const veiculoLimitWarning = document.getElementById('veiculoLimitWarning');
+            const veiculoLimitCount = document.getElementById('veiculoLimitCount');
+            const veiculoLimitCurrent = document.getElementById('veiculoLimitCurrent');
+            
+            if (!isMaster() && permissoes.veiculos.limite < Infinity) {
+                veiculoLimitWarning.style.display = 'block';
+                veiculoLimitCount.textContent = permissoes.veiculos.limite;
+                veiculoLimitCurrent.textContent = `Atualmente: ${veiculos.length} veículo(s) cadastrado(s)`;
+                if (veiculos.length >= permissoes.veiculos.limite) {
+                    veiculoLimitWarning.style.borderLeftColor = '#c62828';
+                    veiculoLimitWarning.style.background = '#ffebee';
+                } else {
+                    veiculoLimitWarning.style.borderLeftColor = '#f57c00';
+                    veiculoLimitWarning.style.background = '#fff3e0';
+                }
+            } else {
+                veiculoLimitWarning.style.display = 'none';
+            }
+
+            // Abas bloqueadas
+            const bloqueadas = {
+                pecas: !permissoes.pecas && !isMaster(),
+                veiculos: !permissoes.veiculos.limite && !isMaster(),
+                manutencao: !permissoes.manutencao && !isMaster(),
+                motoristas: !permissoes.motoristas && !isMaster(),
+                descartados: !permissoes.descartados && !isMaster(),
+                relatorios: !permissoes.relatorios && !isMaster()
+            };
+
+            // Mostrar/ocultar conteúdo das abas
+            document.getElementById('pecasContent').style.display = bloqueadas.pecas ? 'none' : 'block';
+            document.getElementById('pecasBlocked').style.display = bloqueadas.pecas ? 'block' : 'none';
+            
+            document.getElementById('veiculosContent').style.display = bloqueadas.veiculos ? 'none' : 'block';
+            document.getElementById('veiculosBlocked').style.display = bloqueadas.veiculos ? 'block' : 'none';
+            
+            document.getElementById('manutencaoContent').style.display = bloqueadas.manutencao ? 'none' : 'block';
+            document.getElementById('manutencaoBlocked').style.display = bloqueadas.manutencao ? 'block' : 'none';
+            
+            document.getElementById('motoristasContent').style.display = bloqueadas.motoristas ? 'none' : 'block';
+            document.getElementById('motoristasBlocked').style.display = bloqueadas.motoristas ? 'block' : 'none';
+            
+            document.getElementById('descartadosContent').style.display = bloqueadas.descartados ? 'none' : 'block';
+            document.getElementById('descartadosBlocked').style.display = bloqueadas.descartados ? 'block' : 'none';
+            
+            document.getElementById('relatoriosContent').style.display = bloqueadas.relatorios ? 'none' : 'block';
+            document.getElementById('relatoriosBlocked').style.display = bloqueadas.relatorios ? 'block' : 'none';
+
+            // Botões das abas
+            const tabPecas = document.getElementById('tabBtnPecas');
+            const tabVeiculos = document.getElementById('tabBtnVeiculos');
+            const tabManutencao = document.getElementById('tabBtnManutencao');
+            const tabMotoristas = document.getElementById('tabBtnMotoristas');
+            const tabDescartados = document.getElementById('tabBtnDescartados');
+            const tabRelatorios = document.getElementById('tabBtnRelatorios');
+
+            tabPecas.classList.toggle('blocked', bloqueadas.pecas);
+            tabVeiculos.classList.toggle('blocked', bloqueadas.veiculos);
+            tabManutencao.classList.toggle('blocked', bloqueadas.manutencao);
+            tabMotoristas.classList.toggle('blocked', bloqueadas.motoristas);
+            tabDescartados.classList.toggle('blocked', bloqueadas.descartados);
+            tabRelatorios.classList.toggle('blocked', bloqueadas.relatorios);
         }
 
         // ============================================
@@ -3028,7 +2936,19 @@
                 company,
                 email,
                 password,
-                companyName: company
+                companyName: company,
+                isMaster: false,
+                permissoes: {
+                    pneusLimite: 10,
+                    veiculosLimite: 1,
+                    pecas: false,
+                    manutencao: false,
+                    motoristas: false,
+                    descartados: false,
+                    relatorios: false
+                },
+                status: 'pendente',
+                dataCadastro: new Date().toISOString()
             };
             users.push(newUser);
             setUsers(users);
@@ -3049,6 +2969,13 @@
             if (!user) {
                 const err = document.getElementById('loginError');
                 err.textContent = 'E-mail ou senha incorretos.';
+                err.classList.add('show');
+                return;
+            }
+
+            if (user.status === 'bloqueado') {
+                const err = document.getElementById('loginError');
+                err.textContent = '❌ Esta conta está bloqueada. Entre em contato com o administrador.';
                 err.classList.add('show');
                 return;
             }
@@ -3080,10 +3007,20 @@
             companyEl.textContent = user.companyName || user.company || 'Minha Empresa';
             companyEl.dataset.baseName = user.companyName || user.company || 'Minha Empresa';
 
-            document.getElementById('userDisplay').textContent = `👤 ${user.name}`;
+            let displayName = `👤 ${user.name}`;
+            if (user.isMaster) {
+                displayName += ' 👑';
+                document.getElementById('masterBadge').style.display = 'inline';
+            } else {
+                document.getElementById('masterBadge').style.display = 'none';
+            }
+            document.getElementById('userDisplay').textContent = displayName;
+
+            // Mostrar aba Master se for master
+            document.getElementById('tabBtnMaster').style.display = user.isMaster ? 'inline-block' : 'none';
 
             atualizarSelectMotoristas();
-            atualizarSelectVeiculosRotas();
+            atualizarLimitesUI();
 
             renderEstoque();
             renderPecas();
@@ -3091,7 +3028,7 @@
             renderManutencao();
             renderMotoristas();
             renderDescartados();
-            renderRotas();
+            renderMaster();
             atualizarFiltrosRelatorios();
             renderRelatorios();
             switchTab('tab-cadastro');
@@ -3134,47 +3071,44 @@
             });
         }
 
-        function atualizarSelectVeiculosRotas() {
-            const veiculos = getVeiculos();
-            const select = document.getElementById('rotaVeiculo');
-            select.innerHTML = '<option value="">Selecione um veículo...</option>';
-            veiculos.forEach(v => {
-                select.innerHTML += `<option value="${v.id}">${v.placa} - ${v.marca} ${v.modelo}</option>`;
-            });
-        }
-
         function switchTab(tabId) {
+            // Verificar se a aba está bloqueada
+            if (tabId !== 'tab-cadastro' && tabId !== 'tab-estoque' && tabId !== 'tab-master') {
+                const user = getCurrentUser();
+                if (!user) return;
+                const permissoes = getPermissoes(user);
+                const bloqueadas = {
+                    'tab-pecas': !permissoes.pecas && !isMaster(),
+                    'tab-veiculos': !permissoes.veiculos.limite && !isMaster(),
+                    'tab-manutencao': !permissoes.manutencao && !isMaster(),
+                    'tab-motoristas': !permissoes.motoristas && !isMaster(),
+                    'tab-descartados': !permissoes.descartados && !isMaster(),
+                    'tab-relatorios': !permissoes.relatorios && !isMaster()
+                };
+                if (bloqueadas[tabId]) {
+                    alert('🔒 Esta funcionalidade está bloqueada para sua conta. Entre em contato com o administrador.');
+                    return;
+                }
+            }
+
             document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.tabs button[data-tab="${tabId}"]`).classList.add('active');
+            const tabBtn = document.querySelector(`.tabs button[data-tab="${tabId}"]`);
+            if (tabBtn) tabBtn.classList.add('active');
+            
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
 
-            if (tabId === 'tab-estoque') {
-                renderEstoque();
-            }
-            if (tabId === 'tab-pecas') {
-                renderPecas();
-            }
-            if (tabId === 'tab-veiculos') {
-                renderVeiculos();
-            }
-            if (tabId === 'tab-rotas') {
-                atualizarSelectVeiculosRotas();
-                renderRotas();
-            }
-            if (tabId === 'tab-manutencao') {
-                renderManutencao();
-            }
-            if (tabId === 'tab-motoristas') {
-                renderMotoristas();
-            }
-            if (tabId === 'tab-descartados') {
-                renderDescartados();
-            }
+            if (tabId === 'tab-estoque') renderEstoque();
+            if (tabId === 'tab-pecas') renderPecas();
+            if (tabId === 'tab-veiculos') renderVeiculos();
+            if (tabId === 'tab-manutencao') renderManutencao();
+            if (tabId === 'tab-motoristas') renderMotoristas();
+            if (tabId === 'tab-descartados') renderDescartados();
             if (tabId === 'tab-relatorios') {
                 atualizarFiltrosRelatorios();
                 renderRelatorios();
             }
+            if (tabId === 'tab-master') renderMaster();
         }
 
         // ============================================
@@ -3209,12 +3143,17 @@
         }
 
         // ============================================
-        //  CADASTRAR PNEU - COM CADASTRO MULTIPLO
+        //  CADASTRAR PNEU - COM LIMITE
         // ============================================
         let pneusParaCadastrar = [];
 
         function cadastrarPneu(e) {
             e.preventDefault();
+
+            if (!verificarLimitePneus()) {
+                alert('⚠️ Limite de pneus atingido! Sua conta permite apenas 10 pneus no estoque.');
+                return;
+            }
 
             let nome = document.getElementById('pneuNomeSelect').value;
             if (nome === 'outros') {
@@ -3241,14 +3180,22 @@
             const quantidade = parseInt(document.getElementById('pneuQuantidade').value) || 1;
             const dataEntrada = document.getElementById('pneuDataEntrada').value || new Date().toISOString().split('T')[0];
 
+            // Verificar limite com a quantidade
+            const pneus = getPneus();
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!isMaster() && pneus.length + quantidade > permissoes.pneus.limite) {
+                alert(`⚠️ Limite de pneus excedido! Você pode ter no máximo ${permissoes.pneus.limite} pneus. Atualmente: ${pneus.length}`);
+                return;
+            }
+
             if (quantidade === 1) {
                 const pneu = criarPneu(nome, dot, tamanho, tipo, situacao, valor, dataEntrada);
-                const pneus = getPneus();
                 pneus.push(pneu);
                 setPneus(pneus);
                 
                 limparFormPneu();
                 renderEstoque();
+                atualizarLimitesUI();
                 switchTab('tab-estoque');
                 alert('✅ 1 pneu cadastrado com sucesso!');
                 return;
@@ -3293,6 +3240,7 @@
                 kmRemocao: null,
                 dataEntrada: dataEntrada || new Date().toISOString().split('T')[0],
                 dataCadastro: new Date().toLocaleDateString('pt-BR'),
+                faixas: { f1: 0, f2: 0, f3: 0, f4: 0 },
                 historico: [{
                     data: new Date().toLocaleString('pt-BR'),
                     acao: 'Cadastro',
@@ -3421,6 +3369,7 @@
             fecharModalCadastroMultiplo();
             limparFormPneu();
             renderEstoque();
+            atualizarLimitesUI();
             switchTab('tab-estoque');
             alert(`✅ ${cadastrados} pneu(s) cadastrado(s) com sucesso!`);
         }
@@ -3430,6 +3379,12 @@
         // ============================================
         function cadastrarPeca(e) {
             e.preventDefault();
+
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.pecas && !isMaster()) {
+                alert('🔒 Você não tem permissão para cadastrar peças.');
+                return;
+            }
 
             const nome = document.getElementById('pecaNome').value.trim();
             const valor = parseFloat(document.getElementById('pecaValor').value) || 0;
@@ -3480,10 +3435,15 @@
         }
 
         // ============================================
-        //  CADASTRAR VEÍCULO
+        //  CADASTRAR VEÍCULO - COM LIMITE
         // ============================================
         function cadastrarVeiculo(e) {
             e.preventDefault();
+
+            if (!verificarLimiteVeiculos()) {
+                alert('⚠️ Limite de veículos atingido! Sua conta permite apenas 1 veículo.');
+                return;
+            }
 
             const marca = document.getElementById('veiculoMarca').value.trim();
             const modelo = document.getElementById('veiculoModelo').value.trim();
@@ -3521,7 +3481,6 @@
                 status: status,
                 pneus: {},
                 pecas: {},
-                rotas: [],
                 dataCadastro: new Date().toLocaleDateString('pt-BR')
             };
 
@@ -3533,93 +3492,12 @@
             document.getElementById('veiculoValorCarga').value = '0';
             document.getElementById('veiculoValorFrete').value = '0';
 
-            atualizarSelectVeiculosRotas();
+            atualizarSelectMotoristas();
             renderVeiculos();
             renderManutencao();
             renderRelatorios();
+            atualizarLimitesUI();
             alert('✅ Veículo cadastrado com sucesso!');
-        }
-
-        // ============================================
-        //  CADASTRAR ROTA
-        // ============================================
-        function cadastrarRota(e) {
-            e.preventDefault();
-
-            const veiculoId = parseInt(document.getElementById('rotaVeiculo').value);
-            const saida = document.getElementById('rotaSaida').value.trim();
-            const entrega = document.getElementById('rotaEntrega').value.trim();
-            const adicionais = document.getElementById('rotaAdicionais').value.trim();
-            const km = parseFloat(document.getElementById('rotaKm').value) || 0;
-            const data = document.getElementById('rotaData').value || new Date().toISOString().split('T')[0];
-            const obs = document.getElementById('rotaObs').value.trim();
-
-            if (!veiculoId || !saida || !entrega || km <= 0) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-
-            const veiculos = getVeiculos();
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo) {
-                alert('Veículo não encontrado.');
-                return;
-            }
-
-            const idx = veiculos.findIndex(v => v.id === veiculoId);
-            if (idx !== -1) {
-                veiculos[idx].km += km;
-                setVeiculos(veiculos);
-            }
-
-            const rotas = getRotas();
-            const rota = {
-                id: Date.now() + Math.random() * 1000,
-                veiculoId: veiculoId,
-                veiculoPlaca: veiculo.placa,
-                veiculoMarca: veiculo.marca,
-                veiculoModelo: veiculo.modelo,
-                saida: saida,
-                entrega: entrega,
-                adicionais: adicionais || 'Nenhum',
-                km: km,
-                data: data,
-                obs: obs || 'Nenhuma',
-                status: 'andamento',
-                dataRegistro: new Date().toLocaleString('pt-BR')
-            };
-            rotas.push(rota);
-            setRotas(rotas);
-
-            if (!veiculos[idx].rotas) veiculos[idx].rotas = [];
-            veiculos[idx].rotas.push(rota.id);
-            setVeiculos(veiculos);
-
-            document.getElementById('rotaForm').reset();
-            document.getElementById('rotaKm').value = '';
-            document.getElementById('rotaData').value = '';
-
-            renderRotas();
-            renderVeiculos();
-            renderRelatorios();
-            alert('✅ Rota cadastrada com sucesso!');
-        }
-
-        // ============================================
-        //  CONCLUIR ROTA
-        // ============================================
-        function concluirRota(id) {
-            if (!confirm('Confirmar conclusão desta rota?')) return;
-
-            const rotas = getRotas();
-            const rota = rotas.find(r => r.id === id);
-            if (!rota) return;
-
-            rota.status = 'concluida';
-            setRotas(rotas);
-            renderRotas();
-            renderRelatorios();
-            alert('✅ Rota concluída com sucesso!');
         }
 
         // ============================================
@@ -3763,6 +3641,7 @@
             pneus = pneus.filter(p => p.id !== id);
             setPneus(pneus);
             renderEstoque();
+            atualizarLimitesUI();
         }
 
         // ============================================
@@ -3792,10 +3671,9 @@
                 <div class="info-row"><span class="label">Valor:</span> <span>R$ ${pneu.valor.toFixed(2)}</span></div>
                 <div class="info-row"><span class="label">KM Total:</span> <span>${(pneu.kmTotal || 0).toLocaleString('pt-BR')}</span></div>
                 <div class="info-row"><span class="label">Data Entrada:</span> <span>${pneu.dataEntrada || pneu.dataCadastro}</span></div>
-                <div class="info-row"><span class="label">Rodízios:</span> <span>R$ ${(pneu.valorRodizio || 0).toFixed(2)}</span></div>
-                <div class="info-row"><span class="label">Remendos:</span> <span>R$ ${(pneu.valorRemendo || 0).toFixed(2)}</span></div>
             `;
 
+            document.getElementById('editPneuDot').value = pneu.dot || '';
             document.getElementById('valorRecapagem').value = pneu.valorRecapagem || '';
             document.getElementById('valorVulcanizacao').value = pneu.valorVulcanizacao || '';
             document.getElementById('acaoEdicao').value = '';
@@ -3809,12 +3687,13 @@
         }
 
         function confirmarEdicao() {
+            const dot = document.getElementById('editPneuDot').value.trim();
             const valorRecapagem = parseFloat(document.getElementById('valorRecapagem').value) || 0;
             const valorVulcanizacao = parseFloat(document.getElementById('valorVulcanizacao').value) || 0;
             const acao = document.getElementById('acaoEdicao').value;
 
-            if (!acao && valorRecapagem === 0 && valorVulcanizacao === 0) {
-                alert('Selecione uma ação ou adicione um valor.');
+            if (!acao && dot === '' && valorRecapagem === 0 && valorVulcanizacao === 0) {
+                alert('Selecione uma ação ou adicione um valor ou altere o DOT.');
                 return;
             }
 
@@ -3824,6 +3703,10 @@
             idsEdicao.forEach(id => {
                 const pneu = pneus.find(p => p.id === id);
                 if (!pneu) return;
+
+                if (dot !== '') {
+                    pneu.dot = dot;
+                }
 
                 if (valorRecapagem > 0) {
                     pneu.valorRecapagem = valorRecapagem;
@@ -3882,13 +3765,14 @@
             renderEstoque();
             renderDescartados();
             renderRelatorios();
+            atualizarLimitesUI();
             
             if (acao === 'descarte') {
                 alert(`✅ ${pneusAtualizados} pneu(s) descartado(s) com sucesso!`);
             } else if (acao) {
                 alert(`✅ ${pneusAtualizados} pneu(s) atualizado(s) com sucesso!`);
             } else {
-                alert('✅ Valores atualizados com sucesso!');
+                alert('✅ Dados atualizados com sucesso!');
             }
         }
 
@@ -3896,6 +3780,15 @@
         //  RENDER ESTOQUE DE PEÇAS
         // ============================================
         function renderPecas() {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.pecas && !isMaster()) {
+                document.getElementById('pecasContent').style.display = 'none';
+                document.getElementById('pecasBlocked').style.display = 'block';
+                return;
+            }
+            document.getElementById('pecasContent').style.display = 'block';
+            document.getElementById('pecasBlocked').style.display = 'none';
+
             const pecas = getPecas();
             const filtroNome = document.getElementById('filtroPecaNome')?.value.toLowerCase() || '';
             const filtroCategoria = document.getElementById('filtroPecaCategoria')?.value || '';
@@ -3929,9 +3822,6 @@
                     statusLabel = `Instalado (${p.veiculoInstalado})`;
                     if (p.posicao) {
                         statusLabel += ` - ${p.posicao}`;
-                    }
-                    if (p.dataInstalacao) {
-                        statusLabel += ` - ${p.dataInstalacao}`;
                     }
                 } else if (statusLabel === 'instalado') {
                     statusLabel = 'Instalado';
@@ -3984,9 +3874,18 @@
         }
 
         // ============================================
-        //  RENDER VEÍCULOS (ATUALIZADO)
+        //  RENDER VEÍCULOS
         // ============================================
         function renderVeiculos() {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.veiculos.limite && !isMaster()) {
+                document.getElementById('veiculosContent').style.display = 'none';
+                document.getElementById('veiculosBlocked').style.display = 'block';
+                return;
+            }
+            document.getElementById('veiculosContent').style.display = 'block';
+            document.getElementById('veiculosBlocked').style.display = 'none';
+
             const veiculos = getVeiculos();
             const filtroPlaca = document.getElementById('filtroVeiculoPlaca')?.value.toUpperCase() || '';
             const filtroMotorista = document.getElementById('filtroVeiculoMotorista')?.value.toLowerCase() || '';
@@ -4016,7 +3915,6 @@
                 const totalPneus = (v.eixos - 1) * 4 + 2 + 4;
                 const pneusInstalados = v.pneus ? Object.keys(v.pneus).length : 0;
                 const pecasInstaladas = v.pecas ? Object.keys(v.pecas).length : 0;
-                const totalRotas = v.rotas ? v.rotas.length : 0;
 
                 html += `
                     <div class="veiculo-card" onclick="abrirModalCaminhao(${v.id})">
@@ -4030,15 +3928,13 @@
                             <span><span class="label">Carga:</span> ${v.carga || 'Geral'}</span>
                             <span><span class="label">KM:</span> ${v.km.toLocaleString('pt-BR')}</span>
                             <span><span class="label">Eixos:</span> ${v.eixos}</span>
-                            <span><span class="label">Rotas:</span> ${totalRotas}</span>
+                            <span><span class="label">Pneus:</span> ${pneusInstalados} / ${totalPneus}</span>
                             <span style="grid-column:1/-1;"><span class="label">Valor Carga:</span> R$ ${(v.valorCarga || 0).toFixed(2)}</span>
                             <span style="grid-column:1/-1;"><span class="label">Valor Frete:</span> R$ ${(v.valorFrete || 0).toFixed(2)}</span>
-                            <span style="grid-column:1/-1;"><span class="label">Pneus:</span> ${pneusInstalados} / ${totalPneus}</span>
                             <span style="grid-column:1/-1;"><span class="label">Peças:</span> ${pecasInstaladas}</span>
                         </div>
                         <div class="veiculo-card-actions">
-                            <button class="btn-warning" onclick="event.stopPropagation(); abrirModalCarga(${v.id})" title="Alterar Carga">📦 Carga</button>
-                            <button class="btn-route" onclick="event.stopPropagation(); abrirModalRotas(${v.id})" title="Ver Rotas">🗺️</button>
+                            <button class="btn-orange" onclick="event.stopPropagation(); abrirModalManutencao(${v.id})" title="Adicionar Manutenção">🔧 Manutenção</button>
                             <button class="btn-purple" onclick="event.stopPropagation(); abrirModalSelecaoPeca(${v.id})" title="Instalar Peça">🔧</button>
                             <button class="btn-danger" onclick="event.stopPropagation(); excluirVeiculo(${v.id})">🗑️</button>
                             <button class="btn-info" onclick="event.stopPropagation(); toggleStatusVeiculo(${v.id})">${v.status === 'ativo' ? '🔄' : '✅'}</button>
@@ -4064,130 +3960,18 @@
         }
 
         // ============================================
-        //  MODAL DE CARGA
-        // ============================================
-        let veiculoCargaEditando = null;
-
-        function abrirModalCarga(veiculoId) {
-            const veiculos = getVeiculos();
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo) {
-                alert('Veículo não encontrado.');
-                return;
-            }
-
-            veiculoCargaEditando = veiculo;
-
-            document.getElementById('modalCargaSubtitle').textContent = 
-                `${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
-
-            document.getElementById('cargaTipo').value = veiculo.carga || 'geral';
-            document.getElementById('cargaValor').value = veiculo.valorCarga || 0;
-            document.getElementById('cargaFrete').value = veiculo.valorFrete || 0;
-
-            document.getElementById('modalCarga').classList.add('show');
-        }
-
-        function fecharModalCarga() {
-            document.getElementById('modalCarga').classList.remove('show');
-            veiculoCargaEditando = null;
-        }
-
-        function confirmarAlteracaoCarga() {
-            if (!veiculoCargaEditando) {
-                alert('Erro: Veículo não identificado.');
-                return;
-            }
-
-            const tipo = document.getElementById('cargaTipo').value;
-            const valorCarga = parseFloat(document.getElementById('cargaValor').value) || 0;
-            const valorFrete = parseFloat(document.getElementById('cargaFrete').value) || 0;
-
-            if (!tipo) {
-                alert('Por favor, selecione um tipo de carga.');
-                return;
-            }
-
-            const veiculos = getVeiculos();
-            const idx = veiculos.findIndex(v => v.id === veiculoCargaEditando.id);
-
-            if (idx !== -1) {
-                veiculos[idx].carga = tipo;
-                veiculos[idx].valorCarga = valorCarga;
-                veiculos[idx].valorFrete = valorFrete;
-                setVeiculos(veiculos);
-
-                veiculoCargaEditando.carga = tipo;
-                veiculoCargaEditando.valorCarga = valorCarga;
-                veiculoCargaEditando.valorFrete = valorFrete;
-            }
-
-            fecharModalCarga();
-            renderVeiculos();
-            renderRelatorios();
-            alert('✅ Dados da carga atualizados com sucesso!');
-        }
-
-        // ============================================
-        //  MODAL ROTAS DO VEÍCULO
-        // ============================================
-        function abrirModalRotas(veiculoId) {
-            const veiculos = getVeiculos();
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo) return;
-
-            const rotas = getRotas();
-            const rotasVeiculo = rotas.filter(r => r.veiculoId === veiculoId);
-
-            const modal = document.getElementById('modalCaminhao');
-            const container = document.getElementById('caminhaoContainer');
-            
-            document.getElementById('modalVeiculoTitle').textContent = `🗺️ Rotas - ${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}`;
-
-            if (rotasVeiculo.length === 0) {
-                container.innerHTML = `<div class="empty-state"><p>Nenhuma rota registrada para este veículo.</p></div>`;
-                modal.classList.add('show');
-                return;
-            }
-
-            let html = `
-                <div style="max-height:500px; overflow-y:auto; width:100%;">
-                    <div style="margin-bottom:15px; padding:10px; background:#f8f9fa; border-radius:8px;">
-                        <strong>Total de Rotas:</strong> ${rotasVeiculo.length} | 
-                        <strong>KM Total:</strong> ${rotasVeiculo.reduce((sum, r) => sum + r.km, 0).toLocaleString('pt-BR')}
-                    </div>
-            `;
-
-            rotasVeiculo.sort((a, b) => new Date(b.data) - new Date(a.data)).forEach((r, index) => {
-                const statusBadge = r.status === 'concluida' ? 'badge-rota-concluida' : 'badge-rota-andamento';
-                const statusLabel = r.status === 'concluida' ? '✅ Concluída' : '🔄 Em Andamento';
-
-                html += `
-                    <div style="background:#f8f9fa; padding:12px 15px; border-radius:8px; margin-bottom:10px; border-left:4px solid #00695c;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                            <span style="font-weight:600; color:#004d40;">#${index + 1} - ${r.data}</span>
-                            <span style="font-weight:600; color:#00695c;">${r.km} km</span>
-                            <span class="badge ${statusBadge}">${statusLabel}</span>
-                        </div>
-                        <div style="font-size:14px; color:#333;">
-                            <strong>Saída:</strong> ${r.saida} → <strong>Entrega:</strong> ${r.entrega}
-                        </div>
-                        ${r.adicionais && r.adicionais !== 'Nenhum' ? `<div style="font-size:13px; color:#666;">📌 ${r.adicionais}</div>` : ''}
-                        ${r.obs && r.obs !== 'Nenhuma' ? `<div style="font-size:13px; color:#666;">📝 ${r.obs}</div>` : ''}
-                        ${r.status !== 'concluida' ? `<button class="btn-success" onclick="concluirRota(${r.id})" style="margin-top:8px; padding:4px 12px; font-size:12px;">✅ Concluir</button>` : ''}
-                    </div>
-                `;
-            });
-
-            html += `</div>`;
-            container.innerHTML = html;
-            modal.classList.add('show');
-        }
-
-        // ============================================
         //  RENDER MANUTENÇÃO
         // ============================================
         function renderManutencao() {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.manutencao && !isMaster()) {
+                document.getElementById('manutencaoContent').style.display = 'none';
+                document.getElementById('manutencaoBlocked').style.display = 'block';
+                return;
+            }
+            document.getElementById('manutencaoContent').style.display = 'block';
+            document.getElementById('manutencaoBlocked').style.display = 'none';
+
             const veiculos = getVeiculos();
             const manutencoes = getManutencoes();
             const filtroPlaca = document.getElementById('filtroManutencaoPlaca')?.value.toUpperCase() || '';
@@ -4271,6 +4055,12 @@
         let veiculoManutencaoId = null;
 
         function abrirModalManutencao(veiculoId) {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.manutencao && !isMaster()) {
+                alert('🔒 Você não tem permissão para adicionar manutenções.');
+                return;
+            }
+
             veiculoManutencaoId = veiculoId;
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === veiculoId);
@@ -4287,6 +4077,8 @@
             document.getElementById('manutencaoDescricao').value = '';
             document.getElementById('manutencaoValor').value = '';
             document.getElementById('manutencaoFornecedor').value = '';
+            document.getElementById('manutencaoAlinhamento').value = '0';
+            document.getElementById('manutencaoBalanceamento').value = '0';
             
             document.getElementById('modalManutencao').classList.add('show');
         }
@@ -4296,6 +4088,16 @@
             veiculoManutencaoId = null;
         }
 
+        function renovarServico() {
+            document.getElementById('manutencaoData').value = new Date().toISOString().split('T')[0];
+            document.getElementById('manutencaoDescricao').value = 'Renovação de serviços preventivos';
+            document.getElementById('manutencaoAlinhamento').value = '150.00';
+            document.getElementById('manutencaoBalanceamento').value = '120.00';
+            document.getElementById('manutencaoTipo').value = 'preventiva';
+            document.getElementById('manutencaoValor').value = '270.00';
+            alert('🔄 Serviço de renovação preparado! Confirme os valores antes de registrar.');
+        }
+
         function confirmarManutencao() {
             const tipo = document.getElementById('manutencaoTipo').value;
             const data = document.getElementById('manutencaoData').value;
@@ -4303,6 +4105,8 @@
             const descricao = document.getElementById('manutencaoDescricao').value.trim();
             const valor = parseFloat(document.getElementById('manutencaoValor').value) || 0;
             const fornecedor = document.getElementById('manutencaoFornecedor').value.trim();
+            const alinhamento = parseFloat(document.getElementById('manutencaoAlinhamento').value) || 0;
+            const balanceamento = parseFloat(document.getElementById('manutencaoBalanceamento').value) || 0;
 
             if (!tipo) {
                 alert('Por favor, selecione o tipo de manutenção.');
@@ -4354,6 +4158,8 @@
                 km: km,
                 descricao: descricao,
                 valor: valor,
+                alinhamento: alinhamento,
+                balanceamento: balanceamento,
                 fornecedor: fornecedor || 'Não informado',
                 dataRegistro: new Date().toLocaleString('pt-BR')
             };
@@ -4367,6 +4173,12 @@
         }
 
         function abrirModalManutencaoDetalhes(veiculoId) {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.manutencao && !isMaster()) {
+                alert('🔒 Você não tem permissão para ver detalhes de manutenção.');
+                return;
+            }
+
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === veiculoId);
             const manutencoes = getManutencoes();
@@ -4395,8 +4207,14 @@
                 const badgeTipo = {
                     'preventiva': 'badge-preventiva',
                     'corretiva': 'badge-corretiva',
-                    'revisao': 'badge-revisao'
+                    'revisao': 'badge-revisao',
+                    'alinhamento': 'badge-preventiva',
+                    'balanceamento': 'badge-preventiva'
                 } [m.tipo] || '';
+
+                const servicosAdicionais = [];
+                if (m.alinhamento > 0) servicosAdicionais.push(`Alinhamento: R$ ${m.alinhamento.toFixed(2)}`);
+                if (m.balanceamento > 0) servicosAdicionais.push(`Balanceamento: R$ ${m.balanceamento.toFixed(2)}`);
 
                 html += `
                     <div class="manutencao-item">
@@ -4405,6 +4223,7 @@
                             <span class="data">${m.data} • ${m.km}km</span>
                         </div>
                         <div class="descricao">${m.descricao}</div>
+                        ${servicosAdicionais.length > 0 ? `<div style="font-size:13px; color:#666; margin:5px 0;">${servicosAdicionais.join(' | ')}</div>` : ''}
                         <div style="display:flex; justify-content:space-between; margin-top:5px;">
                             <span class="valor">R$ ${m.valor.toFixed(2)}</span>
                             <span class="km">Fornecedor: ${m.fornecedor || 'Não informado'}</span>
@@ -4443,6 +4262,15 @@
         //  RENDER MOTORISTAS
         // ============================================
         function renderMotoristas() {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.motoristas && !isMaster()) {
+                document.getElementById('motoristasContent').style.display = 'none';
+                document.getElementById('motoristasBlocked').style.display = 'block';
+                return;
+            }
+            document.getElementById('motoristasContent').style.display = 'block';
+            document.getElementById('motoristasBlocked').style.display = 'none';
+
             const motoristas = getMotoristas();
             const filtroNome = document.getElementById('filtroMotoristaNome')?.value.toLowerCase() || '';
             const filtroCpf = document.getElementById('filtroMotoristaCpf')?.value.replace(/[^0-9]/g, '') || '';
@@ -4514,6 +4342,12 @@
         function cadastrarMotorista(e) {
             e.preventDefault();
 
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.motoristas && !isMaster()) {
+                alert('🔒 Você não tem permissão para cadastrar motoristas.');
+                return;
+            }
+
             const nome = document.getElementById('motoristaNome').value.trim();
             const cpf = document.getElementById('motoristaCpf').value.trim();
             const sangue = document.getElementById('motoristaSangue').value;
@@ -4563,6 +4397,15 @@
         //  RENDER DESCARTADOS
         // ============================================
         function renderDescartados() {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.descartados && !isMaster()) {
+                document.getElementById('descartadosContent').style.display = 'none';
+                document.getElementById('descartadosBlocked').style.display = 'block';
+                return;
+            }
+            document.getElementById('descartadosContent').style.display = 'block';
+            document.getElementById('descartadosBlocked').style.display = 'none';
+
             const descartados = getDescartados();
             const filtroNome = document.getElementById('filtroDescarteNome')?.value.toLowerCase() || '';
             const filtroTamanho = document.getElementById('filtroDescarteTamanho')?.value || '';
@@ -4658,6 +4501,15 @@
         //  RELATÓRIOS COM FILTROS
         // ============================================
         function renderRelatorios() {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.relatorios && !isMaster()) {
+                document.getElementById('relatoriosContent').style.display = 'none';
+                document.getElementById('relatoriosBlocked').style.display = 'block';
+                return;
+            }
+            document.getElementById('relatoriosContent').style.display = 'block';
+            document.getElementById('relatoriosBlocked').style.display = 'none';
+
             let pneus = getPneus();
             const veiculos = getVeiculos();
             const pecas = getPecas();
@@ -4917,6 +4769,58 @@
                 });
                 tbodyHistorico.innerHTML = htmlHistorico;
             }
+
+            // Relatório de Desgaste
+            renderDesgasteRelatorio(pneus);
+        }
+
+        function renderDesgasteRelatorio(pneus) {
+            const container = document.getElementById('desgasteRelatorioContainer');
+            
+            const pneusComFaixas = pneus.filter(p => p.faixas && (p.faixas.f1 > 0 || p.faixas.f2 > 0 || p.faixas.f3 > 0 || p.faixas.f4 > 0));
+
+            if (pneusComFaixas.length === 0) {
+                container.innerHTML = `<div class="empty-state"><p>Nenhum dado de desgaste registrado.</p></div>`;
+                return;
+            }
+
+            let html = `<div class="desgaste-grid">`;
+            
+            pneusComFaixas.forEach(p => {
+                const faixas = p.faixas;
+                const valores = [faixas.f1 || 0, faixas.f2 || 0, faixas.f3 || 0, faixas.f4 || 0];
+                const media = valores.reduce((a, b) => a + b, 0) / valores.filter(v => v > 0).length || 0;
+                const desgasteEstimado = media > 0 ? (media / 16) * 100 : 0;
+                const statusDesgaste = desgasteEstimado > 70 ? '🟢 Bom' : desgasteEstimado > 40 ? '🟡 Atenção' : '🔴 Trocar';
+
+                const barras = valores.map(v => {
+                    const percentual = (v / 16) * 100;
+                    let classe = 'barra';
+                    if (percentual > 60) classe += ' preenchida';
+                    else if (percentual > 30) classe += ' media';
+                    else classe += ' baixa';
+                    return `<div class="${classe}" style="width:${Math.max(5, percentual)}%;"></div>`;
+                }).join('');
+
+                html += `
+                    <div class="desgaste-item">
+                        <div style="font-weight:600; color:#1a3a5c;">${p.nome}</div>
+                        <div style="font-size:12px; color:#666;">${p.tamanho} • ${p.posicao || 'N/A'}</div>
+                        <div class="valor">${media.toFixed(1)} mm</div>
+                        <div class="label">Média das faixas</div>
+                        <div class="faixa-indicador">${barras}</div>
+                        <div style="margin-top:5px; font-size:12px; font-weight:600; color:${desgasteEstimado > 70 ? '#2e7d32' : desgasteEstimado > 40 ? '#f57c00' : '#c62828'}">
+                            ${statusDesgaste} (${desgasteEstimado.toFixed(0)}%)
+                        </div>
+                        <div style="font-size:11px; color:#999; margin-top:3px;">
+                            F1: ${faixas.f1 || 0}mm | F2: ${faixas.f2 || 0}mm | F3: ${faixas.f3 || 0}mm | F4: ${faixas.f4 || 0}mm
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
         }
 
         function limparFiltrosRelatorios() {
@@ -4985,21 +4889,17 @@
                 let manutencoes = getManutencoes();
                 manutencoes = manutencoes.filter(m => m.veiculoId !== id);
                 setManutencoes(manutencoes);
-
-                let rotas = getRotas();
-                rotas = rotas.filter(r => r.veiculoId !== id);
-                setRotas(rotas);
             }
 
             const novosVeiculos = veiculos.filter(v => v.id !== id);
             setVeiculos(novosVeiculos);
-            atualizarSelectVeiculosRotas();
+            atualizarSelectMotoristas();
             renderVeiculos();
             renderManutencao();
-            renderRotas();
             renderEstoque();
             renderPecas();
             renderRelatorios();
+            atualizarLimitesUI();
         }
 
         function toggleStatusVeiculo(id) {
@@ -5296,6 +5196,7 @@
             const ocupadoClass = pneu ? 'ocupado' : '';
 
             if (pneu) {
+                const faixas = pneu.faixas || {};
                 return `
                     <div class="pneu-slot ${ocupadoClass} ${slotClass}" 
                          draggable="true"
@@ -5304,6 +5205,26 @@
                          onclick="abrirMenuPneu(${veiculo.id}, '${slotId}')">
                         <div class="pneu-info">${pneu.nome}</div>
                         <div class="pneu-detalhes">${pneu.tamanho}</div>
+                        <div class="pneu-faixas">
+                            <div class="pneu-faixa">
+                                <span class="faixa-label">F1</span>
+                                <input type="number" min="0" max="20" step="0.5" value="${faixas.f1 || 0}" 
+                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f1', this.value)" 
+                                       onclick="event.stopPropagation();">
+                                <span class="faixa-label">F2</span>
+                                <input type="number" min="0" max="20" step="0.5" value="${faixas.f2 || 0}" 
+                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f2', this.value)" 
+                                       onclick="event.stopPropagation();">
+                                <span class="faixa-label">F3</span>
+                                <input type="number" min="0" max="20" step="0.5" value="${faixas.f3 || 0}" 
+                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f3', this.value)" 
+                                       onclick="event.stopPropagation();">
+                                <span class="faixa-label">F4</span>
+                                <input type="number" min="0" max="20" step="0.5" value="${faixas.f4 || 0}" 
+                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f4', this.value)" 
+                                       onclick="event.stopPropagation();">
+                            </div>
+                        </div>
                         <button class="remove-pneu" onclick="event.stopPropagation(); abrirModalRemocao(${veiculo.id}, '${slotId}')">✕</button>
                     </div>
                 `;
@@ -5321,10 +5242,7 @@
             }
         }
 
-        // ============================================
-        //  MENU DO PNEU
-        // ============================================
-        function abrirMenuPneu(veiculoId, slotId) {
+        function atualizarFaixa(veiculoId, slotId, faixa, valor) {
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === veiculoId);
             if (!veiculo || !veiculo.pneus) return;
@@ -5336,21 +5254,26 @@
             const pneu = pneus.find(p => p.id === pneuId);
             if (!pneu) return;
 
-            const opcoes = prompt(
-                `Pneu: ${pneu.nome} ${pneu.tamanho}\nValor: R$ ${pneu.valor.toFixed(2)}\nKM Total: ${(pneu.kmTotal || 0)}\n\n` +
-                `Selecione uma opção:\n` +
-                `1. 🔧 Adicionar Serviço\n` +
-                `2. 📦 Remover Pneu\n` +
-                `3. ✏️ Editar Pneu\n\n` +
-                `Digite o número da opção:`
-            );
-            
-            if (opcoes === '1') {
-                abrirModalServico(veiculoId, slotId);
-            } else if (opcoes === '2') {
-                abrirModalRemocao(veiculoId, slotId);
-            } else if (opcoes === '3') {
-                abrirModalEdicaoPneu(veiculoId, slotId);
+            if (!pneu.faixas) pneu.faixas = {};
+            pneu.faixas[faixa] = parseFloat(valor) || 0;
+            setPneus(pneus);
+        }
+
+        // ============================================
+        //  MENU DO PNEU - AGORA ABRE DIRETO AS FAIXAS
+        // ============================================
+        function abrirMenuPneu(veiculoId, slotId) {
+            // Agora clicar no pneu apenas mostra as faixas para edição
+            // As faixas já estão visíveis no próprio slot
+            // Apenas destacamos visualmente
+            const slot = document.querySelector(`.pneu-slot[onclick*="abrirMenuPneu(${veiculoId}, '${slotId}')"]`);
+            if (slot) {
+                slot.style.borderColor = '#ffd700';
+                slot.style.boxShadow = '0 0 15px rgba(255,215,0,0.5)';
+                setTimeout(() => {
+                    slot.style.borderColor = '';
+                    slot.style.boxShadow = '';
+                }, 2000);
             }
         }
 
@@ -5648,6 +5571,7 @@
                 renderVeiculos();
                 renderEstoque();
                 renderRelatorios();
+                atualizarLimitesUI();
                 alert(`✅ Pneu descartado com sucesso!`);
                 return;
             }
@@ -5659,6 +5583,7 @@
             renderVeiculos();
             renderEstoque();
             renderRelatorios();
+            atualizarLimitesUI();
             alert(`✅ Pneu removido com sucesso! Destino: ${destinoLabels[destino]}`);
         }
 
@@ -5669,6 +5594,12 @@
         let pecaSelecionadoId = null;
 
         function abrirModalSelecaoPeca(veiculoId) {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.pecas && !isMaster()) {
+                alert('🔒 Você não tem permissão para instalar peças.');
+                return;
+            }
+
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === veiculoId);
             if (!veiculo) return;
@@ -5823,137 +5754,166 @@
         }
 
         // ============================================
-        //  SERVIÇOS
+        //  MASTER CONTROL - RENDER
         // ============================================
-        let slotServico = null;
-
-        function abrirModalServico(veiculoId, slotId) {
-            const veiculos = getVeiculos();
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo || !veiculo.pneus) return;
-
-            const pneuId = veiculo.pneus[slotId];
-            if (!pneuId) return;
-
-            const pneus = getPneus();
-            const pneu = pneus.find(p => p.id === pneuId);
-            if (!pneu) return;
-
-            slotServico = slotId;
-            veiculoAtual = veiculo;
-
-            const infoBox = document.getElementById('pneuServicoInfo');
-            infoBox.innerHTML = `
-                <div class="info-row"><span class="label">Pneu:</span> <span>${pneu.nome}</span></div>
-                <div class="info-row"><span class="label">Tamanho:</span> <span>${pneu.tamanho}</span></div>
-                <div class="info-row"><span class="label">Situação:</span> <span>${pneu.situacao}</span></div>
-                <div class="info-row"><span class="label">Valor Atual:</span> <span>R$ ${pneu.valor.toFixed(2)}</span></div>
-                <div class="info-row"><span class="label">KM Total:</span> <span>${(pneu.kmTotal || 0).toLocaleString('pt-BR')}</span></div>
-            `;
-
-            document.getElementById('tipoServico').value = '';
-            document.getElementById('valorServico').value = '';
-
-            document.getElementById('modalServico').classList.add('show');
-        }
-
-        function fecharModalServico() {
-            document.getElementById('modalServico').classList.remove('show');
-            slotServico = null;
-        }
-
-        function confirmarServico() {
-            const tipo = document.getElementById('tipoServico').value;
-            const valor = parseFloat(document.getElementById('valorServico').value);
-
-            if (!tipo) {
-                alert('Por favor, selecione o tipo de serviço.');
+        function renderMaster() {
+            if (!isMaster()) {
+                document.getElementById('masterGrid').innerHTML = '<div class="empty-state"><p>🔒 Acesso restrito ao administrador.</p></div>';
                 return;
             }
 
-            if (!valor || valor <= 0) {
-                alert('Por favor, informe um valor válido.');
-                return;
-            }
+            const users = getUsers();
+            const filtroEmpresa = document.getElementById('filtroMasterEmpresa')?.value.toLowerCase() || '';
+            const filtroStatus = document.getElementById('filtroMasterStatus')?.value || '';
 
-            const pneuId = veiculoAtual.pneus[slotServico];
-            if (!pneuId) {
-                alert('Erro: Pneu não encontrado.');
-                fecharModalServico();
-                return;
-            }
-
-            const pneus = getPneus();
-            const pneu = pneus.find(p => p.id === pneuId);
-            if (!pneu) {
-                alert('Erro: Pneu não encontrado no estoque.');
-                fecharModalServico();
-                return;
-            }
-
-            pneu.valor += valor;
-
-            const servicoLabel = tipo === 'rodizio' ? 'Rodízio' : 'Remendo';
-            pneu.historico = pneu.historico || [];
-            pneu.historico.push({
-                data: new Date().toLocaleString('pt-BR'),
-                acao: servicoLabel,
-                detalhes: `${servicoLabel} realizado no valor de R$ ${valor.toFixed(2)} no veículo ${veiculoAtual.placa}`
+            const usersFiltrados = users.filter(u => {
+                const matchEmpresa = (u.company || u.companyName || '').toLowerCase().includes(filtroEmpresa);
+                const matchStatus = !filtroStatus || u.status === filtroStatus;
+                return matchEmpresa && matchStatus;
             });
 
-            if (tipo === 'rodizio') {
-                pneu.valorRodizio = (pneu.valorRodizio || 0) + valor;
-            } else if (tipo === 'remendo') {
-                pneu.valorRemendo = (pneu.valorRemendo || 0) + valor;
+            const grid = document.getElementById('masterGrid');
+
+            if (usersFiltrados.length === 0) {
+                grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><p>Nenhuma empresa encontrada.</p></div>';
+                return;
             }
 
-            setPneus(pneus);
+            let html = '';
+            usersFiltrados.forEach(u => {
+                const pneus = getPneus();
+                const veiculos = getVeiculos();
+                const pneusCount = pneus.length;
+                const veiculosCount = veiculos.length;
+                
+                const statusBadge = u.status === 'aprovado' ? 'badge-ativo' : 
+                                   u.status === 'pendente' ? 'badge-meia' : 'badge-inativo';
+                const statusLabel = u.status === 'aprovado' ? '✅ Aprovado' :
+                                   u.status === 'pendente' ? '⏳ Pendente' : '❌ Bloqueado';
 
-            fecharModalServico();
-            renderCaminhao(veiculoAtual);
-            renderVeiculos();
-            renderEstoque();
-            renderRelatorios();
-            alert(`✅ ${servicoLabel} adicionado com sucesso! Novo valor do pneu: R$ ${pneu.valor.toFixed(2)}`);
+                const permissoes = u.permissoes || {};
+                const pneusLimite = permissoes.pneusLimite || 10;
+                const veiculosLimite = permissoes.veiculosLimite || 1;
+
+                html += `
+                    <div class="master-card">
+                        <div class="empresa-nome">${u.company || u.companyName || u.name}</div>
+                        <div class="empresa-info">📧 ${u.email}</div>
+                        <div class="empresa-info">👤 ${u.name}</div>
+                        <div class="empresa-info">📅 ${new Date(u.dataCadastro).toLocaleDateString('pt-BR')}</div>
+                        <div class="empresa-status">
+                            <span class="badge ${statusBadge}">${statusLabel}</span>
+                            ${u.isMaster ? '<span class="badge badge-ativo">👑 Master</span>' : ''}
+                            <span style="font-size:12px; color:#666;">Pneus: ${pneusCount}/${pneusLimite} | Veículos: ${veiculosCount}/${veiculosLimite}</span>
+                        </div>
+                        <div class="empresa-actions">
+                            ${!u.isMaster ? `
+                                <button class="btn-success" onclick="aprovarEmpresa(${u.id})" title="Aprovar">✅</button>
+                                <button class="btn-warning" onclick="bloquearEmpresa(${u.id})" title="Bloquear">🚫</button>
+                                <button class="btn-info" onclick="editarPermissoes(${u.id})" title="Editar Permissões">📝</button>
+                                <button class="btn-master" onclick="promoverMaster(${u.id})" title="Promover a Master">👑</button>
+                            ` : '<span style="color:#999; font-size:12px;">👑 Conta Master</span>'}
+                            <button class="btn-danger" onclick="excluirEmpresa(${u.id})" title="Excluir Conta">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
         }
 
-        // ============================================
-        //  EDIÇÃO DE PNEU (individual no veículo)
-        // ============================================
-        function abrirModalEdicaoPneu(veiculoId, slotId) {
-            const veiculos = getVeiculos();
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo || !veiculo.pneus) return;
+        function limparFiltrosMaster() {
+            document.getElementById('filtroMasterEmpresa').value = '';
+            document.getElementById('filtroMasterStatus').value = '';
+            renderMaster();
+        }
 
-            const pneuId = veiculo.pneus[slotId];
-            if (!pneuId) return;
+        function aprovarEmpresa(userId) {
+            if (!confirm('Confirmar aprovação desta empresa?')) return;
+            const users = getUsers();
+            const idx = users.findIndex(u => u.id === userId);
+            if (idx !== -1) {
+                users[idx].status = 'aprovado';
+                setUsers(users);
+                renderMaster();
+                alert('✅ Empresa aprovada com sucesso!');
+            }
+        }
 
-            const pneus = getPneus();
-            const pneu = pneus.find(p => p.id === pneuId);
-            if (!pneu) return;
+        function bloquearEmpresa(userId) {
+            if (!confirm('Bloquear esta empresa?')) return;
+            const users = getUsers();
+            const idx = users.findIndex(u => u.id === userId);
+            if (idx !== -1) {
+                users[idx].status = 'bloqueado';
+                setUsers(users);
+                renderMaster();
+                alert('🚫 Empresa bloqueada!');
+            }
+        }
 
-            idsEdicao = [pneuId];
+        function editarPermissoes(userId) {
+            const users = getUsers();
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const permissoes = user.permissoes || {};
+            const pneusLimite = parseInt(prompt(`Limite de Pneus (atual: ${permissoes.pneusLimite || 10})`, permissoes.pneusLimite || 10));
+            if (isNaN(pneusLimite) || pneusLimite < 0) return;
+
+            const veiculosLimite = parseInt(prompt(`Limite de Veículos (atual: ${permissoes.veiculosLimite || 1})`, permissoes.veiculosLimite || 1));
+            if (isNaN(veiculosLimite) || veiculosLimite < 0) return;
+
+            const pecas = confirm('Permitir acesso a Estoque de Peças? (OK = Sim, Cancelar = Não)');
+            const manutencao = confirm('Permitir acesso a Manutenção? (OK = Sim, Cancelar = Não)');
+            const motoristas = confirm('Permitir acesso a Motoristas? (OK = Sim, Cancelar = Não)');
+            const descartados = confirm('Permitir acesso a Descartados? (OK = Sim, Cancelar = Não)');
+            const relatorios = confirm('Permitir acesso a Relatórios? (OK = Sim, Cancelar = Não)');
+
+            const idx = users.findIndex(u => u.id === userId);
+            if (idx !== -1) {
+                users[idx].permissoes = {
+                    pneusLimite: pneusLimite,
+                    veiculosLimite: veiculosLimite,
+                    pecas: pecas,
+                    manutencao: manutencao,
+                    motoristas: motoristas,
+                    descartados: descartados,
+                    relatorios: relatorios
+                };
+                setUsers(users);
+                renderMaster();
+                alert('✅ Permissões atualizadas com sucesso!');
+            }
+        }
+
+        function promoverMaster(userId) {
+            const senha = prompt('Digite a senha master para promover este usuário:');
+            if (senha !== getMasterPassword()) {
+                alert('❌ Senha incorreta!');
+                return;
+            }
+            if (!confirm('Tem certeza que deseja promover este usuário a Master?')) return;
             
-            const infoBox = document.getElementById('pneuEdicaoInfo');
-            infoBox.innerHTML = `
-                <div class="info-row"><span class="label">ID:</span> <span>#${pneuId.toString().slice(-6)}</span></div>
-                <div class="info-row"><span class="label">Pneu:</span> <span>${pneu.nome}</span></div>
-                <div class="info-row"><span class="label">DOT/Fogo:</span> <span>${pneu.dot || 'Não informado'}</span></div>
-                <div class="info-row"><span class="label">Tamanho:</span> <span>${pneu.tamanho}</span></div>
-                <div class="info-row"><span class="label">Situação:</span> <span>${pneu.situacao}</span></div>
-                <div class="info-row"><span class="label">Status:</span> <span>${pneu.status || 'Disponível'}</span></div>
-                <div class="info-row"><span class="label">Valor:</span> <span>R$ ${pneu.valor.toFixed(2)}</span></div>
-                <div class="info-row"><span class="label">KM Total:</span> <span>${(pneu.kmTotal || 0).toLocaleString('pt-BR')}</span></div>
-                <div class="info-row"><span class="label">Data Entrada:</span> <span>${pneu.dataEntrada || pneu.dataCadastro}</span></div>
-                <div class="info-row"><span class="label">Rodízios:</span> <span>R$ ${(pneu.valorRodizio || 0).toFixed(2)}</span></div>
-                <div class="info-row"><span class="label">Remendos:</span> <span>R$ ${(pneu.valorRemendo || 0).toFixed(2)}</span></div>
-            `;
+            if (promoverParaMaster(userId)) {
+                renderMaster();
+                alert('✅ Usuário promovido a Master com sucesso!');
+            }
+        }
 
-            document.getElementById('valorRecapagem').value = pneu.valorRecapagem || '';
-            document.getElementById('valorVulcanizacao').value = pneu.valorVulcanizacao || '';
-            document.getElementById('acaoEdicao').value = '';
+        function excluirEmpresa(userId) {
+            const senha = prompt('Digite a senha master para excluir esta conta:');
+            if (senha !== getMasterPassword()) {
+                alert('❌ Senha incorreta!');
+                return;
+            }
+            if (!confirm('Tem certeza que deseja excluir esta conta permanentemente?')) return;
 
-            document.getElementById('modalEdicao').classList.add('show');
+            let users = getUsers();
+            users = users.filter(u => u.id !== userId);
+            setUsers(users);
+            renderMaster();
+            alert('✅ Conta excluída com sucesso!');
         }
 
         // ============================================
@@ -6275,81 +6235,6 @@
             abrirPDF(html, `Relatorio_Motoristas_${new Date().toISOString().split('T')[0]}.pdf`);
         }
 
-        function gerarPDFRotas() {
-            const rotas = getRotas();
-            if (rotas.length === 0) {
-                alert('Não há rotas para gerar o PDF.');
-                return;
-            }
-            
-            const user = getCurrentUser();
-            const empresa = user?.companyName || user?.company || 'Minha Empresa';
-            
-            let html = `
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Relatório de Rotas</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 40px; }
-                        h1 { color: #1a3a5c; text-align: center; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
-                        th { background: #00695c; color: white; padding: 10px; text-align: left; }
-                        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
-                        .header { text-align: center; margin-bottom: 20px; }
-                        .header .empresa { font-size: 20px; font-weight: bold; color: #1a3a5c; }
-                        .header .data { color: #666; font-size: 14px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <div class="empresa">${empresa}</div>
-                        <div class="data">Relatório de Rotas - ${new Date().toLocaleString('pt-BR')}</div>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Veículo</th>
-                                <th>Placa</th>
-                                <th>Saída</th>
-                                <th>Entrega</th>
-                                <th>KM</th>
-                                <th>Data</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-            
-            rotas.forEach((r, index) => {
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${r.veiculoMarca || ''} ${r.veiculoModelo || ''}</td>
-                        <td>${r.veiculoPlaca || '-'}</td>
-                        <td>${r.saida}</td>
-                        <td>${r.entrega}</td>
-                        <td>${r.km}</td>
-                        <td>${r.data}</td>
-                        <td>${r.status === 'concluida' ? 'Concluída' : 'Em Andamento'}</td>
-                    </tr>
-                `;
-            });
-            
-            html += `
-                        </tbody>
-                    </table>
-                    <div style="margin-top:20px; text-align:center; color:#666; font-size:12px;">
-                        Total de rotas: ${rotas.length}
-                    </div>
-                </body>
-                </html>
-            `;
-            
-            abrirPDF(html, `Relatorio_Rotas_${new Date().toISOString().split('T')[0]}.pdf`);
-        }
-
         function gerarPDFManutencoes() {
             const manutencoes = getManutencoes();
             if (manutencoes.length === 0) {
@@ -6392,6 +6277,8 @@
                                 <th>KM</th>
                                 <th>Descrição</th>
                                 <th>Valor (R$)</th>
+                                <th>Alinhamento</th>
+                                <th>Balanceamento</th>
                                 <th>Fornecedor</th>
                             </tr>
                         </thead>
@@ -6409,6 +6296,8 @@
                         <td>${m.km}</td>
                         <td>${m.descricao}</td>
                         <td>${m.valor.toFixed(2)}</td>
+                        <td>${(m.alinhamento || 0).toFixed(2)}</td>
+                        <td>${(m.balanceamento || 0).toFixed(2)}</td>
                         <td>${m.fornecedor || '-'}</td>
                     </tr>
                 `;
@@ -6512,7 +6401,6 @@
             const pecas = getPecas();
             const manutencoes = getManutencoes();
             const motoristas = getMotoristas();
-            const rotas = getRotas();
             const descartados = getDescartados();
             
             const user = getCurrentUser();
@@ -6567,12 +6455,13 @@
                     <h2>📦 Pneus (${pneus.length})</h2>
                     ${pneus.length > 0 ? `
                     <table>
-                        <thead><tr><th>#</th><th>Nome</th><th>Tamanho</th><th>Situação</th><th>Status</th><th>Valor (R$)</th><th>KM Total</th></tr></thead>
+                        <thead><tr><th>#</th><th>Nome</th><th>DOT</th><th>Tamanho</th><th>Situação</th><th>Status</th><th>Valor (R$)</th><th>KM Total</th></tr></thead>
                         <tbody>
                             ${pneus.slice(0, 50).map((p, i) => `
                                 <tr>
                                     <td>${i + 1}</td>
                                     <td>${p.nome}</td>
+                                    <td>${p.dot || '-'}</td>
                                     <td>${p.tamanho}</td>
                                     <td>${p.situacao}</td>
                                     <td>${p.status === 'instalado' ? 'Instalado' : p.status === 'recapagem' ? 'Em Recapagem' : p.status === 'vulcanizacao' ? 'Em Vulcanização' : 'Disponível'}</td>
@@ -6580,7 +6469,7 @@
                                     <td>${(p.kmTotal || 0).toLocaleString('pt-BR')}</td>
                                 </tr>
                             `).join('')}
-                            ${pneus.length > 50 ? `<tr><td colspan="7" style="text-align:center; color:#666;">... e mais ${pneus.length - 50} pneus</td></tr>` : ''}
+                            ${pneus.length > 50 ? `<tr><td colspan="8" style="text-align:center; color:#666;">... e mais ${pneus.length - 50} pneus</td></tr>` : ''}
                         </tbody>
                     </table>` : '<p style="color:#666;">Nenhum pneu cadastrado.</p>'}
                     
@@ -6677,12 +6566,10 @@
                 fecharModalInstalacao();
                 fecharModalRemocao();
                 fecharModalEdicao();
-                fecharModalServico();
                 fecharModalSelecaoPeca();
                 fecharModalInstalacaoPeca();
                 fecharModalManutencao();
                 fecharModalCadastroMultiplo();
-                fecharModalCarga();
             }
         });
 
@@ -6701,9 +6588,6 @@
         document.getElementById('modalEdicao').addEventListener('click', function(e) {
             if (e.target === this) fecharModalEdicao();
         });
-        document.getElementById('modalServico').addEventListener('click', function(e) {
-            if (e.target === this) fecharModalServico();
-        });
         document.getElementById('modalSelecaoPeca').addEventListener('click', function(e) {
             if (e.target === this) fecharModalSelecaoPeca();
         });
@@ -6716,13 +6600,13 @@
         document.getElementById('modalCadastroMultiplo').addEventListener('click', function(e) {
             if (e.target === this) fecharModalCadastroMultiplo();
         });
-        document.getElementById('modalCarga').addEventListener('click', function(e) {
-            if (e.target === this) fecharModalCarga();
-        });
 
-        console.log('✅ Sistema atualizado com sucesso!');
-        console.log('📦 Modal de Carga implementado');
-        console.log('🔧 Peças instaladas visíveis no modal do veículo');
+        console.log('✅ Sistema Profissional atualizado com sucesso!');
+        console.log('👑 Controle Master implementado');
+        console.log('🔒 Sistema de permissões e limites');
+        console.log('📊 Faixas de desgaste de pneus');
+        console.log('🔧 Manutenção com alinhamento/balanceamento');
+        console.log('📄 Relatórios completos');
     </script>
 </body>
 </html>
