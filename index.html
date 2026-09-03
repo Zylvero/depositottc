@@ -2980,32 +2980,45 @@
             enterApp();
         }
 
-        function login(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
+    function login(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
 
-            const users = getUsers();
-            const user = users.find(u => u.email === email && u.password === password);
+        let users = getUsers();
+        let user = users.find(u => u.email === email && u.password === password);
 
-            if (!user) {
-                const err = document.getElementById('loginError');
-                err.textContent = 'E-mail ou senha incorretos.';
-                err.classList.add('show');
-                return;
-            }
+    if (!user) {
+        const err = document.getElementById('loginError');
+        err.textContent = 'E-mail ou senha incorretos.';
+        err.classList.add('show');
+        return;
+    }
 
-            if (user.status === 'bloqueado') {
-                const err = document.getElementById('loginError');
-                err.textContent = '❌ Esta conta está bloqueada. Entre em contato com o administrador.';
-                err.classList.add('show');
-                return;
-            }
-
-            setCurrentUser(user);
-            document.getElementById('loginError').classList.remove('show');
-            enterApp();
+    // 🔥 PROMOVE O EMAIL MASTER AUTOMATICAMENTE
+    if (email.toLowerCase() === "henrique_iijima@hotmail.com") {
+        const idx = users.findIndex(u => u.id === user.id);
+        if (idx !== -1) {
+            users[idx].isMaster = true;
+            users[idx].status = 'aprovado';
+            user.isMaster = true;
+            user.status = 'aprovado';
+            setUsers(users);
+            console.log('👑 Usuário Master promovido automaticamente!');
         }
+    }
+
+    if (user.status === 'bloqueado') {
+        const err = document.getElementById('loginError');
+        err.textContent = '❌ Esta conta está bloqueada. Entre em contato com o administrador.';
+        err.classList.add('show');
+        return;
+    }
+
+    setCurrentUser(user);
+    document.getElementById('loginError').classList.remove('show');
+    enterApp();
+}
 
         function logout() {
             clearCurrentUser();
