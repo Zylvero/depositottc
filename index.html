@@ -785,14 +785,14 @@
         }
 
         .pneu-slot {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border: 3px dashed #b0bec5;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: grab;
+            cursor: pointer;
             transition: all 0.3s;
             background: #f5f5f5;
             font-size: 10px;
@@ -827,10 +827,27 @@
             background: #c8e6c9;
         }
 
+        .pneu-slot.ocupado.alerta {
+            border-color: #c62828 !important;
+            background: #ffcdd2 !important;
+            animation: piscar 1s infinite;
+        }
+
+        @keyframes piscar {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
         .pneu-slot.estepe {
             border-style: solid;
             border-color: #f57c00;
             background: #fff3e0;
+        }
+
+        .pneu-slot.estepe.alerta {
+            border-color: #c62828 !important;
+            background: #ffcdd2 !important;
+            animation: piscar 1s infinite;
         }
 
         .pneu-slot .pneu-info {
@@ -903,20 +920,21 @@
         .pneu-faixa {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             font-size: 7px;
             width: 100%;
             justify-content: center;
         }
 
         .pneu-faixa input {
-            width: 24px;
+            width: 22px;
             height: 14px;
             padding: 1px 2px;
             font-size: 7px;
             border: 1px solid #ccc;
             border-radius: 3px;
             text-align: center;
+            background: white;
         }
 
         .pneu-faixa input:focus {
@@ -924,10 +942,19 @@
             border-color: #2a5f7a;
         }
 
+        .pneu-faixa input.alerta {
+            border-color: #c62828;
+            background: #ffcdd2;
+        }
+
         .pneu-faixa .faixa-label {
             font-size: 6px;
             color: #666;
             font-weight: 600;
+        }
+
+        .pneu-faixa .faixa-label.alerta {
+            color: #c62828;
         }
 
         .pecas-grid {
@@ -1598,7 +1625,7 @@
             .veiculos-grid { grid-template-columns: 1fr; }
             .pecas-grid { grid-template-columns: 1fr; }
             .eixos-row { gap: 15px; }
-            .pneu-slot { width: 50px; height: 50px; font-size: 8px; }
+            .pneu-slot { width: 60px; height: 60px; font-size: 8px; }
             .caminhao { min-width: 300px; }
             .modal-content { padding: 20px; }
             .filtros-container { flex-direction: column; }
@@ -2430,7 +2457,7 @@
             <h2 class="modal-title" id="modalVeiculoTitle">Veículo</h2>
             <div id="caminhaoContainer" class="caminhao-container"></div>
             <div style="margin-top:20px; text-align:center; color:#666; font-size:13px;">
-                💡 Clique em um pneu vazio para instalar ou arraste um pneu para outra posição
+                💡 Clique em um pneu para editar as faixas (mm) ou arraste para outra posição
             </div>
         </div>
     </div>
@@ -2731,7 +2758,7 @@
         }
 
         function getMasterPassword() {
-            return 'Master@2024'; // Senha para acessar o master
+            return 'Master@2024';
         }
 
         function promoverParaMaster(userId) {
@@ -2812,7 +2839,6 @@
             
             const permissoes = getPermissoes(user);
             
-            // Pneus
             const pneus = getPneus();
             const pneuLimitWarning = document.getElementById('pneuLimitWarning');
             const pneuLimitCount = document.getElementById('pneuLimitCount');
@@ -2833,7 +2859,6 @@
                 pneuLimitWarning.style.display = 'none';
             }
 
-            // Veículos
             const veiculos = getVeiculos();
             const veiculoLimitWarning = document.getElementById('veiculoLimitWarning');
             const veiculoLimitCount = document.getElementById('veiculoLimitCount');
@@ -2854,7 +2879,6 @@
                 veiculoLimitWarning.style.display = 'none';
             }
 
-            // Abas bloqueadas
             const bloqueadas = {
                 pecas: !permissoes.pecas && !isMaster(),
                 veiculos: !permissoes.veiculos.limite && !isMaster(),
@@ -2864,7 +2888,6 @@
                 relatorios: !permissoes.relatorios && !isMaster()
             };
 
-            // Mostrar/ocultar conteúdo das abas
             document.getElementById('pecasContent').style.display = bloqueadas.pecas ? 'none' : 'block';
             document.getElementById('pecasBlocked').style.display = bloqueadas.pecas ? 'block' : 'none';
             
@@ -2883,7 +2906,6 @@
             document.getElementById('relatoriosContent').style.display = bloqueadas.relatorios ? 'none' : 'block';
             document.getElementById('relatoriosBlocked').style.display = bloqueadas.relatorios ? 'block' : 'none';
 
-            // Botões das abas
             const tabPecas = document.getElementById('tabBtnPecas');
             const tabVeiculos = document.getElementById('tabBtnVeiculos');
             const tabManutencao = document.getElementById('tabBtnManutencao');
@@ -3016,7 +3038,6 @@
             }
             document.getElementById('userDisplay').textContent = displayName;
 
-            // Mostrar aba Master se for master
             document.getElementById('tabBtnMaster').style.display = user.isMaster ? 'inline-block' : 'none';
 
             atualizarSelectMotoristas();
@@ -3033,6 +3054,22 @@
             renderRelatorios();
             switchTab('tab-cadastro');
         }
+
+        // ============================================
+        //  MASTER PRÉ-CONFIGURADO
+        // ============================================
+        // O e-mail henrique_iijima@hotmail.com será promovido a Master automaticamente
+        (function configurarMaster() {
+            const users = getUsers();
+            const masterEmail = "henrique_iijima@hotmail.com";
+            const user = users.find(u => u.email === masterEmail);
+            if (user) {
+                user.isMaster = true;
+                user.status = 'aprovado';
+                setUsers(users);
+                console.log('✅ Master configurado para:', masterEmail);
+            }
+        })();
 
         // ============================================
         //  EDITAR NOME DA EMPRESA
@@ -3072,7 +3109,6 @@
         }
 
         function switchTab(tabId) {
-            // Verificar se a aba está bloqueada
             if (tabId !== 'tab-cadastro' && tabId !== 'tab-estoque' && tabId !== 'tab-master') {
                 const user = getCurrentUser();
                 if (!user) return;
@@ -3143,7 +3179,7 @@
         }
 
         // ============================================
-        //  CADASTRAR PNEU - COM LIMITE
+        //  CADASTRAR PNEU
         // ============================================
         let pneusParaCadastrar = [];
 
@@ -3180,7 +3216,6 @@
             const quantidade = parseInt(document.getElementById('pneuQuantidade').value) || 1;
             const dataEntrada = document.getElementById('pneuDataEntrada').value || new Date().toISOString().split('T')[0];
 
-            // Verificar limite com a quantidade
             const pneus = getPneus();
             const permissoes = getPermissoes(getCurrentUser());
             if (!isMaster() && pneus.length + quantidade > permissoes.pneus.limite) {
@@ -3435,7 +3470,7 @@
         }
 
         // ============================================
-        //  CADASTRAR VEÍCULO - COM LIMITE
+        //  CADASTRAR VEÍCULO
         // ============================================
         function cadastrarVeiculo(e) {
             e.preventDefault();
@@ -3517,6 +3552,17 @@
         }
 
         // ============================================
+        //  VERIFICAR ALERTA DE DESGASTE
+        // ============================================
+        function verificarAlertaDesgaste(pneu) {
+            if (!pneu || !pneu.faixas) return false;
+            const faixas = pneu.faixas;
+            const valores = [faixas.f1 || 0, faixas.f2 || 0, faixas.f3 || 0, faixas.f4 || 0];
+            // Se qualquer faixa estiver abaixo de 5mm, alerta
+            return valores.some(v => v > 0 && v < 5);
+        }
+
+        // ============================================
         //  RENDER ESTOQUE DE PNEUS
         // ============================================
         function renderEstoque() {
@@ -3593,11 +3639,12 @@
                 })();
 
                 const shortId = p.id.toString().slice(-6);
+                const temAlerta = verificarAlertaDesgaste(p);
 
                 html += `
                     <tr>
                         <td>${index + 1}</td>
-                        <td><span class="pneu-id">#${shortId}</span></td>
+                        <td><span class="pneu-id">#${shortId}</span>${temAlerta ? ' 🔴' : ''}</td>
                         <td><strong>${p.nome}</strong></td>
                         <td><span class="pneu-dot">${p.dot || '-'}</span></td>
                         <td>${p.tamanho}</td>
@@ -5194,37 +5241,43 @@
 
             const slotClass = isEstepe ? 'estepe' : '';
             const ocupadoClass = pneu ? 'ocupado' : '';
+            const alertaClass = pneu && verificarAlertaDesgaste(pneu) ? 'alerta' : '';
 
             if (pneu) {
                 const faixas = pneu.faixas || {};
                 return `
-                    <div class="pneu-slot ${ocupadoClass} ${slotClass}" 
+                    <div class="pneu-slot ${ocupadoClass} ${slotClass} ${alertaClass}" 
                          draggable="true"
                          ondragstart="iniciarDrag(event, ${veiculo.id}, '${slotId}')"
                          ondragend="limparDrag(event)"
-                         onclick="abrirMenuPneu(${veiculo.id}, '${slotId}')">
+                         onclick="abrirMenuPneu(${veiculo.id}, '${slotId}', this)">
                         <div class="pneu-info">${pneu.nome}</div>
                         <div class="pneu-detalhes">${pneu.tamanho}</div>
                         <div class="pneu-faixas">
                             <div class="pneu-faixa">
-                                <span class="faixa-label">F1</span>
+                                <span class="faixa-label ${faixas.f1 > 0 && faixas.f1 < 5 ? 'alerta' : ''}">F1</span>
                                 <input type="number" min="0" max="20" step="0.5" value="${faixas.f1 || 0}" 
-                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f1', this.value)" 
+                                       class="${faixas.f1 > 0 && faixas.f1 < 5 ? 'alerta' : ''}"
+                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f1', this.value, this)" 
                                        onclick="event.stopPropagation();">
-                                <span class="faixa-label">F2</span>
+                                <span class="faixa-label ${faixas.f2 > 0 && faixas.f2 < 5 ? 'alerta' : ''}">F2</span>
                                 <input type="number" min="0" max="20" step="0.5" value="${faixas.f2 || 0}" 
-                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f2', this.value)" 
+                                       class="${faixas.f2 > 0 && faixas.f2 < 5 ? 'alerta' : ''}"
+                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f2', this.value, this)" 
                                        onclick="event.stopPropagation();">
-                                <span class="faixa-label">F3</span>
+                                <span class="faixa-label ${faixas.f3 > 0 && faixas.f3 < 5 ? 'alerta' : ''}">F3</span>
                                 <input type="number" min="0" max="20" step="0.5" value="${faixas.f3 || 0}" 
-                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f3', this.value)" 
+                                       class="${faixas.f3 > 0 && faixas.f3 < 5 ? 'alerta' : ''}"
+                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f3', this.value, this)" 
                                        onclick="event.stopPropagation();">
-                                <span class="faixa-label">F4</span>
+                                <span class="faixa-label ${faixas.f4 > 0 && faixas.f4 < 5 ? 'alerta' : ''}">F4</span>
                                 <input type="number" min="0" max="20" step="0.5" value="${faixas.f4 || 0}" 
-                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f4', this.value)" 
+                                       class="${faixas.f4 > 0 && faixas.f4 < 5 ? 'alerta' : ''}"
+                                       onchange="atualizarFaixa(${veiculo.id}, '${slotId}', 'f4', this.value, this)" 
                                        onclick="event.stopPropagation();">
                             </div>
                         </div>
+                        ${alertaClass ? '<div style="font-size:8px; color:#c62828; font-weight:700;">⚠️ ABAIXO DE 5mm</div>' : ''}
                         <button class="remove-pneu" onclick="event.stopPropagation(); abrirModalRemocao(${veiculo.id}, '${slotId}')">✕</button>
                     </div>
                 `;
@@ -5242,7 +5295,7 @@
             }
         }
 
-        function atualizarFaixa(veiculoId, slotId, faixa, valor) {
+        function atualizarFaixa(veiculoId, slotId, faixa, valor, input) {
             const veiculos = getVeiculos();
             const veiculo = veiculos.find(v => v.id === veiculoId);
             if (!veiculo || !veiculo.pneus) return;
@@ -5255,25 +5308,64 @@
             if (!pneu) return;
 
             if (!pneu.faixas) pneu.faixas = {};
-            pneu.faixas[faixa] = parseFloat(valor) || 0;
+            const novoValor = parseFloat(valor) || 0;
+            pneu.faixas[faixa] = novoValor;
             setPneus(pneus);
+
+            // Atualizar visualmente o slot
+            if (input) {
+                const slot = input.closest('.pneu-slot');
+                if (slot) {
+                    const temAlerta = verificarAlertaDesgaste(pneu);
+                    slot.classList.toggle('alerta', temAlerta);
+                    
+                    // Atualizar labels e inputs
+                    const labels = slot.querySelectorAll('.faixa-label');
+                    const inputs = slot.querySelectorAll('.pneu-faixa input');
+                    const faixas = ['f1', 'f2', 'f3', 'f4'];
+                    faixas.forEach((f, i) => {
+                        const val = pneu.faixas[f] || 0;
+                        const isAlerta = val > 0 && val < 5;
+                        if (labels[i]) labels[i].classList.toggle('alerta', isAlerta);
+                        if (inputs[i]) inputs[i].classList.toggle('alerta', isAlerta);
+                    });
+                    
+                    // Atualizar mensagem de alerta
+                    const alertaMsg = slot.querySelector('div[style*="font-size:8px"]');
+                    if (temAlerta) {
+                        if (!alertaMsg) {
+                            const msg = document.createElement('div');
+                            msg.style.cssText = 'font-size:8px; color:#c62828; font-weight:700;';
+                            msg.textContent = '⚠️ ABAIXO DE 5mm';
+                            slot.appendChild(msg);
+                        }
+                    } else {
+                        if (alertaMsg) alertaMsg.remove();
+                    }
+                }
+            }
+
+            // Atualizar relatórios
+            renderRelatorios();
         }
 
         // ============================================
-        //  MENU DO PNEU - AGORA ABRE DIRETO AS FAIXAS
+        //  MENU DO PNEU - ABRE AS FAIXAS PARA EDIÇÃO
         // ============================================
-        function abrirMenuPneu(veiculoId, slotId) {
-            // Agora clicar no pneu apenas mostra as faixas para edição
-            // As faixas já estão visíveis no próprio slot
-            // Apenas destacamos visualmente
-            const slot = document.querySelector(`.pneu-slot[onclick*="abrirMenuPneu(${veiculoId}, '${slotId}')"]`);
-            if (slot) {
-                slot.style.borderColor = '#ffd700';
-                slot.style.boxShadow = '0 0 15px rgba(255,215,0,0.5)';
+        function abrirMenuPneu(veiculoId, slotId, slotElement) {
+            // Destacar o pneu para edição das faixas
+            if (slotElement) {
+                slotElement.style.borderColor = '#ffd700';
+                slotElement.style.boxShadow = '0 0 20px rgba(255,215,0,0.6)';
+                // Focar no primeiro input
+                const firstInput = slotElement.querySelector('.pneu-faixa input');
+                if (firstInput) {
+                    setTimeout(() => firstInput.focus(), 100);
+                }
                 setTimeout(() => {
-                    slot.style.borderColor = '';
-                    slot.style.boxShadow = '';
-                }, 2000);
+                    slotElement.style.borderColor = '';
+                    slotElement.style.boxShadow = '';
+                }, 3000);
             }
         }
 
@@ -5973,10 +6065,11 @@
                 const statusLabel = p.status === 'instalado' ? `Instalado${p.veiculoInstalado ? ` (${p.veiculoInstalado})` : ''}` : 
                                    p.status === 'recapagem' ? 'Em Recapagem' :
                                    p.status === 'vulcanizacao' ? 'Em Vulcanização' : 'Disponível';
+                const temAlerta = verificarAlertaDesgaste(p);
                 html += `
                     <tr>
                         <td>${index + 1}</td>
-                        <td>#${p.id.toString().slice(-6)}</td>
+                        <td>#${p.id.toString().slice(-6)}${temAlerta ? ' 🔴' : ''}</td>
                         <td>${p.nome}</td>
                         <td>${p.dot || '-'}</td>
                         <td>${p.tamanho}</td>
@@ -6460,7 +6553,7 @@
                             ${pneus.slice(0, 50).map((p, i) => `
                                 <tr>
                                     <td>${i + 1}</td>
-                                    <td>${p.nome}</td>
+                                    <td>${p.nome}${verificarAlertaDesgaste(p) ? ' 🔴' : ''}</td>
                                     <td>${p.dot || '-'}</td>
                                     <td>${p.tamanho}</td>
                                     <td>${p.situacao}</td>
@@ -6602,9 +6695,9 @@
         });
 
         console.log('✅ Sistema Profissional atualizado com sucesso!');
-        console.log('👑 Controle Master implementado');
+        console.log('👑 Master configurado para: henrique_iijima@hotmail.com');
         console.log('🔒 Sistema de permissões e limites');
-        console.log('📊 Faixas de desgaste de pneus');
+        console.log('📊 Faixas de desgaste de pneus com alerta vermelho para < 5mm');
         console.log('🔧 Manutenção com alinhamento/balanceamento');
         console.log('📄 Relatórios completos');
     </script>
