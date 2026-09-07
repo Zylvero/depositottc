@@ -125,23 +125,20 @@
             font-weight: 700;
         }
 
+        .badge-plano.gratis {
+            background: #ff9800;
+            color: white;
+        }
         .badge-plano.basico {
             background: #4caf50;
             color: white;
         }
-
         .badge-plano.pro {
             background: #2196f3;
             color: white;
         }
-
         .badge-plano.ultra {
             background: #9c27b0;
-            color: white;
-        }
-
-        .badge-plano.gratis {
-            background: #ff9800;
             color: white;
         }
 
@@ -3695,10 +3692,10 @@
                                 <label>Filtrar por Plano</label>
                                 <select id="filtroMasterPlano" onchange="renderMaster()">
                                     <option value="">Todos</option>
+                                    <option value="gratis">Grátis (1)</option>
                                     <option value="basico">Básico (10)</option>
                                     <option value="pro">Pro (50)</option>
                                     <option value="ultra">Ultra (200)</option>
-                                    <option value="gratis">Grátis (1)</option>
                                 </select>
                             </div>
                             <button class="btn-limpar" onclick="limparFiltrosMaster()">Limpar Filtros</button>
@@ -4233,17 +4230,31 @@
         //  HISTÓRICO PARA REVERTER AÇÕES
         // ============================================
         let historicoAcoes = [];
+        let ultimoBatch = null;
 
-        function adicionarHistorico(acao, dados) {
-            historicoAcoes.push({
+        function adicionarHistorico(acao, dados, batchId) {
+            const item = {
                 acao: acao,
                 dados: JSON.parse(JSON.stringify(dados)),
-                timestamp: Date.now()
-            });
+                timestamp: Date.now(),
+                batchId: batchId || null
+            };
+            
+            // Se for um batch, armazena o ID para desfazer tudo de uma vez
+            if (batchId) {
+                item.batchId = batchId;
+            }
+            
+            historicoAcoes.push(item);
             if (historicoAcoes.length > 50) {
                 historicoAcoes.shift();
             }
             localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes));
+        }
+
+        function iniciarBatch() {
+            ultimoBatch = Date.now() + Math.random() * 1000;
+            return ultimoBatch;
         }
 
         function carregarHistorico() {
@@ -4259,105 +4270,129 @@
                 return;
             }
 
+            // Pega a última ação
             const ultima = historicoAcoes.pop();
-            localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes));
-
-            // Restaurar os dados
-            const acao = ultima.acao;
-            const dados = ultima.dados;
-
-            if (acao === 'cadastrar_pneu') {
-                let pneus = getPneus();
-                pneus = pneus.filter(p => p.id !== dados.id);
-                setPneus(pneus);
-                renderEstoque();
-                alert('✅ Última ação desfeita: Cadastro de pneu removido.');
-            } else if (acao === 'excluir_pneu') {
-                let pneus = getPneus();
-                pneus.push(dados);
-                setPneus(pneus);
-                renderEstoque();
-                alert('✅ Última ação desfeita: Pneu restaurado.');
-            } else if (acao === 'instalar_pneu') {
-                let pneus = getPneus();
-                const pneu = pneus.find(p => p.id === dados.pneuId);
-                if (pneu) {
-                    pneu.status = 'disponivel';
-                    pneu.veiculoInstalado = null;
-                    pneu.veiculoId = null;
-                    pneu.posicao = null;
-                    pneu.kmInstalacao = null;
+            
+            // Verifica se tem mais ações do mesmo batch
+            const batchId = ultima.batchId;
+            let itensBatch = [];
+            if (batchId) {
+                // Pega todos os itens do mesmo batch
+                const index = historicoAcoes.findIndex(h => h.batchId === batchId);
+                if (index !== -1) {
+                    itensBatch = historicoAcoes.splice(index);
+                    // Adiciona o item atual
+                    itensBatch.push(ultima);
+                } else {
+                    itensBatch = [ultima];
                 }
-                setPneus(pneus);
-                let veiculos = getVeiculos();
-                const veiculo = veiculos.find(v => v.id === dados.veiculoId);
-                if (veiculo && veiculo.pneus) {
-                    const slot = Object.keys(veiculo.pneus).find(k => veiculo.pneus[k] === dados.pneuId);
-                    if (slot) delete veiculo.pneus[slot];
-                    setVeiculos(veiculos);
-                }
-                renderEstoque();
-                renderVeiculos();
-                alert('✅ Última ação desfeita: Instalação de pneu revertida.');
-            } else if (acao === 'remover_pneu') {
-                let pneus = getPneus();
-                pneus.push(dados.pneu);
-                setPneus(pneus);
-                let veiculos = getVeiculos();
-                const veiculo = veiculos.find(v => v.id === dados.veiculoId);
-                if (veiculo && veiculo.pneus) {
-                    veiculo.pneus[dados.slot] = dados.pneu.id;
-                    setVeiculos(veiculos);
-                }
-                renderEstoque();
-                renderVeiculos();
-                alert('✅ Última ação desfeita: Remoção de pneu revertida.');
-            } else if (acao === 'editar_pneu') {
-                let pneus = getPneus();
-                const idx = pneus.findIndex(p => p.id === dados.id);
-                if (idx !== -1) {
-                    pneus[idx] = dados.original;
-                }
-                setPneus(pneus);
-                renderEstoque();
-                alert('✅ Última ação desfeita: Edição de pneu revertida.');
-            } else if (acao === 'cadastrar_veiculo') {
-                let veiculos = getVeiculos();
-                veiculos = veiculos.filter(v => v.id !== dados.id);
-                setVeiculos(veiculos);
-                renderVeiculos();
-                alert('✅ Última ação desfeita: Cadastro de veículo removido.');
-            } else if (acao === 'excluir_veiculo') {
-                let veiculos = getVeiculos();
-                veiculos.push(dados);
-                setVeiculos(veiculos);
-                renderVeiculos();
-                alert('✅ Última ação desfeita: Veículo restaurado.');
-            } else if (acao === 'editar_km') {
-                let veiculos = getVeiculos();
-                const veiculo = veiculos.find(v => v.id === dados.veiculoId);
-                if (veiculo) {
-                    veiculo.km = dados.kmAntigo;
-                    setVeiculos(veiculos);
-                }
-                if (dados.pneusAtualizados) {
-                    let pneus = getPneus();
-                    dados.pneusAtualizados.forEach(p => {
-                        const pneu = pneus.find(pn => pn.id === p.id);
-                        if (pneu) {
-                            pneu.kmTotal = p.kmAntigo;
-                        }
-                    });
-                    setPneus(pneus);
-                }
-                renderVeiculos();
-                renderEstoque();
-                alert('✅ Última ação desfeita: Edição de KM revertida.');
             } else {
-                alert('⚠️ Não é possível desfazer esta ação.');
+                itensBatch = [ultima];
             }
 
+            localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes));
+
+            // Reverte cada ação do batch (da mais nova para a mais antiga)
+            let mensagens = [];
+            itensBatch.reverse().forEach(item => {
+                const acao = item.acao;
+                const dados = item.dados;
+
+                if (acao === 'cadastrar_pneu') {
+                    let pneus = getPneus();
+                    pneus = pneus.filter(p => p.id !== dados.id);
+                    setPneus(pneus);
+                    mensagens.push('Cadastro de pneu removido.');
+                } else if (acao === 'excluir_pneu') {
+                    let pneus = getPneus();
+                    pneus.push(dados);
+                    setPneus(pneus);
+                    mensagens.push('Pneu restaurado.');
+                } else if (acao === 'instalar_pneu') {
+                    let pneus = getPneus();
+                    const pneu = pneus.find(p => p.id === dados.pneuId);
+                    if (pneu) {
+                        pneu.status = 'disponivel';
+                        pneu.veiculoInstalado = null;
+                        pneu.veiculoId = null;
+                        pneu.posicao = null;
+                        pneu.kmInstalacao = null;
+                        pneu.veiculoTipo = null;
+                    }
+                    setPneus(pneus);
+                    let veiculos = getVeiculos();
+                    const veiculo = veiculos.find(v => v.id === dados.veiculoId);
+                    if (veiculo && veiculo.pneus) {
+                        const slot = Object.keys(veiculo.pneus).find(k => veiculo.pneus[k] === dados.pneuId);
+                        if (slot) delete veiculo.pneus[slot];
+                        setVeiculos(veiculos);
+                    }
+                    mensagens.push('Instalação de pneu revertida.');
+                } else if (acao === 'remover_pneu') {
+                    let pneus = getPneus();
+                    pneus.push(dados.pneu);
+                    setPneus(pneus);
+                    let veiculos = getVeiculos();
+                    const veiculo = veiculos.find(v => v.id === dados.veiculoId);
+                    if (veiculo && veiculo.pneus) {
+                        veiculo.pneus[dados.slot] = dados.pneu.id;
+                        setVeiculos(veiculos);
+                    }
+                    mensagens.push('Remoção de pneu revertida.');
+                } else if (acao === 'editar_pneu') {
+                    let pneus = getPneus();
+                    const idx = pneus.findIndex(p => p.id === dados.id);
+                    if (idx !== -1) {
+                        pneus[idx] = dados.original;
+                    }
+                    setPneus(pneus);
+                    mensagens.push('Edição de pneu revertida.');
+                } else if (acao === 'cadastrar_veiculo') {
+                    let veiculos = getVeiculos();
+                    veiculos = veiculos.filter(v => v.id !== dados.id);
+                    setVeiculos(veiculos);
+                    mensagens.push('Cadastro de veículo removido.');
+                } else if (acao === 'excluir_veiculo') {
+                    let veiculos = getVeiculos();
+                    veiculos.push(dados);
+                    setVeiculos(veiculos);
+                    mensagens.push('Veículo restaurado.');
+                } else if (acao === 'editar_km') {
+                    let veiculos = getVeiculos();
+                    const veiculo = veiculos.find(v => v.id === dados.veiculoId);
+                    if (veiculo) {
+                        veiculo.km = dados.kmAntigo;
+                        setVeiculos(veiculos);
+                    }
+                    if (dados.pneusAtualizados) {
+                        let pneus = getPneus();
+                        dados.pneusAtualizados.forEach(p => {
+                            const pneu = pneus.find(pn => pn.id === p.id);
+                            if (pneu) {
+                                pneu.kmTotal = p.kmAntigo;
+                            }
+                        });
+                        setPneus(pneus);
+                    }
+                    mensagens.push('Edição de KM revertida.');
+                } else if (acao === 'cadastrar_peca') {
+                    let pecas = getPecas();
+                    pecas = pecas.filter(p => p.id !== dados.id);
+                    setPecas(pecas);
+                    mensagens.push('Cadastro de peça removido.');
+                } else {
+                    mensagens.push(`Ação "${acao}" não pode ser desfeita.`);
+                }
+            });
+
+            renderEstoque();
+            renderVeiculos();
+            renderPecas();
+            renderRelatorios();
+            renderDescartados();
             atualizarLimitesUI();
+            
+            alert(`✅ ${itensBatch.length} ação(ões) desfeita(s):\n- ${mensagens.join('\n- ')}`);
         }
 
         // ============================================
@@ -4415,10 +4450,8 @@
             if (user.isMaster) return true;
             
             const veiculos = getVeiculos();
-            const pneus = getPneus();
             const limite = getLimiteVeiculos(user);
             
-            // Se o usuário tem mais veículos que o limite do plano, bloqueia acesso
             if (veiculos.length > limite) {
                 return false;
             }
@@ -4431,6 +4464,50 @@
                 return false;
             }
             return true;
+        }
+
+        function getPermissoes(user) {
+            if (!user) return {};
+            if (user.isMaster) {
+                return {
+                    pneus: { limite: Infinity },
+                    veiculos: { limite: Infinity },
+                    pecas: true,
+                    manutencao: true,
+                    motoristas: true,
+                    descartados: true,
+                    relatorios: true
+                };
+            }
+            const permissoes = user.permissoes || {};
+            const limiteVeiculos = getLimiteVeiculos(user);
+            // Planos Básico, Pro e Ultra liberam todas as funcionalidades
+            const isPlanoPago = user.plano && user.plano !== 'gratis';
+            return {
+                pneus: { limite: permissoes.pneusLimite || (isPlanoPago ? Infinity : 10) },
+                veiculos: { limite: limiteVeiculos },
+                pecas: isPlanoPago || permissoes.pecas || false,
+                manutencao: isPlanoPago || permissoes.manutencao || false,
+                motoristas: isPlanoPago || permissoes.motoristas || false,
+                descartados: isPlanoPago || permissoes.descartados || false,
+                relatorios: isPlanoPago || permissoes.relatorios || false
+            };
+        }
+
+        function verificarLimitePneus() {
+            const user = getCurrentUser();
+            if (!user) return true;
+            if (isMaster()) return true;
+            const permissoes = getPermissoes(user);
+            const pneus = getPneus();
+            return pneus.length < permissoes.pneus.limite;
+        }
+
+        function verificarLimiteVeiculos() {
+            const user = getCurrentUser();
+            if (!user) return true;
+            if (isMaster()) return true;
+            return verificarLimiteVeiculosPlano();
         }
 
         function atualizarPlanoUI() {
@@ -4488,48 +4565,6 @@
             } else {
                 veiculoLimitWarning.style.display = 'none';
             }
-        }
-
-        function getPermissoes(user) {
-            if (!user) return {};
-            if (user.isMaster) {
-                return {
-                    pneus: { limite: Infinity },
-                    veiculos: { limite: Infinity },
-                    pecas: true,
-                    manutencao: true,
-                    motoristas: true,
-                    descartados: true,
-                    relatorios: true
-                };
-            }
-            const permissoes = user.permissoes || {};
-            const limiteVeiculos = getLimiteVeiculos(user);
-            return {
-                pneus: { limite: permissoes.pneusLimite || 10 },
-                veiculos: { limite: limiteVeiculos },
-                pecas: permissoes.pecas || false,
-                manutencao: permissoes.manutencao || false,
-                motoristas: permissoes.motoristas || false,
-                descartados: permissoes.descartados || false,
-                relatorios: permissoes.relatorios || false
-            };
-        }
-
-        function verificarLimitePneus() {
-            const user = getCurrentUser();
-            if (!user) return true;
-            if (isMaster()) return true;
-            const permissoes = getPermissoes(user);
-            const pneus = getPneus();
-            return pneus.length < permissoes.pneus.limite;
-        }
-
-        function verificarLimiteVeiculos() {
-            const user = getCurrentUser();
-            if (!user) return true;
-            if (isMaster()) return true;
-            return verificarLimiteVeiculosPlano();
         }
 
         function atualizarLimitesUI() {
@@ -4678,6 +4713,15 @@
             if (idx !== -1) {
                 users[idx].isMaster = true;
                 users[idx].plano = null;
+                // Libera todas as permissões
+                users[idx].permissoes = {
+                    pneusLimite: Infinity,
+                    pecas: true,
+                    manutencao: true,
+                    motoristas: true,
+                    descartados: true,
+                    relatorios: true
+                };
                 setUsers(users);
                 if (getCurrentUser() && getCurrentUser().id === userId) {
                     setCurrentUser(users[idx]);
@@ -4692,6 +4736,27 @@
             const idx = users.findIndex(u => u.id === userId);
             if (idx !== -1) {
                 users[idx].plano = plano;
+                // Se for plano pago (Basico, Pro, Ultra), libera todas as funcionalidades
+                if (plano && plano !== 'gratis') {
+                    users[idx].permissoes = {
+                        pneusLimite: Infinity,
+                        pecas: true,
+                        manutencao: true,
+                        motoristas: true,
+                        descartados: true,
+                        relatorios: true
+                    };
+                } else {
+                    // Plano Grátis - apenas o básico
+                    users[idx].permissoes = {
+                        pneusLimite: 10,
+                        pecas: false,
+                        manutencao: false,
+                        motoristas: false,
+                        descartados: false,
+                        relatorios: false
+                    };
+                }
                 setUsers(users);
                 if (getCurrentUser() && getCurrentUser().id === userId) {
                     setCurrentUser(users[idx]);
@@ -4760,6 +4825,14 @@
                 newUser.isMaster = true;
                 newUser.status = 'aprovado';
                 newUser.plano = null;
+                newUser.permissoes = {
+                    pneusLimite: Infinity,
+                    pecas: true,
+                    manutencao: true,
+                    motoristas: true,
+                    descartados: true,
+                    relatorios: true
+                };
                 console.log('👑 Usuário Master criado!');
             }
             
@@ -4800,9 +4873,25 @@
                     users[idx].isMaster = true;
                     users[idx].status = 'aprovado';
                     users[idx].plano = null;
+                    users[idx].permissoes = {
+                        pneusLimite: Infinity,
+                        pecas: true,
+                        manutencao: true,
+                        motoristas: true,
+                        descartados: true,
+                        relatorios: true
+                    };
                     user.isMaster = true;
                     user.status = 'aprovado';
                     user.plano = null;
+                    user.permissoes = {
+                        pneusLimite: Infinity,
+                        pecas: true,
+                        manutencao: true,
+                        motoristas: true,
+                        descartados: true,
+                        relatorios: true
+                    };
                     setUsers(users);
                     console.log('👑 Usuário Master promovido automaticamente!');
                 }
@@ -4855,7 +4944,6 @@
 
             carregarHistorico();
             atualizarPlanoUI();
-            atualizarSelectMotoristas();
             atualizarLimitesUI();
 
             renderEstoque();
@@ -4868,13 +4956,6 @@
             atualizarFiltrosRelatorios();
             renderRelatorios();
             switchTab('tab-cadastro');
-        }
-
-        // ============================================
-        //  FUNÇÕES DE ATUALIZAÇÃO DE SELECTS
-        // ============================================
-        function atualizarSelectMotoristas() {
-            // Removido - não será mais usado
         }
 
         function switchTab(tabId) {
@@ -5012,6 +5093,8 @@
                 return;
             }
 
+            // Múltiplos pneus - usar batch
+            const batchId = iniciarBatch();
             pneusParaCadastrar = [];
             for (let i = 0; i < quantidade; i++) {
                 pneusParaCadastrar.push({
@@ -5026,7 +5109,7 @@
                 });
             }
 
-            abrirModalCadastroMultiplo();
+            abrirModalCadastroMultiplo(batchId);
         }
 
         function criarPneu(nome, dot, tamanho, tipo, situacao, valor, dataEntrada) {
@@ -5085,10 +5168,14 @@
         // ============================================
         //  CADASTRO MÚLTIPLO
         // ============================================
-        function abrirModalCadastroMultiplo() {
+        let batchIdMultiplo = null;
+
+        function abrirModalCadastroMultiplo(batchId) {
             const modal = document.getElementById('modalCadastroMultiplo');
             const lista = document.getElementById('listaPneusCadastro');
             const subtitle = document.getElementById('modalMultiploSubtitle');
+            
+            batchIdMultiplo = batchId;
             
             subtitle.textContent = `Preencha o DOT de cada um dos ${pneusParaCadastrar.length} pneus`;
             
@@ -5138,6 +5225,7 @@
         function fecharModalCadastroMultiplo() {
             document.getElementById('modalCadastroMultiplo').classList.remove('show');
             pneusParaCadastrar = [];
+            batchIdMultiplo = null;
         }
 
         function confirmarCadastroMultiplo() {
@@ -5184,9 +5272,9 @@
             
             setPneus(pneus);
             
-            // Adicionar ao histórico
+            // Adicionar ao histórico com batch
             ids.forEach(id => {
-                adicionarHistorico('cadastrar_pneu', { id: id });
+                adicionarHistorico('cadastrar_pneu', { id: id }, batchIdMultiplo);
             });
             
             fecharModalCadastroMultiplo();
@@ -5224,6 +5312,8 @@
 
             const pecas = getPecas();
             const ids = [];
+            const batchId = iniciarBatch();
+            
             for (let i = 0; i < quantidade; i++) {
                 const peca = {
                     id: Date.now() + i + Math.random() * 1000,
@@ -5251,7 +5341,7 @@
 
             setPecas(pecas);
             ids.forEach(id => {
-                adicionarHistorico('cadastrar_peca', { id: id });
+                adicionarHistorico('cadastrar_peca', { id: id }, batchId);
             });
 
             document.getElementById('pecaNome').value = '';
@@ -5498,7 +5588,6 @@
                     statusLabel = 'Disponível';
                 }
 
-                // Posição e veículo
                 let posicaoLabel = p.posicao || '-';
                 if (p.veiculoTipo) {
                     posicaoLabel += ` (${p.veiculoTipo})`;
@@ -5672,7 +5761,6 @@
                 if (pneu.historico && pneu.historico.length > 0) {
                     const ultimaAcao = pneu.historico[pneu.historico.length - 1];
                     if (ultimaAcao && (ultimaAcao.acao === 'Recapagem' || ultimaAcao.acao === 'Vulcanização')) {
-                        // Verifica se a última ação foi feita recentemente (nos últimos 5 segundos)
                         const ultimaData = new Date(ultimaAcao.data);
                         const agora = new Date();
                         const diffMs = agora - ultimaData;
@@ -5706,7 +5794,6 @@
                 }
 
                 if (acao === 'recapagem') {
-                    // Não incrementa novamente se já foi incrementado pelo valorRecapagem
                     if (valorRecapagem === 0) {
                         pneu.contadorRecapagens = (pneu.contadorRecapagens || 0) + 1;
                     }
@@ -5716,6 +5803,7 @@
                     pneu.veiculoId = null;
                     pneu.posicao = null;
                     pneu.kmInstalacao = null;
+                    pneu.veiculoTipo = null;
                     pneu.historico = pneu.historico || [];
                     pneu.historico.push({
                         data: new Date().toLocaleString('pt-BR'),
@@ -5733,6 +5821,7 @@
                     pneu.veiculoId = null;
                     pneu.posicao = null;
                     pneu.kmInstalacao = null;
+                    pneu.veiculoTipo = null;
                     pneu.historico = pneu.historico || [];
                     pneu.historico.push({
                         data: new Date().toLocaleString('pt-BR'),
@@ -5754,7 +5843,6 @@
                     pneusAtualizados++;
                 }
 
-                // Salvar para histórico de reversão
                 if (acao !== 'descarte') {
                     adicionarHistorico('editar_pneu', { id: pneu.id, original: pneuOriginal });
                 }
@@ -5841,7 +5929,7 @@
                             <span><span class="label">Categoria:</span> ${p.categoria}</span>
                             <span><span class="label">Valor:</span> R$ ${p.valor.toFixed(2)}</span>
                             <span><span class="label">Fornecedor:</span> ${p.fornecedor || 'N/A'}</span>
-                            <span><span class="label">Qtd:</span> 1</span>
+                            <span><span class="label">Veículo:</span> ${p.veiculoInstalado || 'N/A'}</span>
                         </div>
                         <div class="peca-card-actions">
                             <button class="btn-danger btn-small" onclick="excluirPecaIndividual(${p.id})">🗑️</button>
@@ -6390,6 +6478,7 @@
 
             // Preencher marcas
             const selectMarca = document.getElementById('filtroRelatorioMarca');
+            selectMarca.innerHTML = '<option value="">Todas</option>';
             const marcas = {};
             pneus.forEach(p => {
                 if (!marcas[p.nome]) {
@@ -8017,6 +8106,7 @@
                             <div class="detalhe"><strong>Valor:</strong> R$ ${p.valor.toFixed(2)}</div>
                             <div class="detalhe"><strong>Posição:</strong> ${p.posicao || 'N/A'}</div>
                             <div class="detalhe"><strong>Instalado:</strong> ${p.dataInstalacao || 'N/A'}</div>
+                            <div class="detalhe"><strong>Veículo:</strong> ${p.veiculoInstalado || 'N/A'}</div>
                             <button class="btn-remover-peca" onclick="event.stopPropagation(); removerPecaInstalada(${p.id})">
                                 🗑️ Remover
                             </button>
@@ -8337,8 +8427,8 @@
                 }
                 pneu.kmRemocao = km;
                 
-                // Salvar veículo de origem antes de remover
-                const veiculoOrigem = pneu.veiculoInstalado || 'Não identificado';
+                // Salvar veículo de origem
+                const veiculoOrigem = veiculoAtual.placa;
                 pneu.veiculoOrigem = veiculoOrigem;
                 
                 pneu.historico = pneu.historico || [];
@@ -8378,6 +8468,7 @@
                 pneu.posicao = null;
                 pneu.kmInstalacao = null;
                 pneu.veiculoTipo = null;
+                pneu.veiculoOrigem = veiculoAtual.placa;
             } else if (destino === 'recapagem') {
                 pneu.status = 'recapagem';
                 pneu.situacao = 'recapado';
@@ -8386,7 +8477,12 @@
                 pneu.posicao = null;
                 pneu.kmInstalacao = null;
                 pneu.veiculoTipo = null;
-                pneu.contadorRecapagens = (pneu.contadorRecapagens || 0) + 1;
+                pneu.veiculoOrigem = veiculoAtual.placa;
+                // Só incrementa se não tiver sido incrementado pela edição
+                const ultimaAcao = pneu.historico && pneu.historico.length > 0 ? pneu.historico[pneu.historico.length - 1] : null;
+                if (!ultimaAcao || ultimaAcao.acao !== 'Recapagem' || (Date.now() - new Date(ultimaAcao.data).getTime()) > 5000) {
+                    pneu.contadorRecapagens = (pneu.contadorRecapagens || 0) + 1;
+                }
             } else if (destino === 'vulcanizacao') {
                 pneu.status = 'vulcanizacao';
                 pneu.situacao = 'vulcanizado';
@@ -8395,7 +8491,11 @@
                 pneu.posicao = null;
                 pneu.kmInstalacao = null;
                 pneu.veiculoTipo = null;
-                pneu.contadorVulcanizacoes = (pneu.contadorVulcanizacoes || 0) + 1;
+                pneu.veiculoOrigem = veiculoAtual.placa;
+                const ultimaAcao = pneu.historico && pneu.historico.length > 0 ? pneu.historico[pneu.historico.length - 1] : null;
+                if (!ultimaAcao || ultimaAcao.acao !== 'Vulcanização' || (Date.now() - new Date(ultimaAcao.data).getTime()) > 5000) {
+                    pneu.contadorVulcanizacoes = (pneu.contadorVulcanizacoes || 0) + 1;
+                }
             } else if (destino === 'descarte') {
                 const descartados = getDescartados();
                 pneu.motivoDescarte = `Removido do veículo ${veiculoAtual.placa} - ${veiculoAtual.marca} ${veiculoAtual.modelo}`;
@@ -9468,17 +9568,15 @@
         });
 
         console.log('✅ Sistema atualizado com sucesso!');
-        console.log('📋 CADASTRAR: "Outros" com campo maior, removido "Outros Valores"');
-        console.log('📋 PNEUS: Filtros por DOT e Placa, coluna de posição/eixo');
+        console.log('📋 PNEUS: Modal de edição menor, DOT editável diretamente');
         console.log('📋 PNEUS: Contadores de recapagem/vulcanização corrigidos');
         console.log('📋 PNEUS: Veículo de origem na remoção');
-        console.log('📋 PEÇAS: Filtro por placa');
-        console.log('📋 VEÍCULOS: Removido motorista, bug de eixos corrigido');
-        console.log('📋 RELATÓRIOS: Filtros por marca, tamanho, DOT, placa e data');
-        console.log('📋 RELATÓRIOS: PDF parcial para cada tipo');
-        console.log('📋 DESCARTADOS: Filtro por DOT');
-        console.log('📋 EXTRA: Botão de reverter última ação');
+        console.log('📋 PEÇAS: Filtro por placa com veículo exibido');
+        console.log('📋 VEÍCULOS: Bug dos eixos ao instalar pneu corrigido');
+        console.log('📋 RELATÓRIOS: Filtros integrados e PDF parcial por tipo');
+        console.log('📋 EXTRA: Desfazer em batch (desfaz todos os itens de uma só vez)');
         console.log('👑 PLANOS: Grátis (1), Básico (10), Pro (50), Ultra (200)');
+        console.log('👑 MASTER: Planos liberam todas as funcionalidades');
         console.log('📞 Suporte: (45) 99983-2590 - WhatsApp');
     </script>
 </body>
