@@ -29,7 +29,6 @@
             font-size: 14px;
         }
 
-        /* ===== HEADER ===== */
         .header {
             background: linear-gradient(135deg, #1a3a5c, #2a5f7a);
             color: white;
@@ -154,57 +153,2356 @@
             background: rgba(255,255,255,0.25);
         }
 
-        /* ... (mantenha o resto dos estilos da versão anterior) ... */
-        /* Inclua todos os estilos das seções que não mudaram */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 12px 15px;
+        }
 
-        /* Estilos adicionais para os novos componentes */
-        .relatorio-filtros-extra {
+        .auth-container {
+            max-width: 400px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .auth-container h2 {
+            color: #1a3a5c;
+            margin-bottom: 6px;
+            font-size: 24px;
+        }
+
+        .auth-container .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e8ecf0;
+        }
+
+        .auth-tabs button {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .auth-tabs button.active {
+            color: #1a3a5c;
+            border-bottom-color: #2a5f7a;
+        }
+
+        .auth-form {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .auth-form.active {
+            display: flex;
+        }
+
+        .auth-form label {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .auth-form input {
+            padding: 10px 14px;
+            border: 2px solid #dce0e5;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+            width: 100%;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: #2a5f7a;
+        }
+
+        .auth-form .btn-primary {
+            background: #1a3a5c;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 5px;
+        }
+
+        .auth-form .btn-primary:hover {
+            background: #2a5f7a;
+        }
+
+        .auth-error {
+            color: #d32f2f;
+            font-size: 13px;
+            background: #ffebee;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .auth-error.show {
+            display: block;
+        }
+
+        .btn-recuperar {
+            background: none;
+            border: none;
+            color: #2a5f7a;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: underline;
+            margin-top: 3px;
+            text-align: left;
+            padding: 0;
+        }
+
+        .btn-recuperar:hover {
+            color: #1a3a5c;
+        }
+
+        .recuperacao-container {
+            margin-top: 10px;
+            padding: 12px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .recuperacao-container.show {
+            display: block;
+        }
+
+        .app-container {
+            display: none;
+        }
+
+        .app-container.show {
+            display: block;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 3px;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            padding: 5px 10px 0 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tabs button {
+            background: none;
+            border: none;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .tabs button:hover {
+            color: #1a3a5c;
+        }
+
+        .tabs button.active {
+            color: #1a3a5c;
+            border-bottom-color: #2a5f7a;
+        }
+
+        .tabs button.blocked {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 0 0 10px 10px;
+            padding: 16px 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            min-height: 300px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 8px 12px;
+            border: 2px solid #dce0e5;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2a5f7a;
+        }
+
+        .form-group .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .form-group .input-group input {
+            flex: 1;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .form-actions button {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 16px;
+            font-size: 14px;
+        }
+
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+
+        .btn-secondary {
+            background: #e8ecf0;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d4d9;
+        }
+
+        .btn-danger {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .btn-info {
+            background: #1565c0;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 12px;
+        }
+
+        .btn-info:hover {
+            background: #0d47a1;
+        }
+
+        .btn-warning {
+            background: #f57c00;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 12px;
+        }
+
+        .btn-warning:hover {
+            background: #e65100;
+        }
+
+        .btn-purple {
+            background: #7b1fa2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 12px;
+        }
+
+        .btn-purple:hover {
+            background: #4a148c;
+        }
+
+        .btn-orange {
+            background: #e65100;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 12px;
+        }
+
+        .btn-orange:hover {
+            background: #bf360c;
+        }
+
+        .btn-pdf {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 12px;
+        }
+
+        .btn-pdf:hover {
+            background: #b71c1c;
+        }
+
+        .btn-master {
+            background: #ffd700;
+            color: #1a3a5c;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn-master:hover {
+            background: #ffc107;
+        }
+
+        .btn-confirmar {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-confirmar:hover {
+            background: #1b5e20;
+        }
+
+        .btn-cancelar {
+            background: #e8ecf0;
+            color: #333;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-cancelar:hover {
+            background: #d0d4d9;
+        }
+
+        .btn-vender {
+            background: #e65100;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .btn-vender:hover {
+            background: #bf360c;
+        }
+
+        .btn-small {
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .estoque-header,
+        .veiculos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .estoque-header h2,
+        .veiculos-header h2 {
+            color: #1a3a5c;
+            font-size: 18px;
+        }
+
+        .estoque-stats,
+        .veiculos-stats {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .estoque-stats span,
+        .veiculos-stats span {
+            background: #f0f2f5;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filtros-container {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
             align-items: flex-end;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #e8ecf0;
         }
 
-        .relatorio-filtros-extra .form-group {
+        .filtros-container .form-group {
             flex: 1;
             min-width: 120px;
+            margin-bottom: 0;
         }
 
-        .relatorio-filtros-extra .form-group label {
+        .filtros-container .form-group label {
             font-size: 11px;
             color: #666;
         }
 
-        .relatorio-filtros-extra .form-group input,
-        .relatorio-filtros-extra .form-group select {
+        .filtros-container .form-group input,
+        .filtros-container .form-group select {
             padding: 6px 10px;
             font-size: 12px;
-            width: 100%;
-            border: 2px solid #dce0e5;
-            border-radius: 6px;
         }
 
-        .btn-whatsapp {
-            background: #25d366;
-            color: white;
+        .filtros-container .btn-limpar {
+            padding: 6px 16px;
+            background: #e8ecf0;
+            color: #333;
             border: none;
-            padding: 6px 14px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 13px;
             font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
             transition: background 0.3s;
-            text-decoration: none;
+            height: 34px;
+            font-size: 12px;
         }
 
-        .btn-whatsapp:hover {
-            background: #1da851;
+        .filtros-container .btn-limpar:hover {
+            background: #d0d4d9;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            min-width: 600px;
+        }
+
+        table th {
+            background: #f0f2f5;
+            color: #333;
+            font-weight: 600;
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 2px solid #dce0e5;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e8ecf0;
+            vertical-align: middle;
+            font-size: 12px;
+        }
+
+        table tr:hover td {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-novo { background: #c8e6c9; color: #1b5e20; }
+        .badge-meia { background: #fff9c4; color: #f57f17; }
+        .badge-recap { background: #ffccbc; color: #bf360c; }
+        .badge-carcaça { background: #d1c4e9; color: #4a148c; }
+        .badge-descarte { background: #ffcdd2; color: #b71c1c; }
+        .badge-vulcanizado { background: #e1bee7; color: #4a148c; }
+        .badge-instalado { background: #b3e5fc; color: #01579b; }
+        .badge-disponivel { background: #c8e6c9; color: #1b5e20; }
+        .badge-instalado-peca { background: #b3e5fc; color: #01579b; }
+        .badge-ativo { background: #c8e6c9; color: #1b5e20; }
+        .badge-inativo { background: #ffcdd2; color: #b71c1c; }
+        .badge-estepe { background: #fff3e0; color: #e65100; }
+        .badge-vendido { background: #e0e0e0; color: #333; }
+        .badge-info { background: #e3f2fd; color: #1a3a5c; }
+        .badge-alerta { background: #ffcdd2; color: #c62828; animation: piscar 1s infinite; }
+        .badge-liso { background: #e0e0e0; color: #333; }
+        .badge-misto { background: #b3e5fc; color: #01579b; }
+        .badge-borrachudo { background: #a5d6a7; color: #1b5e20; }
+
+        .contador-badge {
+            background: #ffd700;
+            color: #1a3a5c;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            display: inline-block;
+            margin-left: 3px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 15px;
+            color: #888;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        .veiculos-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        @media (min-width: 600px) {
+            .veiculos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            }
+        }
+
+        .veiculo-card {
+            background: white;
+            border: 2px solid #e8ecf0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            position: relative;
+        }
+
+        .veiculo-card:hover {
+            border-color: #2a5f7a;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .veiculo-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .veiculo-card-header h3 {
+            color: #1a3a5c;
+            font-size: 16px;
+        }
+
+        .veiculo-card-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px 10px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .veiculo-card-info span {
+            display: flex;
+            gap: 4px;
+        }
+
+        .veiculo-card-info .label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .veiculo-card-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .veiculo-card .resumo-alertas {
+            font-size: 11px;
+            color: #666;
+            margin-top: 6px;
+            padding: 6px 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .veiculo-card .resumo-alertas .alerta-item {
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .veiculo-card .resumo-alertas .alerta-item.critico {
+            color: #c62828;
+            font-weight: 700;
+        }
+
+        .veiculo-card .resumo-alertas .alerta-item.atencao {
+            color: #f57c00;
+        }
+
+        .veiculo-card .resumo-alertas .alerta-item.ok {
+            color: #2e7d32;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 100%;
+            width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
+            padding: 20px 16px;
+            position: relative;
+            max-width: 500px;
+        }
+
+        .modal-content.large {
+            max-width: 95%;
+        }
+
+        @media (min-width: 768px) {
+            .modal-content.large {
+                max-width: 90%;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-title {
+            color: #1a3a5c;
+            margin-bottom: 15px;
+            font-size: 20px;
+            padding-right: 30px;
+        }
+
+        .modal-info-top {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .modal-info-top {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+        }
+
+        .modal-info-top .info-km {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .modal-info-top .info-km .km-valor {
+            font-weight: 700;
+            color: #1a3a5c;
+            font-size: 15px;
+        }
+
+        .modal-info-top .info-km .btn-editar-km {
+            background: none;
+            border: none;
+            color: #1565c0;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .modal-info-top .info-km .btn-editar-km:hover {
+            background: #e3f2fd;
+        }
+
+        .modal-info-top .info-km .input-km-edicao {
+            display: none;
+            width: 100px;
+            padding: 3px 6px;
+            border: 2px solid #1565c0;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .modal-info-top .info-km .input-km-edicao.visible {
+            display: inline-block;
+        }
+
+        .modal-info-top .info-km .btn-confirmar-km {
+            display: none;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 3px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .modal-info-top .info-km .btn-confirmar-km.visible {
+            display: inline-block;
+        }
+
+        .modal-info-top .info-km .btn-cancelar-km {
+            display: none;
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 3px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .modal-info-top .info-km .btn-cancelar-km.visible {
+            display: inline-block;
+        }
+
+        .modal-info-top .info-resumo {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .modal-info-top .info-resumo .alerta {
+            color: #c62828;
+            font-weight: 700;
+        }
+
+        .modal-info-top .info-resumo .atencao {
+            color: #f57c00;
+        }
+
+        .modal-info-top .info-resumo .ok {
+            color: #2e7d32;
+        }
+
+        .modal-info-top .btn-acoes-veiculo {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .modal-info-top .btn-acoes-veiculo button {
+            padding: 4px 10px;
+            font-size: 11px;
+        }
+
+        .modo-combinado-info {
+            background: #e3f2fd;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 13px;
+            color: #1a3a5c;
+        }
+
+        .modo-combinado-info .btn-desvincular {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 3px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+
+        .modal-mm-ref {
+            background: #f5f5f5;
+            padding: 6px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        @media (min-width: 500px) {
+            .modal-mm-ref {
+                flex-direction: row;
+                align-items: center;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+        }
+
+        .modal-mm-ref label {
+            font-weight: 600;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .modal-mm-ref input {
+            width: 70px;
+            padding: 3px 6px;
+            border: 2px solid #dce0e5;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .modal-mm-ref .info-mm {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .modal-mm-ref .info-mm .destaque {
+            font-weight: 700;
+            color: #1a3a5c;
+        }
+
+        .caminhao-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+            overflow-x: auto;
+        }
+
+        .caminhao {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            min-width: 100%;
+        }
+
+        .eixos-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .eixo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .eixo-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .eixo-pneus {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pneu-slot {
+            width: 60px;
+            height: 60px;
+            border: 3px dashed #b0bec5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f5f5f5;
+            font-size: 8px;
+            text-align: center;
+            padding: 3px;
+            word-break: break-all;
+            position: relative;
+            user-select: none;
+            flex-direction: column;
+        }
+
+        @media (min-width: 500px) {
+            .pneu-slot {
+                width: 70px;
+                height: 70px;
+                font-size: 9px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .pneu-slot {
+                width: 80px;
+                height: 80px;
+                font-size: 10px;
+            }
+        }
+
+        .pneu-slot:hover {
+            border-color: #2a5f7a;
+            background: #e3f2fd;
+            transform: scale(1.05);
+        }
+
+        .pneu-slot.dragging {
+            opacity: 0.5;
+            transform: scale(0.9);
+        }
+
+        .pneu-slot.drag-over {
+            border-color: #ffd700;
+            background: #fff9c4;
+            transform: scale(1.1);
+        }
+
+        .pneu-slot.ocupado {
+            border-style: solid;
+            border-color: #2e7d32;
+            background: #c8e6c9;
+        }
+
+        .pneu-slot.ocupado.alerta {
+            border-color: #c62828 !important;
+            background: #ffcdd2 !important;
+            animation: piscar 1s infinite;
+        }
+
+        .pneu-slot.estepe {
+            border-style: solid;
+            border-color: #f57c00;
+            background: #fff3e0;
+        }
+
+        .pneu-slot.estepe.alerta {
+            border-color: #c62828 !important;
+            background: #ffcdd2 !important;
+            animation: piscar 1s infinite;
+        }
+
+        .pneu-slot .pneu-info {
+            font-size: 7px;
+            color: #333;
+            font-weight: 600;
+            line-height: 1.1;
+            pointer-events: none;
+        }
+
+        .pneu-slot .pneu-detalhes {
+            font-size: 6px;
+            color: #666;
+            pointer-events: none;
+        }
+
+        .pneu-slot .remove-pneu {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #c62828;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .pneu-slot.ocupado .remove-pneu,
+        .pneu-slot.estepe .remove-pneu {
+            display: flex;
+        }
+
+        .pneu-slot .remove-pneu:hover {
+            background: #b71c1c;
+        }
+
+        .pneu-slot .pneu-vida-restante {
+            font-size: 6px;
+            color: #1a3a5c;
+            font-weight: 700;
+            pointer-events: none;
+        }
+
+        .estepe-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #e8ecf0;
+            width: 100%;
+        }
+
+        .estepe-section .eixo-label {
+            color: #f57c00;
+            font-size: 12px;
+        }
+
+        .modal-servicos-alinhamento {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .modal-servicos-alinhamento .servico-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding: 6px 0;
+            border-bottom: 1px solid #e8ecf0;
+        }
+
+        .modal-servicos-alinhamento .servico-item:last-child {
+            border-bottom: none;
+        }
+
+        .modal-servicos-alinhamento .servico-item .servico-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .modal-servicos-alinhamento .servico-item .data {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .modal-servicos-alinhamento .servico-item .alerta-tempo {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 8px;
+            border-radius: 10px;
+        }
+
+        .modal-servicos-alinhamento .servico-item .alerta-tempo.critico {
+            background: #ffcdd2;
+            color: #c62828;
+            animation: piscar 1s infinite;
+        }
+
+        .modal-servicos-alinhamento .servico-item .alerta-tempo.atencao {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+
+        .modal-servicos-alinhamento .servico-item .alerta-tempo.ok {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+
+        .pecas-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        @media (min-width: 500px) {
+            .pecas-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        .peca-card {
+            background: white;
+            border: 2px solid #e8ecf0;
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .peca-card:hover {
+            border-color: #7b1fa2;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .peca-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .peca-card-header h4 {
+            color: #1a3a5c;
+            font-size: 14px;
+        }
+
+        .peca-card-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px 10px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .peca-card-info span {
+            display: flex;
+            gap: 3px;
+        }
+
+        .peca-card-info .label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .peca-card-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+            justify-content: flex-end;
+        }
+
+        .pecas-titulo-modal {
+            font-weight: 600;
+            color: #7b1fa2;
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 2px solid #e8ecf0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .pecas-titulo-modal span:last-child {
+            background: #7b1fa2;
+            color: white;
+            padding: 1px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+
+        .sem-pecas-modal {
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            padding: 15px;
+            font-size: 13px;
+        }
+
+        .peca-instalada-item {
+            background: #f8f9fa;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border-left: 4px solid #7b1fa2;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .peca-instalada-item:hover {
+            background: #f0f0f5;
+            transform: translateX(3px);
+        }
+
+        .peca-instalada-item .nome {
+            font-weight: 600;
+            color: #1a3a5c;
+            font-size: 13px;
+        }
+
+        .peca-instalada-item .detalhe {
+            color: #666;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .peca-instalada-item .detalhe strong {
+            color: #333;
+        }
+
+        .peca-instalada-item .btn-remover-peca {
+            margin-top: 6px;
+            padding: 2px 10px;
+            font-size: 10px;
+            background: #c62828;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .peca-instalada-item .btn-remover-peca:hover {
+            background: #b71c1c;
+        }
+
+        .pecas-instaladas-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-top: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 3px 0;
+        }
+
+        @media (min-width: 500px) {
+            .pecas-instaladas-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        .modal-selecao {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-selecao.show {
+            display: flex;
+        }
+
+        .modal-selecao-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px 16px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-selecao-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .lista-itens-disponiveis {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .item-disponivel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border: 1px solid #e8ecf0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .item-disponivel:hover {
+            background: #f0f2f5;
+            border-color: #7b1fa2;
+        }
+
+        .item-disponivel .info {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .item-disponivel .info .nome {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .item-disponivel .info .detalhes {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .item-disponivel .info .dot-info {
+            font-size: 10px;
+            color: #888;
+            font-style: italic;
+        }
+
+        .item-disponivel .qtd {
+            background: #7b1fa2;
+            color: white;
+            padding: 1px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .modal-selecao-close {
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: #e8ecf0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .modal-selecao-close:hover {
+            background: #d0d4d9;
+        }
+
+        .modal-instalacao-peca {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1200;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-instalacao-peca.show {
+            display: flex;
+        }
+
+        .modal-instalacao-peca-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px 16px;
+        }
+
+        .modal-instalacao-peca-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .modal-instalacao-peca-content .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .modal-instalacao-peca-content .form-group {
+            margin-bottom: 12px;
+        }
+
+        .modal-instalacao-peca-content label {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .modal-instalacao-peca-content input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #dce0e5;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .modal-instalacao-peca-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .modal-instalacao-peca-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .modal-remocao {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1300;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-remocao.show {
+            display: flex;
+        }
+
+        .modal-remocao-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px 16px;
+        }
+
+        .modal-remocao-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .modal-remocao-content .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .modal-remocao-content .form-group {
+            margin-bottom: 12px;
+        }
+
+        .modal-remocao-content label {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .modal-remocao-content input,
+        .modal-remocao-content select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #dce0e5;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .modal-remocao-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .modal-remocao-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .modal-edicao {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1400;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-edicao.show {
+            display: flex;
+        }
+
+        .modal-edicao-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 420px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px 16px;
+            position: relative;
+        }
+
+        .modal-edicao-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 6px;
+            font-size: 18px;
+            padding-right: 30px;
+        }
+
+        .modal-edicao-content .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .modal-edicao-content .form-group {
+            margin-bottom: 10px;
+        }
+
+        .modal-edicao-content label {
+            font-weight: 600;
+            color: #333;
+            font-size: 12px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .modal-edicao-content input,
+        .modal-edicao-content select {
+            width: 100%;
+            padding: 6px 10px;
+            border: 2px solid #dce0e5;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .pneu-info-box {
+            background: #f0f2f5;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+
+        .pneu-info-box .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            font-size: 12px;
+        }
+
+        .pneu-info-box .info-row .label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .modal-edicao-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .modal-edicao-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .modal-manutencao-simplificada {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-manutencao-simplificada.show {
+            display: flex;
+        }
+
+        .modal-manutencao-simplificada-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px 16px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-manutencao-simplificada-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .modal-manutencao-simplificada-content .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .modal-manutencao-simplificada-content .form-group {
+            margin-bottom: 10px;
+        }
+
+        .modal-manutencao-simplificada-content label {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .modal-manutencao-simplificada-content input,
+        .modal-manutencao-simplificada-content select,
+        .modal-manutencao-simplificada-content textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #dce0e5;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .modal-manutencao-simplificada-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .modal-manutencao-simplificada-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .modal-combinar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1600;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-combinar.show {
+            display: flex;
+        }
+
+        .modal-combinar-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px 16px;
+        }
+
+        .modal-combinar-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .modal-combinar-content .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .modal-combinar-content .form-group {
+            margin-bottom: 12px;
+        }
+
+        .modal-combinar-content label {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .modal-combinar-content select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #dce0e5;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .modal-combinar-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .modal-combinar-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .modal-vender-veiculo {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1700;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-vender-veiculo.show {
+            display: flex;
+        }
+
+        .modal-vender-veiculo-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px 16px;
+        }
+
+        .modal-vender-veiculo-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .modal-vender-veiculo-content .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .modal-vender-veiculo-content .form-group {
+            margin-bottom: 10px;
+        }
+
+        .modal-vender-veiculo-content label {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .modal-vender-veiculo-content input,
+        .modal-vender-veiculo-content select,
+        .modal-vender-veiculo-content textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #dce0e5;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .modal-vender-veiculo-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .modal-vender-veiculo-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .modal-faixas {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-faixas.show {
+            display: flex;
+        }
+
+        .modal-faixas-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
+            padding: 20px 16px;
+            position: relative;
+        }
+
+        .modal-faixas-content .modal-title {
+            font-size: 18px;
+            padding-right: 30px;
+        }
+
+        .modal-faixas-content .form-group {
+            margin-bottom: 8px;
+        }
+
+        .modal-faixas-content .form-group label {
+            font-size: 13px;
+        }
+
+        .modal-faixas-content .form-group input {
+            padding: 6px 10px;
+            font-size: 18px;
+            width: 80px;
+        }
+
+        .modal-faixas-content .faixa-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .modal-faixas-content .faixa-input-group .status-badge {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+
+        .modal-faixas-content .analise-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            text-align: center;
+        }
+
+        @media (min-width: 500px) {
+            .modal-faixas-content .analise-grid {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+        }
+
+        .modal-faixas-content .analise-item {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .modal-faixas-content .analise-item .valor {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a3a5c;
+        }
+
+        .modal-faixas-content .analise-item .label {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .modal-faixas-content .analise-detalhada {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .modal-cadastro-multiplo {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1800;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-cadastro-multiplo.show {
+            display: flex;
+        }
+
+        .modal-cadastro-multiplo-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px 16px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-cadastro-multiplo-content h3 {
+            color: #1a3a5c;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .modal-cadastro-multiplo-content .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .modal-cadastro-multiplo-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .modal-cadastro-multiplo-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .master-container {
+            background: #fff8e1;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .master-container h3 {
+            color: #1a3a5c;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .master-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 500px) {
+            .master-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        .master-card {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid #e8ecf0;
+        }
+
+        .master-card .empresa-nome {
+            font-weight: 700;
+            color: #1a3a5c;
+            font-size: 15px;
+        }
+
+        .master-card .empresa-info {
+            font-size: 12px;
+            color: #666;
+            margin: 3px 0;
+        }
+
+        .master-card .empresa-status {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .master-card .empresa-status .badge {
+            font-size: 10px;
+        }
+
+        .master-card .empresa-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .planos-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .planos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        .plano-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #e8ecf0;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .plano-card:hover {
+            border-color: #2a5f7a;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .plano-card .plano-nome {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a3a5c;
+        }
+
+        .plano-card .plano-limite {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2a5f7a;
+            margin: 8px 0;
+        }
+
+        .plano-card .plano-limite small {
+            font-size: 13px;
+            font-weight: 400;
+            color: #666;
+        }
+
+        .plano-card .plano-status {
+            margin-top: 8px;
+        }
+
+        .relatorio-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e8ecf0;
+        }
+
+        .relatorio-card h3 {
+            color: #1a3a5c;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .relatorio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (min-width: 500px) {
+            .relatorio-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        .relatorio-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .relatorio-item .valor {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a3a5c;
+        }
+
+        .relatorio-item .label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .desgaste-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 500px) {
+            .desgaste-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        .desgaste-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .desgaste-item .valor {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a3a5c;
+        }
+
+        .desgaste-item .label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .desgaste-item .faixa-indicador {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            margin-top: 6px;
+        }
+
+        .desgaste-item .faixa-indicador .barra {
+            width: 18px;
+            height: 6px;
+            border-radius: 2px;
+            background: #e0e0e0;
+        }
+
+        .desgaste-item .faixa-indicador .barra.preenchida {
+            background: #2e7d32;
+        }
+
+        .desgaste-item .faixa-indicador .barra.media {
+            background: #f57c00;
+        }
+
+        .desgaste-item .faixa-indicador .barra.baixa {
+            background: #c62828;
+        }
+
+        .filtro-custo-km {
+            display: none;
+        }
+
+        .filtro-custo-km.visible {
+            display: flex;
+        }
+
+        .filtro-desgaste-veiculo {
+            display: none;
+        }
+
+        .filtro-desgaste-veiculo.visible {
+            display: flex;
         }
 
         .veiculo-desgaste-item {
@@ -231,27 +2529,23 @@
 
         .veiculo-desgaste-item .veiculo-info {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
             margin-top: 5px;
             font-size: 13px;
             color: #666;
         }
 
-        .veiculo-desgaste-item .veiculo-info .badge {
-            font-size: 10px;
-        }
-
         .veiculo-desgaste-item .resumo-pneus {
             margin-top: 10px;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
         .veiculo-desgaste-item .resumo-pneus .mini-pneu {
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             border: 2px solid #b0bec5;
             display: flex;
@@ -287,91 +2581,15 @@
             transform: translateX(-50%);
             background: #333;
             color: white;
-            padding: 4px 8px;
+            padding: 3px 6px;
             border-radius: 4px;
-            font-size: 9px;
+            font-size: 8px;
             white-space: nowrap;
             z-index: 10;
         }
 
         .veiculo-desgaste-item .resumo-pneus .mini-pneu:hover .tooltip {
             display: block;
-        }
-
-        .planos-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        @media (min-width: 600px) {
-            .planos-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-        }
-
-        .plano-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            border: 2px solid #e8ecf0;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .plano-card:hover {
-            border-color: #2a5f7a;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-        }
-
-        .plano-card .plano-nome {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a3a5c;
-        }
-
-        .plano-card .plano-limite {
-            font-size: 28px;
-            font-weight: 700;
-            color: #2a5f7a;
-            margin: 10px 0;
-        }
-
-        .plano-card .plano-limite small {
-            font-size: 14px;
-            font-weight: 400;
-            color: #666;
-        }
-
-        .plano-card .plano-status {
-            margin-top: 10px;
-        }
-
-        .plano-card .plano-acoes {
-            margin-top: 15px;
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .plano-card.ativo {
-            border-color: #2e7d32;
-            background: #f1f8e9;
-        }
-
-        .plano-card.ativo .plano-nome {
-            color: #2e7d32;
-        }
-
-        .plano-card.inativo {
-            border-color: #c62828;
-            background: #ffebee;
-        }
-
-        .plano-card.inativo .plano-nome {
-            color: #c62828;
         }
 
         .modal-desgaste-detalhes {
@@ -427,17 +2645,21 @@
             padding-right: 30px;
         }
 
-        .plano-selecionado-info {
-            background: #e3f2fd;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 14px;
-            color: #1a3a5c;
+        @keyframes piscar {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         @media (max-width: 480px) {
+            .container {
+                padding: 8px 10px;
+            }
+            .tab-content {
+                padding: 12px 10px;
+            }
+            .header-title h1 {
+                font-size: 16px;
+            }
             .header-left {
                 width: 100%;
                 justify-content: space-between;
@@ -451,15 +2673,83 @@
             .header-whatsapp .whatsapp-icon {
                 font-size: 22px;
             }
-            .plano-card .plano-limite {
-                font-size: 22px;
+            .auth-container {
+                padding: 20px 16px;
+                margin: 20px 10px;
+            }
+            .form-actions button {
+                min-width: 80px;
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            table {
+                font-size: 11px;
+                min-width: 500px;
+            }
+            table th, table td {
+                padding: 5px 8px;
+            }
+            .estoque-header h2, .veiculos-header h2 {
+                font-size: 16px;
+            }
+            .modal-content {
+                padding: 15px 12px;
+            }
+            .pneu-slot {
+                width: 50px;
+                height: 50px;
+                font-size: 7px;
+            }
+            .pneu-slot .pneu-info {
+                font-size: 6px;
+            }
+            .pneu-slot .pneu-detalhes {
+                font-size: 5px;
+            }
+            .eixos-row {
+                gap: 10px;
+            }
+            .eixo-pneus {
+                gap: 5px;
+            }
+            .modal-info-top .btn-acoes-veiculo button {
+                font-size: 10px;
+                padding: 3px 8px;
             }
             .veiculo-desgaste-item .veiculo-placa {
                 font-size: 16px;
             }
+            .plano-card .plano-limite {
+                font-size: 20px;
+            }
+            .veiculo-card-header h3 {
+                font-size: 14px;
+            }
+            .veiculo-card-info {
+                font-size: 12px;
+            }
         }
 
         @media (max-width: 360px) {
+            .pneu-slot {
+                width: 42px;
+                height: 42px;
+                font-size: 6px;
+                border-width: 2px;
+            }
+            .pneu-slot .pneu-info {
+                font-size: 5px;
+            }
+            .pneu-slot .pneu-detalhes {
+                font-size: 4px;
+            }
+            .eixo-pneus {
+                gap: 3px;
+            }
+            .tabs button {
+                font-size: 10px;
+                padding: 6px 8px;
+            }
             .header-title h1 {
                 font-size: 14px;
                 padding: 2px 6px;
@@ -474,26 +2764,6 @@
                 font-size: 11px;
                 padding: 4px 10px;
             }
-        }
-
-        /* ===== INCLUA TODOS OS ESTILOS ANTERIORES AQUI ===== */
-        /* (mantenha todos os estilos da versão anterior) */
-
-        /* Estilos para os filtros de relatório */
-        .filtro-custo-km {
-            display: none;
-        }
-
-        .filtro-custo-km.visible {
-            display: flex;
-        }
-
-        .filtro-desgaste-veiculo {
-            display: none;
-        }
-
-        .filtro-desgaste-veiculo.visible {
-            display: flex;
         }
     </style>
 </head>
@@ -1114,7 +3384,7 @@
                     </div>
                 </div>
 
-                <!-- TAB RELATÓRIOS - MODIFICADO -->
+                <!-- TAB RELATÓRIOS -->
                 <div id="tab-relatorios" class="tab-pane">
                     <div id="relatoriosBlocked" style="display:none; background:#ffebee; padding:15px; border-radius:10px; text-align:center;">
                         <h3 style="color:#c62828; font-size:16px;">🔒 Acesso Bloqueado</h3>
@@ -1164,7 +3434,6 @@
                             <button class="btn-limpar" onclick="limparFiltrosRelatorios()">Limpar Filtros</button>
                         </div>
 
-                        <!-- Filtros extras para Custo por KM -->
                         <div class="filtros-container filtro-custo-km" id="filtroCustoKm">
                             <div class="form-group">
                                 <label>Agrupar por</label>
@@ -1175,7 +3444,6 @@
                             </div>
                         </div>
 
-                        <!-- Filtros extras para Desgaste -->
                         <div class="filtros-container filtro-desgaste-veiculo" id="filtroDesgasteVeiculo">
                             <div class="form-group">
                                 <label>Filtrar por Placa</label>
@@ -1183,7 +3451,6 @@
                             </div>
                         </div>
 
-                        <!-- Resumo Geral -->
                         <div class="relatorio-card" id="relatorioResumoGeral">
                             <h3>Resumo Geral</h3>
                             <div class="relatorio-grid">
@@ -1206,7 +3473,6 @@
                             </div>
                         </div>
 
-                        <!-- Custo por KM -->
                         <div class="relatorio-card" id="relatorioCustoKm">
                             <h3>📈 Custo por KM dos Pneus</h3>
                             <p style="color:#666; margin-bottom:12px; font-size:13px;" id="custoKmDescricao">Cálculo baseado no valor do pneu e quilometragem total percorrida</p>
@@ -1232,7 +3498,6 @@
                             <div id="custoKmResumo" style="margin-top:10px; padding:10px; background:#f8f9fa; border-radius:6px; font-size:14px; font-weight:600; color:#1a3a5c;"></div>
                         </div>
 
-                        <!-- Custos de Peças -->
                         <div class="relatorio-card" id="relatorioCustoPecas">
                             <h3>🔧 Custos de Peças por Veículo</h3>
                             <p style="color:#666; margin-bottom:12px; font-size:13px;">Total de custos com peças instaladas em cada veículo</p>
@@ -1254,7 +3519,6 @@
                             </div>
                         </div>
 
-                        <!-- Custos de Manutenção -->
                         <div class="relatorio-card" id="relatorioCustoManutencao">
                             <h3>🔧 Custos de Manutenção por Veículo</h3>
                             <p style="color:#666; margin-bottom:12px; font-size:13px;">Total de custos com manutenção em cada veículo</p>
@@ -1276,7 +3540,6 @@
                             </div>
                         </div>
 
-                        <!-- Histórico de Remoções -->
                         <div class="relatorio-card" id="relatorioHistorico">
                             <h3>📋 Histórico de Pneus Removidos</h3>
                             <p style="color:#666; margin-bottom:12px; font-size:13px;">Histórico completo de pneus removidos dos veículos</p>
@@ -1302,7 +3565,6 @@
                             </div>
                         </div>
 
-                        <!-- Desgaste por Veículo -->
                         <div class="relatorio-card" id="relatorioDesgaste">
                             <h3>📊 Relatório de Desgaste por Veículo</h3>
                             <p style="color:#666; margin-bottom:12px; font-size:13px;">Clique em um veículo para ver os detalhes dos pneus</p>
@@ -1313,7 +3575,7 @@
                     </div>
                 </div>
 
-                <!-- TAB MASTER - MODIFICADO COM PLANOS -->
+                <!-- TAB MASTER -->
                 <div id="tab-master" class="tab-pane">
                     <div class="master-container">
                         <h3>👑 Controle Master</h3>
@@ -1345,7 +3607,6 @@
                             <button class="btn-limpar" onclick="limparFiltrosMaster()">Limpar Filtros</button>
                         </div>
 
-                        <!-- Planos Disponíveis -->
                         <div class="planos-grid" id="planosDisponiveis">
                             <div class="plano-card" data-plano="basico">
                                 <div class="plano-nome">📋 Básico</div>
@@ -1375,7 +3636,386 @@
         </div>
     </div>
 
-    <!-- ... (mantenha todos os modais da versão anterior) ... -->
+    <!-- Modal do Caminhão -->
+    <div id="modalCaminhao" class="modal-overlay">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="fecharModalCaminhao()">✕</button>
+            <h2 class="modal-title" id="modalVeiculoTitle">Veículo</h2>
+            
+            <div class="modal-info-top" id="modalInfoTop">
+                <div class="info-km" id="modalInfoKm">
+                    <span class="km-valor">📊 KM: 0</span>
+                    <button class="btn-editar-km" onclick="toggleEdicaoKm()" title="Editar KM">✏️</button>
+                    <input type="number" class="input-km-edicao" id="inputEdicaoKm" value="0" min="0" step="1">
+                    <button class="btn-confirmar-km" onclick="confirmarEdicaoKm()">✅</button>
+                    <button class="btn-cancelar-km" onclick="cancelarEdicaoKm()">❌</button>
+                </div>
+                <div class="info-resumo" id="modalInfoResumo"></div>
+                <div class="btn-acoes-veiculo">
+                    <button class="btn-orange" onclick="abrirModalManutencaoSimplificada()">🔧</button>
+                    <button class="btn-purple" onclick="abrirModalSelecaoPeca(veiculoAtual?.id)" title="Instalar Peça">🔧</button>
+                    <button class="btn-warning" onclick="abrirModalCombinar()" title="Combinar">🔗</button>
+                    <button class="btn-vender" onclick="abrirModalVenderVeiculo()" title="Vender/Sinistro">💰</button>
+                </div>
+            </div>
+
+            <div id="modoCombinadoInfo" class="modo-combinado-info" style="display:none;"></div>
+
+            <div class="modal-mm-ref">
+                <label>100% = <input type="number" id="mmReferencia" value="16" min="1" max="30" step="0.5"> mm</label>
+                <span class="info-mm">🔴 < 5mm | 🟡 5-8mm | 🟢 > 8mm</span>
+                <span class="info-mm">⚠️ Dif > 1mm: <span class="destaque">analisar</span></span>
+            </div>
+
+            <div id="caminhaoContainer" class="caminhao-container"></div>
+            
+            <div class="modal-servicos-alinhamento" id="modalServicosAlinhamento">
+                <div style="font-weight:600; color:#1a3a5c; margin-bottom:8px; font-size:14px;">🔧 Serviços Realizados</div>
+                <div id="listaServicosAlinhamento"></div>
+            </div>
+
+            <div style="margin-top:15px; text-align:center; color:#666; font-size:12px;">
+                💡 Clique em um pneu para editar as faixas ou arraste para outra posição
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Seleção de Pneus -->
+    <div id="modalSelecao" class="modal-selecao">
+        <div class="modal-selecao-content">
+            <h3>Selecionar Pneu</h3>
+            <div id="infoPneuSelecao" style="margin-bottom:12px; color:#666; font-size:13px;"></div>
+            <div id="listaPneusDisponiveis" class="lista-itens-disponiveis"></div>
+            <button class="modal-selecao-close" onclick="fecharModalSelecao()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Instalação de Pneu -->
+    <div id="modalInstalacao" class="modal-instalacao-peca">
+        <div class="modal-instalacao-peca-content">
+            <h3>Instalar Pneu</h3>
+            <p class="subtitle">Informe a quilometragem atual do veículo</p>
+            <div id="infoInstalacao" style="margin-bottom:12px; color:#666; font-size:13px;"></div>
+            <div class="form-group">
+                <label>Quilometragem Atual (KM)</label>
+                <input type="number" id="kmInstalacao" placeholder="Digite a KM atual" min="0" required>
+            </div>
+            <div class="modal-instalacao-peca-actions">
+                <button class="btn-confirmar" onclick="confirmarInstalacao()">Confirmar</button>
+                <button class="btn-cancelar" onclick="fecharModalInstalacao()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Remoção de Pneu -->
+    <div id="modalRemocao" class="modal-remocao">
+        <div class="modal-remocao-content">
+            <h3>Remover Pneu</h3>
+            <p class="subtitle" style="color:#666; font-size:13px; margin-bottom:12px;">Informe os detalhes da remoção</p>
+            
+            <div id="pneuRemocaoInfo" class="pneu-info-box"></div>
+            
+            <div class="form-group">
+                <label>Quilometragem Atual (KM)</label>
+                <input type="number" id="kmRemocao" placeholder="Digite a KM atual" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Destino do Pneu</label>
+                <select id="destinoPneu" required>
+                    <option value="">Selecione...</option>
+                    <option value="estoque_meia_vida">Voltar para Estoque (Meia Vida)</option>
+                    <option value="recapagem">Enviar para Recapagem</option>
+                    <option value="vulcanizacao">Enviar para Vulcanização</option>
+                    <option value="descarte">Descarte</option>
+                </select>
+            </div>
+            
+            <div class="modal-remocao-actions">
+                <button class="btn-confirmar" onclick="confirmarRemocao()">Confirmar</button>
+                <button class="btn-cancelar" onclick="fecharModalRemocao()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="modalEdicao" class="modal-edicao">
+        <div class="modal-edicao-content">
+            <button class="modal-close" onclick="fecharModalEdicao()">✕</button>
+            <h3>Editar Pneu</h3>
+            <p class="subtitle">Gerencie as informações deste pneu</p>
+            
+            <div id="pneuEdicaoInfo" class="pneu-info-box"></div>
+            
+            <div class="form-group">
+                <label>DOT / Fogo</label>
+                <input type="text" id="editPneuDot" placeholder="Ex: DOT 1234">
+            </div>
+            
+            <div class="form-group">
+                <label>Valor Recapagem (R$)</label>
+                <input type="number" id="valorRecapagem" placeholder="0,00" min="0" step="0.01">
+            </div>
+            
+            <div class="form-group">
+                <label>Valor Vulcanização (R$)</label>
+                <input type="number" id="valorVulcanizacao" placeholder="0,00" min="0" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label>Outros Valores (R$)</label>
+                <input type="number" id="editOutrosValores" placeholder="0,00" min="0" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Recapagem</label>
+                <select id="editTipoRecapagem">
+                    <option value="">Selecione...</option>
+                    <option value="banda_leve">Banda Leve</option>
+                    <option value="misto">Misto</option>
+                    <option value="borrachudo">Borrachudo</option>
+                    <option value="outros">Outros</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Outro Tipo</label>
+                <input type="text" id="editTipoRecapagemOutros" placeholder="Digite o tipo" style="display:none;">
+            </div>
+            
+            <div class="form-group">
+                <label>Ações</label>
+                <select id="acaoEdicao">
+                    <option value="">Selecione uma ação...</option>
+                    <option value="recapagem">Marcar como Recapado</option>
+                    <option value="vulcanizacao">Marcar como Vulcanizado</option>
+                    <option value="descarte">Enviar para Descarte</option>
+                </select>
+            </div>
+            
+            <div class="modal-edicao-actions">
+                <button class="btn-confirmar" onclick="confirmarEdicao()">Confirmar</button>
+                <button class="btn-cancelar" onclick="fecharModalEdicao()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Seleção de Peças -->
+    <div id="modalSelecaoPeca" class="modal-selecao">
+        <div class="modal-selecao-content">
+            <h3>Selecionar Peça para Instalar</h3>
+            <div id="infoPecaSelecao" style="margin-bottom:12px; color:#666; font-size:13px;"></div>
+            <div id="listaPecasDisponiveis" class="lista-itens-disponiveis"></div>
+            <button class="modal-selecao-close" onclick="fecharModalSelecaoPeca()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Instalação de Peça -->
+    <div id="modalInstalacaoPeca" class="modal-instalacao-peca">
+        <div class="modal-instalacao-peca-content">
+            <h3>Instalar Peça</h3>
+            <p class="subtitle">Informe os detalhes da instalação</p>
+            <div id="infoInstalacaoPeca" style="margin-bottom:12px; color:#666; font-size:13px;"></div>
+            <div class="form-group">
+                <label>Data da Instalação</label>
+                <input type="date" id="dataInstalacaoPeca" required>
+            </div>
+            <div class="form-group">
+                <label>Eixo/Posição</label>
+                <input type="text" id="posicaoInstalacaoPeca" placeholder="Ex: Dianteiro, Traseiro 1" required>
+            </div>
+            <div class="modal-instalacao-peca-actions">
+                <button class="btn-confirmar" onclick="confirmarInstalacaoPeca()">Confirmar</button>
+                <button class="btn-cancelar" onclick="fecharModalInstalacaoPeca()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Manutenção Simplificada -->
+    <div id="modalManutencaoSimplificada" class="modal-manutencao-simplificada">
+        <div class="modal-manutencao-simplificada-content">
+            <h3>🔧 Registrar Serviço</h3>
+            <p class="subtitle" id="modalManutencaoSimplificadaSubtitle">Registre alinhamento ou balanceamento</p>
+            
+            <div class="form-group">
+                <label>Tipo de Serviço</label>
+                <select id="manutencaoSimpTipo" required>
+                    <option value="">Selecione...</option>
+                    <option value="alinhamento">Alinhamento</option>
+                    <option value="balanceamento">Balanceamento</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Data do Serviço</label>
+                <input type="date" id="manutencaoSimpData" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Quilometragem (KM)</label>
+                <input type="number" id="manutencaoSimpKm" placeholder="KM atual" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Local/Oficina</label>
+                <input type="text" id="manutencaoSimpLocal" placeholder="Nome da oficina" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Valor Total (R$)</label>
+                <input type="number" id="manutencaoSimpValor" placeholder="0,00" min="0" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Observações (opcional)</label>
+                <textarea id="manutencaoSimpObs" rows="2" placeholder="Observações"></textarea>
+            </div>
+            
+            <div class="modal-manutencao-simplificada-actions">
+                <button class="btn-confirmar" onclick="confirmarManutencaoSimplificada()">Registrar</button>
+                <button class="btn-cancelar" onclick="fecharModalManutencaoSimplificada()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Combinar Veículos -->
+    <div id="modalCombinar" class="modal-combinar">
+        <div class="modal-combinar-content">
+            <h3>🔗 Combinar Veículos</h3>
+            <p class="subtitle">Selecione um veículo para combinar (Cavalo + Carreta)</p>
+            
+            <div class="form-group">
+                <label>Veículo para Combinar</label>
+                <select id="combinarVeiculoSelect">
+                    <option value="">Selecione...</option>
+                </select>
+            </div>
+            
+            <div class="modal-combinar-actions">
+                <button class="btn-confirmar" onclick="confirmarCombinar()">Combinar</button>
+                <button class="btn-cancelar" onclick="fecharModalCombinar()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Vender/Sinistro -->
+    <div id="modalVenderVeiculo" class="modal-vender-veiculo">
+        <div class="modal-vender-veiculo-content">
+            <h3>💰 Vender / Sinistro</h3>
+            <p class="subtitle" id="modalVenderSubtitle">Registre a venda ou sinistro do veículo</p>
+            
+            <div class="form-group">
+                <label>Tipo</label>
+                <select id="venderTipo" required>
+                    <option value="">Selecione...</option>
+                    <option value="venda">Venda</option>
+                    <option value="sinistro">Sinistro</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Data</label>
+                <input type="date" id="venderData" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Valor (R$) - Opcional</label>
+                <input type="number" id="venderValor" placeholder="0,00" min="0" step="0.01">
+            </div>
+            
+            <div class="form-group">
+                <label>Observações</label>
+                <textarea id="venderObs" rows="3" placeholder="Detalhes"></textarea>
+            </div>
+            
+            <div class="modal-vender-veiculo-actions">
+                <button class="btn-vender" onclick="confirmarVenderVeiculo()">Confirmar</button>
+                <button class="btn-cancelar" onclick="fecharModalVenderVeiculo()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Faixas -->
+    <div id="modalFaixas" class="modal-faixas">
+        <div class="modal-faixas-content">
+            <button class="modal-close" onclick="fecharModalFaixas()">✕</button>
+            <h2 class="modal-title" id="modalFaixasTitle">📏 Medição de Desgaste</h2>
+            
+            <div id="modalFaixasInfo" style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px;"></div>
+
+            <div style="background: #e3f2fd; padding: 12px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 13px;">
+                <strong>💡 Instruções:</strong> Meça a altura da banda de rodagem em 4 pontos (F1, F2, F3, F4) em mm.
+                <div style="display: flex; justify-content: center; gap: 15px; margin-top: 8px; flex-wrap: wrap;">
+                    <span>F1 ↕</span>
+                    <span>F2 ↕</span>
+                    <span>F3 ↕</span>
+                    <span>F4 ↕</span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 700; color: #1a3a5c;">F1 <span style="font-weight:400;color:#666;font-size:11px;">- ext. esq</span></label>
+                    <div class="faixa-input-group">
+                        <input type="number" id="faixaF1" min="0" max="30" step="0.5" value="0" style="width:70px; font-size:18px; padding:6px 8px;">
+                        <span style="font-size:14px;">mm</span>
+                        <span id="statusF1" class="status-badge"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 700; color: #1a3a5c;">F2 <span style="font-weight:400;color:#666;font-size:11px;">- central esq</span></label>
+                    <div class="faixa-input-group">
+                        <input type="number" id="faixaF2" min="0" max="30" step="0.5" value="0" style="width:70px; font-size:18px; padding:6px 8px;">
+                        <span style="font-size:14px;">mm</span>
+                        <span id="statusF2" class="status-badge"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 700; color: #1a3a5c;">F3 <span style="font-weight:400;color:#666;font-size:11px;">- central dir</span></label>
+                    <div class="faixa-input-group">
+                        <input type="number" id="faixaF3" min="0" max="30" step="0.5" value="0" style="width:70px; font-size:18px; padding:6px 8px;">
+                        <span style="font-size:14px;">mm</span>
+                        <span id="statusF3" class="status-badge"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 700; color: #1a3a5c;">F4 <span style="font-weight:400;color:#666;font-size:11px;">- ext. dir</span></label>
+                    <div class="faixa-input-group">
+                        <input type="number" id="faixaF4" min="0" max="30" step="0.5" value="0" style="width:70px; font-size:18px; padding:6px 8px;">
+                        <span style="font-size:14px;">mm</span>
+                        <span id="statusF4" class="status-badge"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                <div class="analise-grid">
+                    <div class="analise-item">
+                        <div class="valor" id="mediaFaixas">0.0 mm</div>
+                        <div class="label">Média</div>
+                    </div>
+                    <div class="analise-item">
+                        <div class="valor" id="desgasteEstimado">0%</div>
+                        <div class="label">Desgaste</div>
+                    </div>
+                    <div class="analise-item">
+                        <div class="valor" id="statusGeral" style="font-size:16px;">🟢 Bom</div>
+                        <div class="label">Status</div>
+                    </div>
+                    <div class="analise-item">
+                        <div class="valor" id="vidaRestante">-</div>
+                        <div class="label">Vida Restante</div>
+                    </div>
+                </div>
+                <div id="analiseDetalhada" class="analise-detalhada"></div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-success" onclick="salvarFaixas()" style="flex:1; padding: 10px; font-size: 14px;">💾 Salvar</button>
+                <button class="btn-secondary" onclick="fecharModalFaixas()" style="flex:1; padding: 10px; font-size: 14px;">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal de Desgaste Detalhado -->
     <div id="modalDesgasteDetalhes" class="modal-desgaste-detalhes">
@@ -1386,9 +4026,24 @@
         </div>
     </div>
 
+    <!-- Modal de Cadastro Múltiplo -->
+    <div id="modalCadastroMultiplo" class="modal-cadastro-multiplo">
+        <div class="modal-cadastro-multiplo-content">
+            <h3>📦 Cadastrar Múltiplos Pneus</h3>
+            <p class="subtitle" id="modalMultiploSubtitle">Preencha o DOT de cada pneu</p>
+            
+            <div id="listaPneusCadastro" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px;"></div>
+            
+            <div class="modal-cadastro-multiplo-actions">
+                <button class="btn-confirmar" onclick="confirmarCadastroMultiplo()">✅ Salvar Todos</button>
+                <button class="btn-cancelar" onclick="fecharModalCadastroMultiplo()">❌ Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ============================================
-        //  BANCO DE DADOS (mantido da versão anterior)
+        //  BANCO DE DADOS
         // ============================================
         function getCurrentUserId() {
             const user = getCurrentUser();
@@ -1486,6 +4141,7 @@
 
         function getPlanoUsuario(user) {
             if (!user) return PLANOS.basico;
+            if (user.isMaster) return null;
             if (user.plano && PLANOS[user.plano]) {
                 return PLANOS[user.plano];
             }
@@ -1496,21 +4152,21 @@
             if (!user) return 10;
             if (user.isMaster) return Infinity;
             const plano = getPlanoUsuario(user);
-            return plano.limite;
+            return plano ? plano.limite : 10;
         }
 
         function getLabelPlano(user) {
             if (!user) return 'Básico';
             if (user.isMaster) return 'Master';
             const plano = getPlanoUsuario(user);
-            return plano.label;
+            return plano ? plano.label : 'Básico';
         }
 
         function getCorPlano(user) {
             if (!user) return 'basico';
             if (user.isMaster) return 'master';
             const plano = getPlanoUsuario(user);
-            return plano.cor;
+            return plano ? plano.cor : 'basico';
         }
 
         function verificarLimiteVeiculosPlano() {
@@ -1533,11 +4189,14 @@
             }
             
             const plano = getPlanoUsuario(user);
-            planoBadge.style.display = 'inline';
-            planoBadge.textContent = plano.label;
-            planoBadge.className = `badge-plano ${plano.cor}`;
+            if (plano) {
+                planoBadge.style.display = 'inline';
+                planoBadge.textContent = plano.label;
+                planoBadge.className = `badge-plano ${plano.cor}`;
+            } else {
+                planoBadge.style.display = 'none';
+            }
             
-            // Atualiza limite de veículos
             const veiculoLimitWarning = document.getElementById('veiculoLimitWarning');
             const veiculoLimitCount = document.getElementById('veiculoLimitCount');
             const veiculoLimitCurrent = document.getElementById('veiculoLimitCurrent');
@@ -2320,7 +4979,7 @@
         }
 
         // ============================================
-        //  CADASTRAR VEÍCULO - COM VERIFICAÇÃO DE PLANO
+        //  CADASTRAR VEÍCULO
         // ============================================
         function atualizarEixosPorTipo() {
             const tipo = document.getElementById('veiculoTipo').value;
@@ -2475,7 +5134,7 @@
         }
 
         // ============================================
-        //  RENDER ESTOQUE DE PNEUS (resumido)
+        //  RENDER ESTOQUE DE PNEUS
         // ============================================
         function renderEstoque() {
             const pneus = getPneus();
@@ -2883,7 +5542,7 @@
         }
 
         // ============================================
-        //  RENDER VEÍCULOS - COM PLANO
+        //  RENDER VEÍCULOS
         // ============================================
         function renderVeiculos() {
             const permissoes = getPermissoes(getCurrentUser());
@@ -3326,7 +5985,7 @@
         }
 
         // ============================================
-        //  RELATÓRIOS - COM FILTROS POR TIPO E AGRUPAMENTO
+        //  RELATÓRIOS
         // ============================================
         function renderRelatorios() {
             const permissoes = getPermissoes(getCurrentUser());
@@ -3432,7 +6091,7 @@
             });
 
             // ============================================
-            //  CUSTO POR KM - COM AGRUPAMENTO
+            //  CUSTO POR KM
             // ============================================
             const tbodyCusto = document.getElementById('relatorioCustoKmBody');
             const custoResumo = document.getElementById('custoKmResumo');
@@ -3449,7 +6108,6 @@
                 let custoTotal = 0;
                 let kmTotal = 0;
                 
-                // Agrupar por veículo ou marca
                 const grupos = {};
                 pneusComKm.forEach(p => {
                     const chave = agruparPor === 'veiculo' ? (p.veiculoInstalado || 'Não instalado') : p.nome;
@@ -3461,7 +6119,6 @@
                     grupos[chave].kmTotal += p.kmTotal || 0;
                 });
 
-                // Ordenar por custo/km
                 Object.keys(grupos).forEach(chave => {
                     const grupo = grupos[chave];
                     grupo.custoKm = grupo.kmTotal > 0 ? grupo.custoTotal / grupo.kmTotal : 0;
@@ -3470,20 +6127,20 @@
                 const gruposOrdenados = Object.entries(grupos).sort((a, b) => a[1].custoKm - b[1].custoKm);
 
                 gruposOrdenados.forEach(([chave, grupo]) => {
-                    // Cabeçalho do grupo
                     const label = agruparPor === 'veiculo' ? `🚗 ${chave}` : `📦 ${chave}`;
+                    const corCustoKm = grupo.custoKm < 0.5 ? '#2e7d32' : grupo.custoKm < 1 ? '#f57c00' : '#c62828';
+                    
                     htmlCusto += `
                         <tr style="background: #f0f2f5; font-weight: 700;">
                             <td colspan="8" style="padding: 8px 12px; color: #1a3a5c;">
                                 ${label} - Total: ${grupo.pneus.length} pneus | 
                                 KM Total: ${grupo.kmTotal.toLocaleString('pt-BR')} | 
                                 Custo Total: R$ ${grupo.custoTotal.toFixed(2)} | 
-                                Custo/KM: <span style="color: ${grupo.custoKm < 0.5 ? '#2e7d32' : grupo.custoKm < 1 ? '#f57c00' : '#c62828'}">R$ ${grupo.custoKm.toFixed(4)}</span>
+                                Custo/KM: <span style="color: ${corCustoKm}">R$ ${grupo.custoKm.toFixed(4)}</span>
                             </td>
                         </tr>
                     `;
                     
-                    // Pneus do grupo
                     grupo.pneus.forEach(p => {
                         index++;
                         const custoPorKm = (p.kmTotal || 0) > 0 ? p.valor / (p.kmTotal || 1) : p.valor;
@@ -3668,7 +6325,7 @@
             }
 
             // ============================================
-            //  DESGASTE POR VEÍCULO - MOSTRANDO PLACAS
+            //  DESGASTE POR VEÍCULO
             // ============================================
             renderDesgastePorVeiculo(pneus, veiculosFiltrados, filtroVeiculo);
         }
@@ -3677,16 +6334,13 @@
             const container = document.getElementById('desgasteRelatorioContainer');
             const filtroPlaca = document.getElementById('filtroDesgastePlaca')?.value?.toUpperCase() || '';
             
-            // Filtrar pneus instalados com faixas
             let pneusComFaixas = pneus.filter(p => p.status === 'instalado' && p.faixas && 
                 (p.faixas.f1 > 0 || p.faixas.f2 > 0 || p.faixas.f3 > 0 || p.faixas.f4 > 0));
 
-            // Se tem filtro de veículo, filtra
             if (filtroVeiculo) {
                 pneusComFaixas = pneusComFaixas.filter(p => p.veiculoInstalado === filtroVeiculo);
             }
 
-            // Agrupar por veículo
             const desgastePorVeiculo = {};
             pneusComFaixas.forEach(p => {
                 const veiculoKey = p.veiculoInstalado || 'Não identificado';
@@ -3718,7 +6372,6 @@
                 else if (diff > 1) desgastePorVeiculo[veiculoKey].status = 'atencao';
             });
 
-            // Aplicar filtro de placa
             let veiculosParaMostrar = Object.entries(desgastePorVeiculo);
             if (filtroPlaca) {
                 veiculosParaMostrar = veiculosParaMostrar.filter(([placa]) => 
@@ -3727,7 +6380,7 @@
             }
 
             if (veiculosParaMostrar.length === 0) {
-                container.innerHTML = `<div class="empty-state"><p>${filtroVeiculo || filtroPlaca ? 'Nenhum veículo encontrado com os filtros aplicados.' : 'Nenhum dado de desgaste registrado.'}</p></div>`;
+                container.innerHTML = `<div class="empty-state"><p>${filtroVeiculo || filtroPlaca ? 'Nenhum veículo encontrado.' : 'Nenhum dado de desgaste registrado.'}</p></div>`;
                 return;
             }
 
@@ -3736,7 +6389,6 @@
                 const statusIcon = dados.status === 'critico' ? '🔴' : dados.status === 'atencao' ? '🟡' : '🟢';
                 const statusText = dados.status === 'critico' ? 'Crítico' : dados.status === 'atencao' ? 'Atenção' : 'OK';
                 
-                // Calcula média geral do veículo
                 const medias = dados.pneus.map(p => p.media);
                 const mediaGeral = medias.length > 0 ? medias.reduce((a, b) => a + b, 0) / medias.length : 0;
 
@@ -3744,7 +6396,6 @@
                 const veiculoLabel = veiculoInfo.marca && veiculoInfo.modelo ? 
                     `${veiculoInfo.marca} ${veiculoInfo.modelo}` : veiculo;
 
-                // Mini pneus para resumo visual
                 const miniPneus = dados.pneus.map(p => {
                     const classe = p.temAlerta ? 'critico' : p.diff > 1 ? 'atencao' : 'ok';
                     return `<div class="mini-pneu ${classe}" title="${p.nome}: ${p.media.toFixed(1)}mm">
@@ -3918,16 +6569,1549 @@
         }
 
         // ============================================
-        //  MODAL DO CAMINHÃO (resumido - mantido da versão anterior)
+        //  MODAL DO CAMINHÃO
         // ============================================
         let veiculoAtual = null;
         let slotSelecionado = null;
         let pneuSelecionadoId = null;
         let veiculoInstalacaoId = null;
         let modoEdicaoKm = false;
+        let dragData = null;
 
-        // Funções do modal do caminhão (mantidas da versão anterior)
-        // ... (incluir todas as funções do modal do caminhão)
+        function abrirModalCaminhao(id) {
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === id);
+            if (!veiculo) return;
+
+            if (veiculo.combinadoCom) {
+                const combinado = veiculos.find(v => v.id === veiculo.combinadoCom);
+                if (combinado) {
+                    veiculoAtual = {
+                        ...veiculo,
+                        pneus: { ...veiculo.pneus, ...combinado.pneus },
+                        estruturaEixos: [...veiculo.estruturaEixos, ...combinado.estruturaEixos],
+                        eixos: veiculo.eixos + combinado.eixos,
+                        placa: `${veiculo.placa} + ${combinado.placa}`,
+                        _combinadoOriginal: combinado,
+                        _idOriginal: veiculo.id
+                    };
+                    document.getElementById('modoCombinadoInfo').style.display = 'block';
+                    document.getElementById('modoCombinadoInfo').innerHTML = `
+                        🔗 Combinado com <strong>${combinado.marca} ${combinado.modelo}</strong> (${combinado.placa})
+                        <button class="btn-desvincular" onclick="desvincularVeiculos(${veiculo.id})">Desvincular</button>
+                    `;
+                } else {
+                    veiculoAtual = veiculo;
+                    document.getElementById('modoCombinadoInfo').style.display = 'none';
+                }
+            } else {
+                veiculoAtual = veiculo;
+                document.getElementById('modoCombinadoInfo').style.display = 'none';
+            }
+            
+            const totalPecas = getPecas().filter(p => p.veiculoId === id && p.status === 'instalado').length;
+            document.getElementById('modalVeiculoTitle').textContent = 
+                `${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}  |  🔧 ${totalPecas} peça(s)  |  🚛 ${veiculo.eixos} eixos`;
+            
+            atualizarInfoKm(veiculoAtual);
+            
+            let resumoHtml = '';
+            let alertas = [];
+            
+            if (veiculo.servicos && veiculo.servicos.length > 0) {
+                const ultimo = veiculo.servicos[veiculo.servicos.length - 1];
+                const diasPassados = Math.floor((Date.now() - new Date(ultimo.data).getTime()) / (1000 * 60 * 60 * 24));
+                if (diasPassados > 180) {
+                    alertas.push(`<span class="alerta">⚠️ ${ultimo.tipo} há ${diasPassados}d</span>`);
+                } else if (diasPassados > 90) {
+                    alertas.push(`<span class="atencao">🟡 ${ultimo.tipo} há ${diasPassados}d</span>`);
+                } else {
+                    alertas.push(`<span class="ok">✅ ${ultimo.tipo} há ${diasPassados}d</span>`);
+                }
+            }
+            
+            if (veiculo.pneus) {
+                const pneus = getPneus();
+                Object.values(veiculo.pneus).forEach(pneuId => {
+                    const pneu = pneus.find(p => p.id === pneuId);
+                    if (pneu) {
+                        if (verificarAlertaDesgaste(pneu)) {
+                            alertas.push(`<span class="alerta">🔴 ${pneu.nome} - crítico</span>`);
+                        }
+                        const diff = calcularDiferencaFaixas(pneu);
+                        if (diff > 1) {
+                            alertas.push(`<span class="atencao">🟡 ${pneu.nome} - dif > 1mm</span>`);
+                        }
+                    }
+                });
+            }
+            
+            if (alertas.length === 0) {
+                resumoHtml = '<span class="ok">✅ Sem alertas</span>';
+            } else {
+                resumoHtml = alertas.join(' ');
+            }
+            
+            document.getElementById('modalInfoResumo').innerHTML = resumoHtml;
+            
+            document.getElementById('modalCaminhao').classList.add('show');
+            renderCaminhao(veiculoAtual);
+            renderServicosAlinhamento(veiculoAtual);
+        }
+
+        function atualizarInfoKm(veiculo) {
+            const kmAtual = veiculo.km || 0;
+            
+            document.getElementById('inputEdicaoKm').value = kmAtual;
+            document.querySelector('.km-valor').textContent = `📊 KM: ${kmAtual.toLocaleString('pt-BR')}`;
+            
+            modoEdicaoKm = false;
+            document.getElementById('inputEdicaoKm').classList.remove('visible');
+            document.querySelector('.btn-confirmar-km').classList.remove('visible');
+            document.querySelector('.btn-cancelar-km').classList.remove('visible');
+            document.querySelector('.btn-editar-km').style.display = 'inline';
+        }
+
+        function toggleEdicaoKm() {
+            const input = document.getElementById('inputEdicaoKm');
+            const confirmBtn = document.querySelector('.btn-confirmar-km');
+            const cancelBtn = document.querySelector('.btn-cancelar-km');
+            const editBtn = document.querySelector('.btn-editar-km');
+            
+            if (modoEdicaoKm) {
+                cancelarEdicaoKm();
+                return;
+            }
+            
+            modoEdicaoKm = true;
+            input.classList.add('visible');
+            confirmBtn.classList.add('visible');
+            cancelBtn.classList.add('visible');
+            editBtn.style.display = 'none';
+            input.focus();
+            input.select();
+        }
+
+        function cancelarEdicaoKm() {
+            const input = document.getElementById('inputEdicaoKm');
+            const confirmBtn = document.querySelector('.btn-confirmar-km');
+            const cancelBtn = document.querySelector('.btn-cancelar-km');
+            const editBtn = document.querySelector('.btn-editar-km');
+            
+            modoEdicaoKm = false;
+            input.classList.remove('visible');
+            confirmBtn.classList.remove('visible');
+            cancelBtn.classList.remove('visible');
+            editBtn.style.display = 'inline';
+            
+            if (veiculoAtual) {
+                input.value = veiculoAtual.km || 0;
+            }
+        }
+
+        function confirmarEdicaoKm() {
+            const input = document.getElementById('inputEdicaoKm');
+            const novaKm = parseInt(input.value);
+            
+            if (isNaN(novaKm) || novaKm < 0) {
+                alert('Por favor, informe uma quilometragem válida.');
+                return;
+            }
+            
+            if (novaKm < (veiculoAtual.km || 0)) {
+                if (!confirm('A nova KM é menor que a atual. Isso pode afetar os pneus. Continuar?')) {
+                    return;
+                }
+            }
+            
+            const veiculos = getVeiculos();
+            const veiculoOriginal = veiculos.find(v => v.id === (veiculoAtual._idOriginal || veiculoAtual.id));
+            
+            if (veiculoOriginal) {
+                const kmAntigo = veiculoOriginal.km || 0;
+                veiculoOriginal.km = novaKm;
+                
+                if (veiculoOriginal.pneus) {
+                    const pneus = getPneus();
+                    Object.values(veiculoOriginal.pneus).forEach(pneuId => {
+                        const pneu = pneus.find(p => p.id === pneuId);
+                        if (pneu && pneu.kmInstalacao !== null) {
+                            if (novaKm > kmAntigo) {
+                                pneu.kmTotal = (pneu.kmTotal || 0) + (novaKm - kmAntigo);
+                            } else if (novaKm < kmAntigo) {
+                                pneu.kmTotal = Math.max(0, (pneu.kmTotal || 0) - (kmAntigo - novaKm));
+                            }
+                            pneu.historico = pneu.historico || [];
+                            pneu.historico.push({
+                                data: new Date().toLocaleString('pt-BR'),
+                                acao: 'Atualização KM',
+                                detalhes: `KM atualizada de ${kmAntigo} para ${novaKm}. KM total: ${pneu.kmTotal}`
+                            });
+                        }
+                    });
+                    setPneus(pneus);
+                }
+                
+                setVeiculos(veiculos);
+                veiculoAtual.km = novaKm;
+                if (veiculoAtual._combinadoOriginal) {
+                    const combinadoOriginal = veiculos.find(v => v.id === veiculoAtual._combinadoOriginal.id);
+                    if (combinadoOriginal) {
+                        combinadoOriginal.km = novaKm;
+                        setVeiculos(veiculos);
+                    }
+                }
+            }
+            
+            modoEdicaoKm = false;
+            document.querySelector('.btn-editar-km').style.display = 'inline';
+            document.querySelector('.km-valor').textContent = `📊 KM: ${novaKm.toLocaleString('pt-BR')}`;
+            document.getElementById('inputEdicaoKm').classList.remove('visible');
+            document.querySelector('.btn-confirmar-km').classList.remove('visible');
+            document.querySelector('.btn-cancelar-km').classList.remove('visible');
+            
+            renderCaminhao(veiculoAtual);
+            renderVeiculos();
+            renderEstoque();
+            renderRelatorios();
+            
+            alert(`✅ KM atualizada para ${novaKm.toLocaleString('pt-BR')}. KM dos pneus atualizada.`);
+        }
+
+        function fecharModalCaminhao() {
+            document.getElementById('modalCaminhao').classList.remove('show');
+            veiculoAtual = null;
+            slotSelecionado = null;
+            pneuSelecionadoId = null;
+            veiculoInstalacaoId = null;
+            dragData = null;
+            modoEdicaoKm = false;
+            document.getElementById('modoCombinadoInfo').style.display = 'none';
+        }
+
+        function renderServicosAlinhamento(veiculo) {
+            const container = document.getElementById('listaServicosAlinhamento');
+            const servicos = veiculo.servicos || [];
+            
+            if (servicos.length === 0) {
+                container.innerHTML = '<div style="color:#999; font-style:italic; text-align:center; padding:8px; font-size:13px;">Nenhum serviço registrado</div>';
+                return;
+            }
+            
+            let html = '';
+            servicos.sort((a, b) => new Date(b.data) - new Date(a.data)).forEach(s => {
+                const diasPassados = Math.floor((Date.now() - new Date(s.data).getTime()) / (1000 * 60 * 60 * 24));
+                let alertaClass = 'ok';
+                let alertaText = '✅ OK';
+                if (diasPassados > 180) {
+                    alertaClass = 'critico';
+                    alertaText = `⚠️ ${diasPassados}d`;
+                } else if (diasPassados > 90) {
+                    alertaClass = 'atencao';
+                    alertaText = `🟡 ${diasPassados}d`;
+                } else {
+                    alertaText = `✅ ${diasPassados}d`;
+                }
+                
+                html += `
+                    <div class="servico-item">
+                        <div class="servico-info">
+                            <strong>${s.tipo}</strong>
+                            <span class="data">${s.data} • ${s.km}km</span>
+                            <span class="alerta-tempo ${alertaClass}">${alertaText}</span>
+                        </div>
+                        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                            <span style="font-size:13px; color:#555;">R$ ${s.valor.toFixed(2)}</span>
+                            ${s.local ? `<span style="font-size:12px; color:#999;">${s.local}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function renderCaminhao(veiculo) {
+            const container = document.getElementById('caminhaoContainer');
+            const estrutura = veiculo.estruturaEixos || [];
+            
+            if (estrutura.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>Estrutura de eixos não definida.</p></div>';
+                return;
+            }
+
+            let html = `<div class="caminhao">`;
+
+            estrutura.forEach((eixo, index) => {
+                const eixoNome = eixo.nome || `${index + 1}° Eixo`;
+                const qtd = eixo.qtd || 4;
+                const tipo = eixo.tipo || 'traseiro';
+                
+                const slots = [];
+                if (qtd === 2) {
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-esquerdo`, label: 'E' });
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-direito`, label: 'D' });
+                } else if (qtd === 4) {
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-esquerdo-externo`, label: 'EE' });
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-esquerdo-interno`, label: 'EI' });
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-direito-interno`, label: 'DI' });
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-direito-externo`, label: 'DE' });
+                } else {
+                    for (let i = 1; i <= qtd; i++) {
+                        slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-${i}`, label: `${i}` });
+                    }
+                }
+
+                const isDianteiro = tipo === 'dianteiro';
+                const eixoClass = isDianteiro ? 'eixo-dianteiro' : '';
+
+                html += `
+                    <div class="eixos-row">
+                        <div class="eixo ${eixoClass}">
+                            <div class="eixo-label">${isDianteiro ? '🚛 ' : ''}${eixoNome}</div>
+                            <div class="eixo-pneus">
+                                ${slots.map(slot => {
+                                    const pneuId = veiculo.pneus ? veiculo.pneus[slot.id] : null;
+                                    return renderPneuSlot(veiculo, slot.id, pneuId);
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="estepe-section">
+                    <div class="eixos-row">
+                        <div class="eixo">
+                            <div class="eixo-label" style="color:#f57c00;">🟧 Estepes</div>
+                            <div class="eixo-pneus">
+                                ${renderPneuSlot(veiculo, 'estepe-1', veiculo.pneus ? veiculo.pneus['estepe-1'] : null, true)}
+                                ${renderPneuSlot(veiculo, 'estepe-2', veiculo.pneus ? veiculo.pneus['estepe-2'] : null, true)}
+                                ${renderPneuSlot(veiculo, 'estepe-3', veiculo.pneus ? veiculo.pneus['estepe-3'] : null, true)}
+                                ${renderPneuSlot(veiculo, 'estepe-4', veiculo.pneus ? veiculo.pneus['estepe-4'] : null, true)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const pecas = getPecas();
+            const pecasInstaladas = pecas.filter(p => p.veiculoId === (veiculo._idOriginal || veiculo.id) && p.status === 'instalado');
+
+            html += `
+                <div style="width:100%; margin-top:20px;">
+                    <div class="pecas-titulo-modal">
+                        <span>🔧 Peças Instaladas</span>
+                        <span>${pecasInstaladas.length}</span>
+                    </div>
+            `;
+
+            if (pecasInstaladas.length === 0) {
+                html += `
+                    <div class="sem-pecas-modal">
+                        Nenhuma peça instalada.
+                        <span>Clique em 🔧 no card do veículo para instalar</span>
+                    </div>
+                `;
+            } else {
+                html += `<div class="pecas-instaladas-grid">`;
+                pecasInstaladas.forEach(p => {
+                    html += `
+                        <div class="peca-instalada-item">
+                            <div class="nome">${p.nome}</div>
+                            <div class="detalhe"><strong>Categoria:</strong> ${p.categoria}</div>
+                            <div class="detalhe"><strong>Valor:</strong> R$ ${p.valor.toFixed(2)}</div>
+                            <div class="detalhe"><strong>Posição:</strong> ${p.posicao || 'N/A'}</div>
+                            <div class="detalhe"><strong>Instalado:</strong> ${p.dataInstalacao || 'N/A'}</div>
+                            <button class="btn-remover-peca" onclick="event.stopPropagation(); removerPecaInstalada(${p.id})">
+                                🗑️ Remover
+                            </button>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderPneuSlot(veiculo, slotId, pneuId, isEstepe = false) {
+            const pneus = getPneus();
+            const pneu = pneuId ? pneus.find(p => p.id === pneuId) : null;
+
+            const slotClass = isEstepe ? 'estepe' : '';
+            const ocupadoClass = pneu ? 'ocupado' : '';
+            const alertaClass = pneu && verificarAlertaDesgaste(pneu) ? 'alerta' : '';
+
+            if (pneu) {
+                const faixas = pneu.faixas || {};
+                const temAlerta = verificarAlertaDesgaste(pneu);
+                const diff = calcularDiferencaFaixas(pneu);
+                const mmRef = parseFloat(document.getElementById('mmReferencia')?.value) || 16;
+                const vidaRestante = estimarVidaRestante(pneu, mmRef);
+                
+                let tipoDisplay = pneu.tipo;
+                if (pneu.tipoRecapagem) {
+                    const tipoMap = {
+                        'banda_leve': 'Banda Leve',
+                        'misto': 'Misto',
+                        'borrachudo': 'Borrachudo',
+                        'outros': pneu.tipoRecapagemOutros || 'Outros'
+                    };
+                    tipoDisplay = tipoMap[pneu.tipoRecapagem] || pneu.tipoRecapagem;
+                }
+
+                const contadorRecap = pneu.contadorRecapagens || 0;
+
+                return `
+                    <div class="pneu-slot ${ocupadoClass} ${slotClass} ${alertaClass}" 
+                         draggable="true"
+                         ondragstart="iniciarDrag(event, ${veiculo.id}, '${slotId}')"
+                         ondragend="limparDrag(event)"
+                         onclick="abrirModalFaixas(${veiculo.id}, '${slotId}')">
+                        <div class="pneu-info">${pneu.nome}
+                            ${contadorRecap > 0 ? `<span style="font-size:7px;background:#ff8a65;color:#fff;padding:0 5px;border-radius:6px;display:inline-block;margin-left:2px;">${contadorRecap}x</span>` : ''}
+                        </div>
+                        <div class="pneu-detalhes">${pneu.tamanho} • ${tipoDisplay}</div>
+                        <div class="pneu-detalhes" style="font-size:6px; color:#666;">
+                            F1:${faixas.f1||0} F2:${faixas.f2||0}
+                        </div>
+                        <div class="pneu-detalhes" style="font-size:6px; color:#666;">
+                            F3:${faixas.f3||0} F4:${faixas.f4||0}
+                        </div>
+                        ${temAlerta ? '<div style="font-size:7px; color:#c62828; font-weight:700;">⚠️</div>' : ''}
+                        ${diff > 1 ? '<div style="font-size:6px; color:#f57c00;">📏</div>' : ''}
+                        ${vidaRestante && vidaRestante.km > 0 ? `<div class="pneu-vida-restante">${vidaRestante.km.toLocaleString('pt-BR')}km</div>` : ''}
+                        <button class="remove-pneu" onclick="event.stopPropagation(); abrirModalRemocao(${veiculo.id}, '${slotId}')">✕</button>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="pneu-slot ${slotClass}"
+                         ondragover="permitirDrop(event)"
+                         ondragleave="limparDrag(event)"
+                         ondrop="finalizarDrop(event, ${veiculo.id}, '${slotId}')"
+                         onclick="abrirModalSelecao(${veiculo.id}, '${slotId}')">
+                        <span style="font-size:18px;">➕</span>
+                        ${isEstepe ? '<div style="font-size:7px;color:#f57c00;">Estepe</div>' : ''}
+                    </div>
+                `;
+            }
+        }
+
+        // ============================================
+        //  MODAL DE FAIXAS
+        // ============================================
+        let veiculoFaixasId = null;
+        let slotFaixasId = null;
+
+        function abrirModalFaixas(veiculoId, slotId) {
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) return;
+
+            const pneuId = veiculo.pneus[slotId];
+            if (!pneuId) return;
+
+            const pneus = getPneus();
+            const pneu = pneus.find(p => p.id === pneuId);
+            if (!pneu) return;
+
+            veiculoFaixasId = veiculoId;
+            slotFaixasId = slotId;
+
+            const faixas = pneu.faixas || { f1: 0, f2: 0, f3: 0, f4: 0 };
+            const nomeSlot = slotId.replace(/-/g, ' ').replace(/estepe/g, 'Estepe');
+
+            const modal = document.getElementById('modalFaixas');
+            
+            document.getElementById('modalFaixasTitle').textContent = `📏 Desgaste - ${pneu.nome}`;
+            
+            document.getElementById('modalFaixasInfo').innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 13px;">
+                    <div><strong>ID:</strong> #${pneu.id.toString().slice(-6)}</div>
+                    <div><strong>Marca:</strong> ${pneu.nome}</div>
+                    <div><strong>DOT:</strong> ${pneu.dot || 'N/A'}</div>
+                    <div><strong>Tamanho:</strong> ${pneu.tamanho}</div>
+                    <div><strong>Posição:</strong> ${nomeSlot}</div>
+                    <div><strong>KM Total:</strong> ${(pneu.kmTotal || 0).toLocaleString('pt-BR')}</div>
+                </div>
+            `;
+
+            document.getElementById('faixaF1').value = faixas.f1 || 0;
+            document.getElementById('faixaF2').value = faixas.f2 || 0;
+            document.getElementById('faixaF3').value = faixas.f3 || 0;
+            document.getElementById('faixaF4').value = faixas.f4 || 0;
+
+            ['F1', 'F2', 'F3', 'F4'].forEach(f => {
+                const input = document.getElementById(`faixa${f}`);
+                if (input) {
+                    input.removeEventListener('input', window._faixaInputHandler);
+                    const handler = function() {
+                        atualizarStatusFaixa(f);
+                        atualizarResumoFaixasCompleto();
+                    };
+                    window._faixaInputHandler = handler;
+                    input.addEventListener('input', handler);
+                }
+            });
+
+            document.getElementById('mmReferencia').removeEventListener('change', window._mmRefHandler);
+            const mmHandler = function() {
+                atualizarResumoFaixasCompleto();
+            };
+            window._mmRefHandler = mmHandler;
+            document.getElementById('mmReferencia').addEventListener('change', mmHandler);
+
+            atualizarStatusFaixa('F1');
+            atualizarStatusFaixa('F2');
+            atualizarStatusFaixa('F3');
+            atualizarStatusFaixa('F4');
+            atualizarResumoFaixasCompleto();
+
+            modal.classList.add('show');
+        }
+
+        function atualizarStatusFaixa(faixa) {
+            const input = document.getElementById(`faixa${faixa}`);
+            const statusEl = document.getElementById(`status${faixa}`);
+            if (!input || !statusEl) return;
+
+            const valor = parseFloat(input.value) || 0;
+            
+            if (valor === 0) {
+                statusEl.textContent = '⏳';
+                statusEl.style.background = '#e0e0e0';
+                statusEl.style.color = '#666';
+            } else if (valor < 5) {
+                statusEl.textContent = '🔴';
+                statusEl.style.background = '#ffcdd2';
+                statusEl.style.color = '#c62828';
+            } else if (valor < 8) {
+                statusEl.textContent = '🟡';
+                statusEl.style.background = '#fff9c4';
+                statusEl.style.color = '#f57f17';
+            } else {
+                statusEl.textContent = '🟢';
+                statusEl.style.background = '#c8e6c9';
+                statusEl.style.color = '#1b5e20';
+            }
+        }
+
+        function atualizarResumoFaixasCompleto() {
+            const valores = [];
+            for (let i = 1; i <= 4; i++) {
+                const input = document.getElementById(`faixaF${i}`);
+                if (input) {
+                    const val = parseFloat(input.value) || 0;
+                    if (val > 0) valores.push(val);
+                }
+            }
+
+            const mediaEl = document.getElementById('mediaFaixas');
+            const desgasteEl = document.getElementById('desgasteEstimado');
+            const statusEl = document.getElementById('statusGeral');
+            const vidaEl = document.getElementById('vidaRestante');
+            const analiseEl = document.getElementById('analiseDetalhada');
+
+            if (valores.length === 0) {
+                mediaEl.textContent = '0.0 mm';
+                desgasteEl.textContent = '0%';
+                statusEl.textContent = '⏳ Sem dados';
+                statusEl.style.background = '#e0e0e0';
+                statusEl.style.color = '#666';
+                vidaEl.textContent = '-';
+                analiseEl.textContent = '';
+                return;
+            }
+
+            const media = valores.reduce((a, b) => a + b, 0) / valores.length;
+            const mmRef = parseFloat(document.getElementById('mmReferencia')?.value) || 16;
+            const desgaste = ((mmRef - media) / mmRef) * 100;
+            const diff = Math.max(...valores) - Math.min(...valores);
+
+            mediaEl.textContent = `${media.toFixed(1)} mm`;
+            desgasteEl.textContent = `${Math.min(100, Math.max(0, desgaste)).toFixed(0)}%`;
+
+            const temCritico = valores.some(v => v < 5);
+            const temAtencao = valores.some(v => v >= 5 && v < 8);
+
+            if (temCritico) {
+                statusEl.textContent = '🔴 CRÍTICO';
+                statusEl.style.background = '#ffcdd2';
+                statusEl.style.color = '#c62828';
+            } else if (temAtencao) {
+                statusEl.textContent = '🟡 ATENÇÃO';
+                statusEl.style.background = '#fff9c4';
+                statusEl.style.color = '#f57f17';
+            } else if (media > 0) {
+                statusEl.textContent = '🟢 Bom';
+                statusEl.style.background = '#c8e6c9';
+                statusEl.style.color = '#1b5e20';
+            }
+
+            if (media > 3.5) {
+                const mmPorKm = 0.0001;
+                const kmAte3_5 = (media - 3.5) / mmPorKm;
+                const diasAte3_5 = kmAte3_5 / 300;
+                vidaEl.textContent = `${Math.round(kmAte3_5).toLocaleString('pt-BR')}km\n${Math.round(diasAte3_5)}d`;
+            } else {
+                vidaEl.textContent = '🔴 Crítico';
+            }
+
+            let analise = '';
+            if (diff > 1) {
+                analise = '⚠️ <strong>Diferença > 1mm</strong> - Possível desgaste irregular ou problemas de alinhamento.';
+            } else if (temCritico) {
+                analise = '🔴 <strong>Pneu em estado crítico</strong> - Troca imediata recomendada.';
+            } else if (temAtencao) {
+                analise = '🟡 <strong>Monitorar pneu</strong> - Desgaste avançado, planejar substituição.';
+            } else if (media > 8) {
+                analise = '🟢 <strong>Pneu em bom estado</strong> - Mantenha a manutenção preventiva.';
+            }
+            analiseEl.innerHTML = analise;
+        }
+
+        function fecharModalFaixas() {
+            document.getElementById('modalFaixas').classList.remove('show');
+            veiculoFaixasId = null;
+            slotFaixasId = null;
+        }
+
+        function salvarFaixas() {
+            const pneus = getPneus();
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoFaixasId);
+            if (!veiculo || !veiculo.pneus) return;
+
+            const pneuId = veiculo.pneus[slotFaixasId];
+            if (!pneuId) return;
+
+            const pneu = pneus.find(p => p.id === pneuId);
+            if (!pneu) return;
+
+            const f1 = parseFloat(document.getElementById('faixaF1').value) || 0;
+            const f2 = parseFloat(document.getElementById('faixaF2').value) || 0;
+            const f3 = parseFloat(document.getElementById('faixaF3').value) || 0;
+            const f4 = parseFloat(document.getElementById('faixaF4').value) || 0;
+
+            if (!pneu.faixas) pneu.faixas = {};
+            pneu.faixas.f1 = f1;
+            pneu.faixas.f2 = f2;
+            pneu.faixas.f3 = f3;
+            pneu.faixas.f4 = f4;
+
+            pneu.ultimaMedicaoKm = veiculo.km;
+            pneu.ultimaMedicaoData = new Date().toISOString();
+            pneu.historicoMedicoes = pneu.historicoMedicoes || [];
+            pneu.historicoMedicoes.push({
+                data: new Date().toLocaleString('pt-BR'),
+                km: veiculo.km,
+                faixas: { f1, f2, f3, f4 },
+                mmRef: parseFloat(document.getElementById('mmReferencia')?.value) || 16
+            });
+
+            pneu.historico = pneu.historico || [];
+            pneu.historico.push({
+                data: new Date().toLocaleString('pt-BR'),
+                acao: 'Medição de Desgaste',
+                detalhes: `F1:${f1} F2:${f2} F3:${f3} F4:${f4} | KM:${veiculo.km}`
+            });
+
+            setPneus(pneus);
+            fecharModalFaixas();
+            renderCaminhao(veiculo);
+            renderVeiculos();
+            renderEstoque();
+            renderRelatorios();
+            
+            alert('✅ Medições salvas com sucesso!');
+        }
+
+        // ============================================
+        //  DRAG AND DROP
+        // ============================================
+        function iniciarDrag(e, veiculoId, slotId) {
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) return;
+            
+            const pneuId = veiculo.pneus[slotId];
+            if (!pneuId) return;
+
+            dragData = {
+                veiculoId: veiculoId,
+                slotOrigem: slotId,
+                pneuId: pneuId
+            };
+
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', slotId);
+        }
+
+        function permitirDrop(e) {
+            e.preventDefault();
+            e.target.closest('.pneu-slot')?.classList.add('drag-over');
+        }
+
+        function limparDrag(e) {
+            document.querySelectorAll('.pneu-slot').forEach(el => {
+                el.classList.remove('dragging', 'drag-over');
+            });
+        }
+
+        function finalizarDrop(e, veiculoId, slotDestino) {
+            e.preventDefault();
+            limparDrag(e);
+
+            if (!dragData) return;
+            if (dragData.veiculoId !== veiculoId) {
+                alert('Não é possível mover pneus entre veículos diferentes.');
+                dragData = null;
+                return;
+            }
+            if (dragData.slotOrigem === slotDestino) {
+                dragData = null;
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) {
+                dragData = null;
+                return;
+            }
+
+            const pneuDestinoId = veiculo.pneus[slotDestino];
+            const pneuOrigemId = veiculo.pneus[dragData.slotOrigem];
+            if (!pneuOrigemId) {
+                dragData = null;
+                return;
+            }
+
+            const pneus = getPneus();
+            const pneu = pneus.find(p => p.id === pneuOrigemId);
+            if (pneu) {
+                pneu.posicao = slotDestino.replace(/-/g, ' ');
+                pneu.historico = pneu.historico || [];
+                pneu.historico.push({
+                    data: new Date().toLocaleString('pt-BR'),
+                    acao: 'Movimentação',
+                    detalhes: `Movido de ${dragData.slotOrigem} para ${slotDestino}`
+                });
+                setPneus(pneus);
+            }
+
+            delete veiculo.pneus[dragData.slotOrigem];
+            if (pneuDestinoId) {
+                veiculo.pneus[dragData.slotOrigem] = pneuDestinoId;
+            }
+            veiculo.pneus[slotDestino] = pneuOrigemId;
+
+            const idx = veiculos.findIndex(v => v.id === veiculoId);
+            if (idx !== -1) {
+                veiculos[idx] = veiculo;
+                setVeiculos(veiculos);
+            }
+
+            dragData = null;
+            renderCaminhao(veiculo);
+            renderVeiculos();
+            renderEstoque();
+            renderRelatorios();
+        }
+
+        // ============================================
+        //  SELEÇÃO DE PNEU PARA INSTALAÇÃO
+        // ============================================
+        function abrirModalSelecao(veiculoId, slotId) {
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo) return;
+
+            veiculoInstalacaoId = veiculoId;
+            slotSelecionado = slotId;
+
+            const pneus = getPneus();
+            const pneusDisponiveis = pneus.filter(p => p.status === 'disponivel' || !p.status);
+
+            if (pneusDisponiveis.length === 0) {
+                alert('Não há pneus disponíveis no estoque.');
+                return;
+            }
+
+            const modal = document.getElementById('modalSelecao');
+            const lista = document.getElementById('listaPneusDisponiveis');
+            const info = document.getElementById('infoPneuSelecao');
+
+            const nomeSlot = slotId.replace(/-/g, ' ').replace(/estepe/g, 'Estepe');
+            info.textContent = `Selecione um pneu para: ${nomeSlot}`;
+
+            lista.innerHTML = pneusDisponiveis.map(p => `
+                <div class="item-disponivel" onclick="abrirModalInstalacao(${p.id})">
+                    <div class="info">
+                        <span class="nome">${p.nome}</span>
+                        <span class="detalhes">${p.tamanho} • ${p.tipo} • ${p.situacao} • R$ ${p.valor.toFixed(2)} • KM: ${(p.kmTotal || 0)}</span>
+                        <span class="dot-info">📋 DOT: ${p.dot || 'N/A'}</span>
+                    </div>
+                    <span class="qtd">1</span>
+                </div>
+            `).join('');
+
+            modal.classList.add('show');
+        }
+
+        function fecharModalSelecao() {
+            document.getElementById('modalSelecao').classList.remove('show');
+        }
+
+        function abrirModalInstalacao(pneuId) {
+            pneuSelecionadoId = pneuId;
+
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoInstalacaoId);
+            if (!veiculo) {
+                alert('Veículo não encontrado.');
+                return;
+            }
+            veiculoAtual = veiculo;
+
+            document.getElementById('infoInstalacao').textContent = 
+                `Instalando em: ${slotSelecionado.replace(/-/g, ' ')} - ${veiculo.marca} ${veiculo.modelo}`;
+            document.getElementById('kmInstalacao').value = veiculo.km;
+            document.getElementById('kmInstalacao').min = veiculo.km;
+
+            fecharModalSelecao();
+            document.getElementById('modalInstalacao').classList.add('show');
+        }
+
+        function fecharModalInstalacao() {
+            document.getElementById('modalInstalacao').classList.remove('show');
+            pneuSelecionadoId = null;
+        }
+
+        function confirmarInstalacao() {
+            if (!veiculoAtual || !slotSelecionado || !pneuSelecionadoId) {
+                alert('Erro: Dados incompletos.');
+                fecharModalInstalacao();
+                return;
+            }
+
+            const km = parseInt(document.getElementById('kmInstalacao').value);
+            if (!km || km < 0) {
+                alert('Por favor, informe uma quilometragem válida.');
+                return;
+            }
+
+            if (km < veiculoAtual.km) {
+                alert('A KM não pode ser menor que a atual do veículo.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx !== -1) {
+                veiculos[idx].km = km;
+                veiculoAtual.km = km;
+                setVeiculos(veiculos);
+            }
+
+            const pneus = getPneus();
+            const pneu = pneus.find(p => p.id === pneuSelecionadoId);
+            if (!pneu) {
+                alert('Pneu não encontrado.');
+                fecharModalInstalacao();
+                return;
+            }
+
+            pneu.kmTotal = pneu.kmTotal || 0;
+            pneu.status = 'instalado';
+            pneu.veiculoInstalado = veiculoAtual.placa;
+            pneu.veiculoId = veiculoAtual.id;
+            pneu.posicao = slotSelecionado.replace(/-/g, ' ');
+            pneu.kmInstalacao = km;
+
+            if (!veiculoAtual.pneus) veiculoAtual.pneus = {};
+            veiculoAtual.pneus[slotSelecionado] = pneuSelecionadoId;
+
+            pneu.historico = pneu.historico || [];
+            pneu.historico.push({
+                data: new Date().toLocaleString('pt-BR'),
+                acao: 'Instalação',
+                detalhes: `Instalado no veículo ${veiculoAtual.placa} na posição ${slotSelecionado} com KM ${km}`
+            });
+
+            setPneus(pneus);
+
+            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idxVeiculo !== -1) {
+                veiculos[idxVeiculo] = veiculoAtual;
+                setVeiculos(veiculos);
+            }
+
+            fecharModalInstalacao();
+            renderCaminhao(veiculoAtual);
+            renderVeiculos();
+            renderEstoque();
+            renderRelatorios();
+            
+            alert(`✅ Pneu ${pneu.nome} instalado com sucesso!`);
+        }
+
+        // ============================================
+        //  REMOÇÃO DE PNEU
+        // ============================================
+        let slotRemocao = null;
+
+        function abrirModalRemocao(veiculoId, slotId) {
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) return;
+
+            const pneuId = veiculo.pneus[slotId];
+            if (!pneuId) return;
+
+            const pneus = getPneus();
+            const pneu = pneus.find(p => p.id === pneuId);
+            if (!pneu) return;
+
+            slotRemocao = slotId;
+            veiculoAtual = veiculo;
+
+            const infoBox = document.getElementById('pneuRemocaoInfo');
+            infoBox.innerHTML = `
+                <div class="info-row"><span class="label">Pneu:</span> <span>${pneu.nome}</span></div>
+                <div class="info-row"><span class="label">DOT:</span> <span>${pneu.dot || 'N/A'}</span></div>
+                <div class="info-row"><span class="label">Tamanho:</span> <span>${pneu.tamanho}</span></div>
+                <div class="info-row"><span class="label">Situação:</span> <span>${pneu.situacao}</span></div>
+                <div class="info-row"><span class="label">Valor:</span> <span>R$ ${pneu.valor.toFixed(2)}</span></div>
+                <div class="info-row"><span class="label">KM Total:</span> <span>${(pneu.kmTotal || 0).toLocaleString('pt-BR')}</span></div>
+                <div class="info-row"><span class="label">Posição:</span> <span>${slotId.replace(/-/g, ' ')}</span></div>
+            `;
+
+            document.getElementById('kmRemocao').value = veiculo.km;
+            document.getElementById('kmRemocao').min = veiculo.km;
+            document.getElementById('destinoPneu').value = '';
+
+            document.getElementById('modalRemocao').classList.add('show');
+        }
+
+        function fecharModalRemocao() {
+            document.getElementById('modalRemocao').classList.remove('show');
+            slotRemocao = null;
+        }
+
+        function confirmarRemocao() {
+            const km = parseInt(document.getElementById('kmRemocao').value);
+            const destino = document.getElementById('destinoPneu').value;
+
+            if (!km || km < 0) {
+                alert('Por favor, informe uma KM válida.');
+                return;
+            }
+
+            if (km < veiculoAtual.km) {
+                alert('A KM não pode ser menor que a atual do veículo.');
+                return;
+            }
+
+            if (!destino) {
+                alert('Por favor, selecione o destino do pneu.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx !== -1) {
+                veiculos[idx].km = km;
+                veiculoAtual.km = km;
+                setVeiculos(veiculos);
+            }
+
+            const pneuId = veiculoAtual.pneus[slotRemocao];
+            if (!pneuId) {
+                alert('Erro: Pneu não encontrado.');
+                fecharModalRemocao();
+                return;
+            }
+
+            const pneus = getPneus();
+            const pneu = pneus.find(p => p.id === pneuId);
+            if (pneu) {
+                if (pneu.kmInstalacao !== null) {
+                    const kmRodado = Math.max(0, km - pneu.kmInstalacao);
+                    pneu.kmTotal = (pneu.kmTotal || 0) + kmRodado;
+                }
+                pneu.kmRemocao = km;
+                pneu.historico = pneu.historico || [];
+                pneu.historico.push({
+                    data: new Date().toLocaleString('pt-BR'),
+                    acao: 'Remoção',
+                    detalhes: `Removido do veículo ${veiculoAtual.placa} na posição ${slotRemocao} com KM ${km}. KM total: ${pneu.kmTotal}`
+                });
+            }
+
+            delete veiculoAtual.pneus[slotRemocao];
+
+            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idxVeiculo !== -1) {
+                veiculos[idxVeiculo] = veiculoAtual;
+                setVeiculos(veiculos);
+            }
+
+            if (!pneu) {
+                alert('Erro: Pneu não encontrado.');
+                fecharModalRemocao();
+                return;
+            }
+
+            const destinoLabels = {
+                'estoque_meia_vida': 'Voltou ao estoque (Meia Vida)',
+                'recapagem': 'Enviado para Recapagem',
+                'vulcanizacao': 'Enviado para Vulcanização',
+                'descarte': 'Descartado'
+            };
+
+            if (destino === 'estoque_meia_vida') {
+                pneu.situacao = 'meia vida';
+                pneu.status = 'disponivel';
+                pneu.veiculoInstalado = null;
+                pneu.veiculoId = null;
+                pneu.posicao = null;
+                pneu.kmInstalacao = null;
+            } else if (destino === 'recapagem') {
+                pneu.status = 'recapagem';
+                pneu.situacao = 'recapado';
+                pneu.veiculoInstalado = null;
+                pneu.veiculoId = null;
+                pneu.posicao = null;
+                pneu.kmInstalacao = null;
+                pneu.contadorRecapagens = (pneu.contadorRecapagens || 0) + 1;
+            } else if (destino === 'vulcanizacao') {
+                pneu.status = 'vulcanizacao';
+                pneu.situacao = 'vulcanizado';
+                pneu.veiculoInstalado = null;
+                pneu.veiculoId = null;
+                pneu.posicao = null;
+                pneu.kmInstalacao = null;
+                pneu.contadorVulcanizacoes = (pneu.contadorVulcanizacoes || 0) + 1;
+            } else if (destino === 'descarte') {
+                const descartados = getDescartados();
+                pneu.motivoDescarte = `Removido do veículo ${veiculoAtual.placa}`;
+                pneu.posicao = slotRemocao.replace(/-/g, ' ');
+                pneu.dataDescarte = new Date().toLocaleDateString('pt-BR');
+                descartados.push({...pneu});
+                setDescartados(descartados);
+                
+                const idxPneu = pneus.findIndex(p => p.id === pneuId);
+                if (idxPneu !== -1) {
+                    pneus.splice(idxPneu, 1);
+                }
+                setPneus(pneus);
+                renderDescartados();
+                fecharModalRemocao();
+                renderCaminhao(veiculoAtual);
+                renderVeiculos();
+                renderEstoque();
+                renderRelatorios();
+                atualizarLimitesUI();
+                alert(`✅ Pneu descartado com sucesso!`);
+                return;
+            }
+
+            setPneus(pneus);
+
+            fecharModalRemocao();
+            renderCaminhao(veiculoAtual);
+            renderVeiculos();
+            renderEstoque();
+            renderRelatorios();
+            atualizarLimitesUI();
+            alert(`✅ Pneu removido! Destino: ${destinoLabels[destino]}`);
+        }
+
+        // ============================================
+        //  SELEÇÃO DE PEÇA PARA INSTALAÇÃO
+        // ============================================
+        let veiculoPecaId = null;
+        let pecaSelecionadoId = null;
+
+        function abrirModalSelecaoPeca(veiculoId) {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.pecas && !isMaster()) {
+                alert('🔒 Você não tem permissão para instalar peças.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo) return;
+
+            veiculoPecaId = veiculoId;
+
+            const pecas = getPecas();
+            const pecasDisponiveis = pecas.filter(p => p.status === 'disponivel' || !p.status);
+
+            if (pecasDisponiveis.length === 0) {
+                alert('Não há peças disponíveis.');
+                return;
+            }
+
+            const modal = document.getElementById('modalSelecaoPeca');
+            const lista = document.getElementById('listaPecasDisponiveis');
+            const info = document.getElementById('infoPecaSelecao');
+
+            info.textContent = `Selecione uma peça para: ${veiculo.marca} ${veiculo.modelo}`;
+
+            lista.innerHTML = pecasDisponiveis.map(p => `
+                <div class="item-disponivel" onclick="abrirModalInstalacaoPeca(${p.id})">
+                    <div class="info">
+                        <span class="nome">${p.nome}</span>
+                        <span class="detalhes">${p.categoria} • R$ ${p.valor.toFixed(2)} • ${p.fornecedor || 'Sem fornecedor'}</span>
+                    </div>
+                    <span class="qtd">1</span>
+                </div>
+            `).join('');
+
+            modal.classList.add('show');
+        }
+
+        function fecharModalSelecaoPeca() {
+            document.getElementById('modalSelecaoPeca').classList.remove('show');
+        }
+
+        function abrirModalInstalacaoPeca(pecaId) {
+            pecaSelecionadoId = pecaId;
+
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === veiculoPecaId);
+            if (!veiculo) {
+                alert('Veículo não encontrado.');
+                return;
+            }
+            veiculoAtual = veiculo;
+
+            const pecas = getPecas();
+            const peca = pecas.find(p => p.id === pecaId);
+            if (!peca) {
+                alert('Peça não encontrada.');
+                return;
+            }
+
+            document.getElementById('infoInstalacaoPeca').textContent = 
+                `Instalando: ${peca.nome} - ${veiculo.marca} ${veiculo.modelo}`;
+            
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('dataInstalacaoPeca').value = hoje;
+            document.getElementById('posicaoInstalacaoPeca').value = '';
+
+            fecharModalSelecaoPeca();
+            document.getElementById('modalInstalacaoPeca').classList.add('show');
+        }
+
+        function fecharModalInstalacaoPeca() {
+            document.getElementById('modalInstalacaoPeca').classList.remove('show');
+            pecaSelecionadoId = null;
+        }
+
+        function confirmarInstalacaoPeca() {
+            if (!veiculoAtual || !pecaSelecionadoId) {
+                alert('Erro: Dados incompletos.');
+                fecharModalInstalacaoPeca();
+                return;
+            }
+
+            const dataInstalacao = document.getElementById('dataInstalacaoPeca').value;
+            const posicao = document.getElementById('posicaoInstalacaoPeca').value.trim();
+
+            if (!dataInstalacao) {
+                alert('Por favor, informe a data.');
+                return;
+            }
+
+            if (!posicao) {
+                alert('Por favor, informe a posição/eixo.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx !== -1) {
+                veiculos[idx] = veiculoAtual;
+                setVeiculos(veiculos);
+            }
+
+            const pecas = getPecas();
+            const peca = pecas.find(p => p.id === pecaSelecionadoId);
+            if (!peca) {
+                alert('Peça não encontrada.');
+                fecharModalInstalacaoPeca();
+                return;
+            }
+
+            peca.status = 'instalado';
+            peca.veiculoInstalado = veiculoAtual.placa;
+            peca.veiculoId = veiculoAtual.id;
+            peca.posicao = posicao;
+            peca.dataInstalacao = dataInstalacao;
+
+            if (!veiculoAtual.pecas) veiculoAtual.pecas = {};
+            veiculoAtual.pecas[Date.now()] = pecaSelecionadoId;
+
+            peca.historico = peca.historico || [];
+            peca.historico.push({
+                data: new Date().toLocaleString('pt-BR'),
+                acao: 'Instalação',
+                detalhes: `Instalado no veículo ${veiculoAtual.placa} em ${posicao} em ${dataInstalacao}`
+            });
+
+            setPecas(pecas);
+
+            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idxVeiculo !== -1) {
+                veiculos[idxVeiculo] = veiculoAtual;
+                setVeiculos(veiculos);
+            }
+
+            fecharModalInstalacaoPeca();
+            renderVeiculos();
+            renderPecas();
+            renderRelatorios();
+            
+            alert(`✅ Peça ${peca.nome} instalada com sucesso!`);
+        }
+
+        // ============================================
+        //  REMOVER PEÇA INSTALADA
+        // ============================================
+        function removerPecaInstalada(pecaId) {
+            if (!confirm('Tem certeza que deseja remover esta peça?')) return;
+
+            const pecas = getPecas();
+            const peca = pecas.find(p => p.id === pecaId);
+            if (!peca) return;
+
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === peca.veiculoId);
+            if (veiculo && veiculo.pecas) {
+                const chave = Object.keys(veiculo.pecas).find(k => veiculo.pecas[k] === pecaId);
+                if (chave) delete veiculo.pecas[chave];
+                setVeiculos(veiculos);
+            }
+
+            peca.status = 'disponivel';
+            peca.veiculoInstalado = null;
+            peca.veiculoId = null;
+            peca.posicao = null;
+            peca.dataInstalacao = null;
+            peca.historico = peca.historico || [];
+            peca.historico.push({
+                data: new Date().toLocaleString('pt-BR'),
+                acao: 'Remoção',
+                detalhes: `Removida do veículo ${veiculo ? veiculo.placa : 'N/A'}`
+            });
+
+            setPecas(pecas);
+            renderVeiculos();
+            renderPecas();
+            renderRelatorios();
+            
+            if (veiculo) {
+                renderCaminhao(veiculo);
+            }
+            
+            alert('✅ Peça removida com sucesso!');
+        }
+
+        // ============================================
+        //  MANUTENÇÃO SIMPLIFICADA
+        // ============================================
+        function abrirModalManutencaoSimplificada() {
+            if (!veiculoAtual) {
+                alert('Selecione um veículo primeiro.');
+                return;
+            }
+
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.manutencao && !isMaster()) {
+                alert('🔒 Você não tem permissão.');
+                return;
+            }
+
+            document.getElementById('modalManutencaoSimplificadaSubtitle').textContent = 
+                `Registre serviço para: ${veiculoAtual.marca} ${veiculoAtual.modelo}`;
+            
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('manutencaoSimpData').value = hoje;
+            document.getElementById('manutencaoSimpKm').value = veiculoAtual.km;
+            document.getElementById('manutencaoSimpKm').min = veiculoAtual.km;
+            
+            document.getElementById('manutencaoSimpTipo').value = '';
+            document.getElementById('manutencaoSimpLocal').value = '';
+            document.getElementById('manutencaoSimpValor').value = '';
+            document.getElementById('manutencaoSimpObs').value = '';
+            
+            document.getElementById('modalManutencaoSimplificada').classList.add('show');
+        }
+
+        function fecharModalManutencaoSimplificada() {
+            document.getElementById('modalManutencaoSimplificada').classList.remove('show');
+        }
+
+        function confirmarManutencaoSimplificada() {
+            const tipo = document.getElementById('manutencaoSimpTipo').value;
+            const data = document.getElementById('manutencaoSimpData').value;
+            const km = parseInt(document.getElementById('manutencaoSimpKm').value);
+            const local = document.getElementById('manutencaoSimpLocal').value.trim();
+            const valor = parseFloat(document.getElementById('manutencaoSimpValor').value) || 0;
+            const obs = document.getElementById('manutencaoSimpObs').value.trim();
+
+            if (!tipo) {
+                alert('Por favor, selecione o tipo de serviço.');
+                return;
+            }
+
+            if (!data) {
+                alert('Por favor, informe a data.');
+                return;
+            }
+
+            if (!km || km < 0) {
+                alert('Por favor, informe uma KM válida.');
+                return;
+            }
+
+            if (km < veiculoAtual.km) {
+                alert('A KM não pode ser menor que a atual.');
+                return;
+            }
+
+            if (!local) {
+                alert('Por favor, informe o local.');
+                return;
+            }
+
+            if (!valor || valor <= 0) {
+                alert('Por favor, informe o valor.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx !== -1) {
+                veiculos[idx].km = km;
+                if (!veiculos[idx].servicos) veiculos[idx].servicos = [];
+                veiculos[idx].servicos.push({
+                    tipo: tipo,
+                    data: data,
+                    km: km,
+                    local: local,
+                    valor: valor,
+                    obs: obs,
+                    dataRegistro: new Date().toLocaleString('pt-BR')
+                });
+                setVeiculos(veiculos);
+                veiculoAtual = veiculos[idx];
+            }
+
+            fecharModalManutencaoSimplificada();
+            renderManutencao();
+            renderVeiculos();
+            renderRelatorios();
+            
+            if (veiculoAtual) {
+                renderCaminhao(veiculoAtual);
+                renderServicosAlinhamento(veiculoAtual);
+            }
+            
+            alert('✅ Serviço registrado com sucesso!');
+        }
+
+        // ============================================
+        //  COMBINAR VEÍCULOS
+        // ============================================
+        function abrirModalCombinar() {
+            if (!veiculoAtual) {
+                alert('Selecione um veículo primeiro.');
+                return;
+            }
+
+            if (veiculoAtual.combinadoCom) {
+                alert('Este veículo já está combinado.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const disponiveis = veiculos.filter(v => 
+                v.id !== veiculoAtual.id && 
+                !v.combinadoCom && 
+                v.status === 'ativo'
+            );
+
+            if (disponiveis.length === 0) {
+                alert('Não há veículos disponíveis para combinar.');
+                return;
+            }
+
+            const select = document.getElementById('combinarVeiculoSelect');
+            select.innerHTML = '<option value="">Selecione...</option>';
+            disponiveis.forEach(v => {
+                const tipoLabel = {
+                    'cavalo_3_eixos': 'Cavalo - 3 Eixos',
+                    '4_eixos': '4 Eixos',
+                    'carreta': 'Carreta'
+                } [v.tipo] || v.tipo;
+                select.innerHTML += `<option value="${v.id}">${v.placa} - ${v.marca} ${v.modelo} (${tipoLabel})</option>`;
+            });
+
+            document.getElementById('modalCombinar').classList.add('show');
+        }
+
+        function fecharModalCombinar() {
+            document.getElementById('modalCombinar').classList.remove('show');
+        }
+
+        function confirmarCombinar() {
+            const veiculoId = parseInt(document.getElementById('combinarVeiculoSelect').value);
+            if (!veiculoId) {
+                alert('Selecione um veículo.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const veiculo1 = veiculos.find(v => v.id === veiculoAtual.id);
+            const veiculo2 = veiculos.find(v => v.id === veiculoId);
+
+            if (!veiculo1 || !veiculo2) {
+                alert('Veículo não encontrado.');
+                return;
+            }
+
+            const tipos = [veiculo1.tipo, veiculo2.tipo];
+            const temCavalo = tipos.includes('cavalo_3_eixos');
+            const temCarreta = tipos.includes('carreta');
+            
+            if (!(temCavalo && temCarreta)) {
+                alert('Para combinar, um veículo deve ser "Cavalo - 3 Eixos" e o outro "Carreta".');
+                return;
+            }
+
+            let cavalo, carreta;
+            if (veiculo1.tipo === 'cavalo_3_eixos') {
+                cavalo = veiculo1;
+                carreta = veiculo2;
+            } else {
+                cavalo = veiculo2;
+                carreta = veiculo1;
+            }
+
+            cavalo.combinadoCom = carreta.id;
+            cavalo.combinadoTipo = 'cavalo';
+            carreta.combinadoCom = cavalo.id;
+            carreta.combinadoTipo = 'carreta';
+
+            setVeiculos(veiculos);
+            fecharModalCombinar();
+            renderVeiculos();
+            renderManutencao();
+            
+            alert(`✅ Veículos combinados: ${cavalo.placa} + ${carreta.placa}`);
+        }
+
+        function desvincularVeiculos(id) {
+            if (!confirm('Deseja desvincular este veículo?')) return;
+
+            const veiculos = getVeiculos();
+            const veiculo = veiculos.find(v => v.id === id);
+            if (!veiculo) return;
+
+            const combinado = veiculos.find(v => v.id === veiculo.combinadoCom);
+            if (combinado) {
+                combinado.combinadoCom = null;
+                combinado.combinadoTipo = null;
+            }
+            veiculo.combinadoCom = null;
+            veiculo.combinadoTipo = null;
+
+            setVeiculos(veiculos);
+            fecharModalCaminhao();
+            renderVeiculos();
+            renderManutencao();
+            
+            alert('✅ Veículos desvinculados!');
+        }
+
+        // ============================================
+        //  VENDER/SINISTRO VEÍCULO
+        // ============================================
+        function abrirModalVenderVeiculo() {
+            if (!veiculoAtual) {
+                alert('Selecione um veículo primeiro.');
+                return;
+            }
+
+            if (veiculoAtual.status === 'vendido') {
+                alert('Este veículo já foi vendido/sinistrado.');
+                return;
+            }
+
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('venderData').value = hoje;
+            document.getElementById('venderTipo').value = '';
+            document.getElementById('venderValor').value = '';
+            document.getElementById('venderObs').value = '';
+
+            document.getElementById('modalVenderVeiculo').classList.add('show');
+        }
+
+        function fecharModalVenderVeiculo() {
+            document.getElementById('modalVenderVeiculo').classList.remove('show');
+        }
+
+        function confirmarVenderVeiculo() {
+            const tipo = document.getElementById('venderTipo').value;
+            const data = document.getElementById('venderData').value;
+            const valor = parseFloat(document.getElementById('venderValor').value) || 0;
+            const obs = document.getElementById('venderObs').value.trim();
+
+            if (!tipo) {
+                alert('Selecione o tipo (Venda ou Sinistro).');
+                return;
+            }
+
+            if (!data) {
+                alert('Informe a data.');
+                return;
+            }
+
+            const veiculos = getVeiculos();
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx === -1) {
+                alert('Veículo não encontrado.');
+                return;
+            }
+
+            veiculos[idx].status = 'vendido';
+            veiculos[idx].historicoVenda = {
+                tipo: tipo,
+                data: data,
+                valor: valor,
+                obs: obs || 'Sem observações',
+                dataRegistro: new Date().toLocaleString('pt-BR')
+            };
+
+            setVeiculos(veiculos);
+            fecharModalVenderVeiculo();
+            renderVeiculos();
+            renderManutencao();
+            
+            alert(`✅ Veículo marcado como ${tipo === 'venda' ? 'Vendido' : 'Sinistro'}!`);
+        }
 
         // ============================================
         //  MASTER CONTROL - COM PLANOS
@@ -3951,10 +8135,6 @@
             });
 
             const grid = document.getElementById('masterGrid');
-
-            // Destacar plano ativo do usuário logado
-            const userLogado = getCurrentUser();
-            const planoAtual = userLogado?.plano || 'basico';
 
             if (usersFiltrados.length === 0) {
                 grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><p>Nenhuma empresa encontrada.</p></div>';
@@ -4084,7 +8264,7 @@
         }
 
         // ============================================
-        //  FUNÇÕES DE GERAÇÃO DE PDF (resumidas)
+        //  FUNÇÕES DE GERAÇÃO DE PDF
         // ============================================
         function gerarPDFPneus() {
             let pneus = window._pneusFiltrados || getPneus();
@@ -4680,6 +8860,42 @@
             }
         });
 
+        document.getElementById('modalCaminhao').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalCaminhao();
+        });
+        document.getElementById('modalSelecao').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalSelecao();
+        });
+        document.getElementById('modalInstalacao').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalInstalacao();
+        });
+        document.getElementById('modalRemocao').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalRemocao();
+        });
+        document.getElementById('modalEdicao').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalEdicao();
+        });
+        document.getElementById('modalSelecaoPeca').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalSelecaoPeca();
+        });
+        document.getElementById('modalInstalacaoPeca').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalInstalacaoPeca();
+        });
+        document.getElementById('modalManutencaoSimplificada').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalManutencaoSimplificada();
+        });
+        document.getElementById('modalCombinar').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalCombinar();
+        });
+        document.getElementById('modalVenderVeiculo').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalVenderVeiculo();
+        });
+        document.getElementById('modalCadastroMultiplo').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalCadastroMultiplo();
+        });
+        document.getElementById('modalFaixas').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalFaixas();
+        });
         document.getElementById('modalDesgasteDetalhes').addEventListener('click', function(e) {
             if (e.target === this) fecharModalDesgasteDetalhes();
         });
