@@ -3133,6 +3133,316 @@
         }
 
         // ============================================
+        //  RENDER CAMINHÃO - CORRIGIDO
+        // ============================================
+        let veiculoAtual = null;
+        let slotSelecionado = null;
+        let pneuSelecionadoId = null;
+        let veiculoInstalacaoId = null;
+        let modoEdicaoKm = false;
+        let dragData = null;
+
+        function abrirModalCaminhao(id) {
+            if (!verificarEAcessar()) return;
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === id);
+            if (!veiculo) return;
+
+            if (veiculo.combinadoCom) {
+                const combinado = veiculos.find(v => v.id === veiculo.combinadoCom);
+                if (combinado) {
+                    veiculoAtual = {
+                        ...veiculo,
+                        pneus: { ...veiculo.pneus, ...combinado.pneus },
+                        estruturaEixos: [...veiculo.estruturaEixos, ...combinado.estruturaEixos],
+                        eixos: veiculo.eixos + combinado.eixos,
+                        placa: `${veiculo.placa} + ${combinado.placa}`,
+                        _combinadoOriginal: combinado,
+                        _idOriginal: veiculo.id
+                    };
+                    document.getElementById('modoCombinadoInfo').style.display = 'block';
+                    document.getElementById('modoCombinadoInfo').innerHTML = `
+                        🔗 Combinado com <strong>${combinado.marca} ${combinado.modelo}</strong> (${combinado.placa})
+                        <button class="btn-desvincular" onclick="desvincularVeiculos(${veiculo.id})">Desvincular</button>
+                    `;
+                } else { veiculoAtual = veiculo; document.getElementById('modoCombinadoInfo').style.display = 'none'; }
+            } else { veiculoAtual = veiculo; document.getElementById('modoCombinadoInfo').style.display = 'none'; }
+
+            const totalPecas = (dadosCache.pecas || []).filter(p => p.veiculoId === id && p.status === 'instalado').length;
+            document.getElementById('modalVeiculoTitle').textContent = `${veiculo.marca} ${veiculo.modelo} - ${veiculo.placa}  |  🔧 ${totalPecas} peça(s)  |  🚛 ${veiculo.eixos} eixos`;
+            atualizarInfoKm(veiculoAtual);
+
+            let resumoHtml = '';
+            let alertas = [];
+            if (veiculo.servicos && veiculo.servicos.length > 0) {
+                const ultimo = veiculo.servicos[veiculo.servicos.length - 1];
+                const diasPassados = Math.floor((Date.now() - new Date(ultimo.data).getTime()) / (1000 * 60 * 60 * 24));
+                if (diasPassados > 180) alertas.push(`<span class="alerta">⚠️ ${ultimo.tipo} há ${diasPassados}d</span>`);
+                else if (diasPassados > 90) alertas.push(`<span class="atencao">🟡 ${ultimo.tipo} há ${diasPassados}d</span>`);
+                else alertas.push(`<span class="ok">✅ ${ultimo.tipo} há ${diasPassados}d</span>`);
+            }
+            if (veiculo.pneus) {
+                const pneus = dadosCache.pneus || [];
+                Object.values(veiculo.pneus).forEach(pneuId => {
+                    const pneu = pneus.find(p => p.id === pneuId);
+                    if (pneu) {
+                        if (verificarAlertaDesgaste(pneu)) alertas.push(`<span class="alerta">🔴 ${pneu.nome} - crítico</span>`);
+                        const diff = calcularDiferencaFaixas(pneu);
+                        if (diff > 1) alertas.push(`<span class="atencao">🟡 ${pneu.nome} - dif > 1mm</span>`);
+                    }
+                });
+            }
+            resumoHtml = alertas.length === 0 ? '<span class="ok">✅ Sem alertas</span>' : alertas.join(' ');
+            document.getElementById('modalInfoResumo').innerHTML = resumoHtml;
+
+            document.getElementById('modalCaminhao').classList.add('show');
+            renderCaminhao(veiculoAtual);
+            renderServicosAlinhamento(veiculoAtual);
+        }
+
+        function atualizarInfoKm(veiculo) {
+            const kmAtual = veiculo.km || 0;
+            document.getElementById('inputEdicaoKm').value = kmAtual;
+            document.querySelector('.km-valor').textContent = `📊 KM: ${kmAtual.toLocaleString('pt-BR')}`;
+            modoEdicaoKm = false;
+            document.getElementById('inputEdicaoKm').classList.remove('visible');
+            document.querySelector('.btn-confirmar-km').classList.remove('visible');
+            document.querySelector('.btn-cancelar-km').classList.remove('visible');
+            document.querySelector('.btn-editar-km').style.display = 'inline';
+        }
+
+        function toggleEdicaoKm() {
+            const input = document.getElementById('inputEdicaoKm');
+            const confirmBtn = document.querySelector('.btn-confirmar-km');
+            const cancelBtn = document.querySelector('.btn-cancelar-km');
+            const editBtn = document.querySelector('.btn-editar-km');
+            if (modoEdicaoKm) { cancelarEdicaoKm(); return; }
+            modoEdicaoKm = true;
+            input.classList.add('visible');
+            confirmBtn.classList.add('visible');
+            cancelBtn.classList.add('visible');
+            editBtn.style.display = 'none';
+            input.focus();
+            input.select();
+        }
+
+        function cancelarEdicaoKm() {
+            const input = document.getElementById('inputEdicaoKm');
+            const confirmBtn = document.querySelector('.btn-confirmar-km');
+            const cancelBtn = document.querySelector('.btn-cancelar-km');
+            const editBtn = document.querySelector('.btn-editar-km');
+            modoEdicaoKm = false;
+            input.classList.remove('visible');
+            confirmBtn.classList.remove('visible');
+            cancelBtn.classList.remove('visible');
+            editBtn.style.display = 'inline';
+            if (veiculoAtual) input.value = veiculoAtual.km || 0;
+        }
+
+        async function confirmarEdicaoKm() {
+            const input = document.getElementById('inputEdicaoKm');
+            const novaKm = parseInt(input.value);
+            if (isNaN(novaKm) || novaKm < 0) { alert('Por favor, informe uma quilometragem válida.'); return; }
+            if (novaKm < (veiculoAtual.km || 0)) {
+                if (!confirm('A nova KM é menor que a atual. Isso pode afetar os pneus. Continuar?')) return;
+            }
+
+            let veiculos = dadosCache.veiculos || [];
+            const veiculoOriginal = veiculos.find(v => v.id === (veiculoAtual._idOriginal || veiculoAtual.id));
+            if (veiculoOriginal) {
+                const kmAntigo = veiculoOriginal.km || 0;
+                const pneusAtualizados = [];
+                veiculoOriginal.km = novaKm;
+                if (veiculoOriginal.pneus) {
+                    let pneus = dadosCache.pneus || [];
+                    Object.values(veiculoOriginal.pneus).forEach(pneuId => {
+                        const pneu = pneus.find(p => p.id === pneuId);
+                        if (pneu && pneu.kmInstalacao !== null) {
+                            const kmAntigoPneu = pneu.kmTotal || 0;
+                            if (novaKm > kmAntigo) pneu.kmTotal = (pneu.kmTotal || 0) + (novaKm - kmAntigo);
+                            else if (novaKm < kmAntigo) pneu.kmTotal = Math.max(0, (pneu.kmTotal || 0) - (kmAntigo - novaKm));
+                            pneusAtualizados.push({ id: pneu.id, kmAntigo: kmAntigoPneu });
+                            pneu.historico = pneu.historico || [];
+                            pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Atualização KM', detalhes: `KM do veículo atualizada de ${kmAntigo} para ${novaKm}. KM Total do pneu: ${pneu.kmTotal}` });
+                        }
+                    });
+                    dadosCache.pneus = pneus;
+                    await setPneus(pneus);
+                }
+                dadosCache.veiculos = veiculos;
+                await setVeiculos(veiculos);
+                veiculoAtual.km = novaKm;
+                await adicionarHistorico('editar_km', { veiculoId: veiculoOriginal.id, kmAntigo: kmAntigo, pneusAtualizados: pneusAtualizados });
+                if (veiculoAtual._combinadoOriginal) {
+                    const combinadoOriginal = veiculos.find(v => v.id === veiculoAtual._combinadoOriginal.id);
+                    if (combinadoOriginal) { combinadoOriginal.km = novaKm; dadosCache.veiculos = veiculos; await setVeiculos(veiculos); }
+                }
+            }
+
+            modoEdicaoKm = false;
+            document.querySelector('.btn-editar-km').style.display = 'inline';
+            document.querySelector('.km-valor').textContent = `📊 KM: ${novaKm.toLocaleString('pt-BR')}`;
+            document.getElementById('inputEdicaoKm').classList.remove('visible');
+            document.querySelector('.btn-confirmar-km').classList.remove('visible');
+            document.querySelector('.btn-cancelar-km').classList.remove('visible');
+
+            renderCaminhao(veiculoAtual);
+            await renderVeiculos();
+            await renderEstoque();
+            await renderRelatorios();
+            alert(`✅ KM atualizada para ${novaKm.toLocaleString('pt-BR')}. KM dos pneus atualizada.`);
+        }
+
+        function fecharModalCaminhao() {
+            document.getElementById('modalCaminhao').classList.remove('show');
+            veiculoAtual = null;
+            slotSelecionado = null;
+            pneuSelecionadoId = null;
+            veiculoInstalacaoId = null;
+            dragData = null;
+            modoEdicaoKm = false;
+            document.getElementById('modoCombinadoInfo').style.display = 'none';
+        }
+
+        function renderServicosAlinhamento(veiculo) {
+            const container = document.getElementById('listaServicosAlinhamento');
+            const servicos = veiculo.servicos || [];
+            if (servicos.length === 0) { container.innerHTML = '<div style="color:#999;font-style:italic;text-align:center;padding:8px;font-size:13px;">Nenhum serviço registrado</div>'; return; }
+            let html = '';
+            servicos.sort((a, b) => new Date(b.data) - new Date(a.data)).forEach(s => {
+                const diasPassados = Math.floor((Date.now() - new Date(s.data).getTime()) / (1000 * 60 * 60 * 24));
+                let alertaClass = 'ok', alertaText = '✅ OK';
+                if (diasPassados > 180) { alertaClass = 'critico'; alertaText = `⚠️ ${diasPassados}d`; }
+                else if (diasPassados > 90) { alertaClass = 'atencao'; alertaText = `🟡 ${diasPassados}d`; }
+                else { alertaText = `✅ ${diasPassados}d`; }
+                html += `<div class="servico-item"><div class="servico-info"><strong>${s.tipo}</strong><span class="data">${s.data} • ${s.km}km</span><span class="alerta-tempo ${alertaClass}">${alertaText}</span></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;"><span style="font-size:13px;color:#555;">R$ ${s.valor.toFixed(2)}</span>${s.local ? `<span style="font-size:12px;color:#999;">${s.local}</span>` : ''}</div></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // ============================================
+        //  RENDER CAMINHÃO - FUNÇÃO CORRIGIDA
+        // ============================================
+        function renderCaminhao(veiculo) {
+            const container = document.getElementById('caminhaoContainer');
+            const estrutura = veiculo.estruturaEixos || [];
+            if (estrutura.length === 0) { 
+                container.innerHTML = '<div class="empty-state"><p>Estrutura de eixos não definida.</p></div>'; 
+                return; 
+            }
+
+            let html = `<div class="caminhao">`;
+            
+            estrutura.forEach((eixo, index) => {
+                const eixoNome = eixo.nome || `${index + 1}° Eixo`;
+                const qtd = eixo.qtd || 4;
+                const tipo = eixo.tipo || 'traseiro';
+                
+                // Gerar slots baseado na quantidade de pneus do eixo
+                let slots = [];
+                if (qtd === 2) {
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-esquerdo`, label: 'E' });
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-direito`, label: 'D' });
+                } else if (qtd === 4) {
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-esquerdo-externo`, label: 'EE' });
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-esquerdo-interno`, label: 'EI' });
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-direito-interno`, label: 'DI' });
+                    slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-direito-externo`, label: 'DE' });
+                } else {
+                    for (let i = 1; i <= qtd; i++) {
+                        slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-${i}`, label: `${i}` });
+                    }
+                }
+                
+                const isDianteiro = tipo === 'dianteiro';
+                const eixoClass = isDianteiro ? 'eixo-dianteiro' : '';
+                
+                html += `<div class="eixos-row"><div class="eixo ${eixoClass}">`;
+                html += `<div class="eixo-label">${isDianteiro ? '🚛 ' : ''}${eixoNome}</div>`;
+                html += `<div class="eixo-pneus">`;
+                
+                slots.forEach(slot => {
+                    const pneuId = veiculo.pneus ? veiculo.pneus[slot.id] : null;
+                    html += renderPneuSlot(veiculo, slot.id, pneuId, false);
+                });
+                
+                html += `</div></div></div>`;
+            });
+
+            // Estepes
+            html += `<div class="estepe-section"><div class="eixos-row"><div class="eixo"><div class="eixo-label" style="color:#f57c00;">🟧 Estepes</div><div class="eixo-pneus">`;
+            html += renderPneuSlot(veiculo, 'estepe-1', veiculo.pneus ? veiculo.pneus['estepe-1'] : null, true);
+            html += renderPneuSlot(veiculo, 'estepe-2', veiculo.pneus ? veiculo.pneus['estepe-2'] : null, true);
+            html += renderPneuSlot(veiculo, 'estepe-3', veiculo.pneus ? veiculo.pneus['estepe-3'] : null, true);
+            html += renderPneuSlot(veiculo, 'estepe-4', veiculo.pneus ? veiculo.pneus['estepe-4'] : null, true);
+            html += `</div></div></div></div>`;
+
+            // Peças instaladas
+            const pecas = dadosCache.pecas || [];
+            const pecasInstaladas = pecas.filter(p => p.veiculoId === (veiculo._idOriginal || veiculo.id) && p.status === 'instalado');
+            html += `<div style="width:100%;margin-top:20px;"><div class="pecas-titulo-modal"><span>🔧 Peças Instaladas</span><span>${pecasInstaladas.length}</span></div>`;
+            if (pecasInstaladas.length === 0) {
+                html += `<div class="sem-pecas-modal">Nenhuma peça instalada.<span>Clique em 🔧 no card do veículo para instalar</span></div>`;
+            } else {
+                html += `<div class="pecas-instaladas-grid">`;
+                pecasInstaladas.forEach(p => {
+                    html += `<div class="peca-instalada-item"><div class="nome">${p.nome}</div><div class="detalhe"><strong>Categoria:</strong> ${p.categoria}</div><div class="detalhe"><strong>Valor:</strong> R$ ${p.valor.toFixed(2)}</div><div class="detalhe"><strong>Posição:</strong> ${p.posicao||'N/A'}</div><div class="detalhe"><strong>Instalado:</strong> ${p.dataInstalacao||'N/A'}</div><div class="detalhe"><strong>Veículo:</strong> ${p.veiculoInstalado||'N/A'}</div><button class="btn-remover-peca" onclick="event.stopPropagation(); removerPecaInstalada(${p.id})">🗑️ Remover</button></div>`;
+                });
+                html += `</div>`;
+            }
+            html += `</div></div>`;
+            
+            container.innerHTML = html;
+        }
+
+        // ============================================
+        //  RENDER PNEU SLOT - FUNÇÃO CORRIGIDA
+        // ============================================
+        function renderPneuSlot(veiculo, slotId, pneuId, isEstepe = false) {
+            const pneus = dadosCache.pneus || [];
+            const pneu = pneuId ? pneus.find(p => p.id === pneuId) : null;
+            const slotClass = isEstepe ? 'estepe' : '';
+            const ocupadoClass = pneu ? 'ocupado' : '';
+            const alertaClass = pneu && verificarAlertaDesgaste(pneu) ? 'alerta' : '';
+
+            if (pneu) {
+                const faixas = pneu.faixas || {};
+                const temAlerta = verificarAlertaDesgaste(pneu);
+                const diff = calcularDiferencaFaixas(pneu);
+                const mmRef = parseFloat(document.getElementById('mmReferencia')?.value) || 16;
+                const vidaRestante = estimarVidaRestante(pneu, mmRef);
+                let tipoDisplay = pneu.tipo;
+                if (pneu.tipoRecapagem) { 
+                    const tipoMap = { 
+                        'banda_leve': 'Banda Leve', 
+                        'misto': 'Misto', 
+                        'borrachudo': 'Borrachudo', 
+                        'outros': pneu.tipoRecapagemOutros || 'Outros' 
+                    }; 
+                    tipoDisplay = tipoMap[pneu.tipoRecapagem] || pneu.tipoRecapagem; 
+                }
+                const contadorRecap = pneu.contadorRecapagens || 0;
+
+                return `<div class="pneu-slot ${ocupadoClass} ${slotClass} ${alertaClass}" draggable="true" ondragstart="iniciarDrag(event, ${veiculo.id}, '${slotId}')" ondragend="limparDrag(event)" onclick="abrirModalFaixas(${veiculo.id}, '${slotId}')">
+                    <div class="pneu-info">${pneu.nome}${contadorRecap > 0 ? `<span style="font-size:7px;background:#ff8a65;color:#fff;padding:0 5px;border-radius:6px;display:inline-block;margin-left:2px;">${contadorRecap}x</span>` : ''}</div>
+                    <div class="pneu-detalhes" style="font-size:8px;color:#333;">${pneu.tamanho}</div>
+                    <div class="pneu-detalhes" style="font-size:7px;color:#888;">${tipoDisplay}</div>
+                    <div class="pneu-detalhes" style="font-size:6px;color:#999;">${pneu.dot||''}</div>
+                    <div class="pneu-detalhes" style="font-size:6px;color:#666;">F1:${faixas.f1||0} F2:${faixas.f2||0}</div>
+                    <div class="pneu-detalhes" style="font-size:6px;color:#666;">F3:${faixas.f3||0} F4:${faixas.f4||0}</div>
+                    ${temAlerta ? '<div style="font-size:7px;color:#c62828;font-weight:700;">⚠️</div>' : ''}
+                    ${diff > 1 ? '<div style="font-size:6px;color:#f57c00;">📏</div>' : ''}
+                    ${vidaRestante && vidaRestante.km > 0 ? `<div class="pneu-vida-restante">${vidaRestante.km.toLocaleString('pt-BR')}km</div>` : ''}
+                    <button class="remove-pneu" onclick="event.stopPropagation(); abrirModalRemocao(${veiculo.id}, '${slotId}')">✕</button>
+                </div>`;
+            } else {
+                return `<div class="pneu-slot ${slotClass}" ondragover="permitirDrop(event)" ondragleave="limparDrag(event)" ondrop="finalizarDrop(event, ${veiculo.id}, '${slotId}')" onclick="abrirModalSelecao(${veiculo.id}, '${slotId}')">
+                    <span style="font-size:18px;">➕</span>${isEstepe ? '<div style="font-size:7px;color:#f57c00;">Estepe</div>' : ''}
+                </div>`;
+            }
+        }
+
+        // ============================================
         //  MASTER - RENDER EMPRESAS CADASTRADAS
         // ============================================
         async function renderMaster() {
@@ -3307,7 +3617,9 @@
         console.log('✅ Sistema atualizado com sucesso!');
         console.log('🔥 Integrado com Firebase!');
         console.log('📋 Cada empresa tem seu próprio estoque separado!');
-        console.log('📋 VEÍCULOS: Bug dos eixos em veículos combinados corrigido');
+        console.log('📋 VEÍCULOS: Estrutura de eixos corrigida para cada tipo de veículo');
+        console.log('📋 VEÍCULOS: Dianteiro = 2 pneus (E/D), Tração/Truck = 4 pneus (EE/EI/DI/DE)');
+        console.log('📋 VEÍCULOS: Carreta = 4 pneus por eixo numerados');
         console.log('📋 VEÍCULOS: Remoção de pneu mostra placa e eixo de origem');
         console.log('📋 VEÍCULOS: KM atualizada desconta da vida restante dos pneus');
         console.log('📋 PNEUS: Filtro por DOT e Placa');
