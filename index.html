@@ -10,9 +10,12 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
     <style>
+        /* ===== RESET E BASE ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .top-bar { background: #c62828; height: 4px; width: 100%; position: fixed; top: 0; left: 0; z-index: 9999; }
         body { background: #f0f2f5; min-height: 100vh; padding-top: 4px; font-size: 14px; }
+        
+        /* ===== HEADER ===== */
         .header { background: linear-gradient(135deg, #1a3a5c, #2a5f7a); color: white; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .header-title h1 { font-size: 18px; font-weight: 300; cursor: pointer; padding: 4px 10px; border-radius: 6px; transition: background 0.3s; border: 2px solid transparent; }
@@ -32,6 +35,8 @@
         .btn-logout { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.3s; font-size: 13px; }
         .btn-logout:hover { background: rgba(255,255,255,0.25); }
         .container { max-width: 1400px; margin: 0 auto; padding: 12px 15px; }
+
+        /* ===== AUTH ===== */
         .auth-container { max-width: 400px; margin: 40px auto; background: white; border-radius: 16px; padding: 30px 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
         .auth-container h2 { color: #1a3a5c; margin-bottom: 6px; font-size: 24px; }
         .auth-container .subtitle { color: #666; font-size: 13px; margin-bottom: 20px; }
@@ -51,8 +56,12 @@
         .btn-recuperar:hover { color: #1a3a5c; }
         .recuperacao-container { margin-top: 10px; padding: 12px; background: #f0f7ff; border-radius: 8px; display: none; }
         .recuperacao-container.show { display: block; }
+
+        /* ===== APP ===== */
         .app-container { display: none; }
         .app-container.show { display: block; }
+
+        /* ===== TABS ===== */
         .tabs { display: flex; gap: 3px; background: white; border-radius: 10px 10px 0 0; padding: 5px 10px 0 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.04); overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
         .tabs::-webkit-scrollbar { display: none; }
         .tabs button { background: none; border: none; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; white-space: nowrap; flex-shrink: 0; }
@@ -62,6 +71,8 @@
         .tab-content { background: white; border-radius: 0 0 10px 10px; padding: 16px 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); min-height: 300px; }
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
+
+        /* ===== FORMS ===== */
         .form-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
         .form-group { display: flex; flex-direction: column; gap: 4px; }
         .form-group.full { grid-column: 1 / -1; }
@@ -72,6 +83,8 @@
         .form-group .input-group input { flex: 1; min-width: 100px; }
         .form-actions { grid-column: 1 / -1; display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
         .form-actions button { flex: 1; min-width: 100px; padding: 10px 16px; font-size: 14px; }
+
+        /* ===== BUTTONS ===== */
         .btn-success { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.3s; font-size: 14px; }
         .btn-success:hover { background: #1b5e20; }
         .btn-secondary { background: #e8ecf0; color: #333; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.3s; font-size: 14px; }
@@ -100,10 +113,14 @@
         .btn-undo:hover { background: #4a148c; }
         .btn-small { padding: 4px 10px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.3s; }
         .hidden { display: none !important; }
+
+        /* ===== HEADERS ===== */
         .estoque-header, .veiculos-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 8px; }
         .estoque-header h2, .veiculos-header h2 { color: #1a3a5c; font-size: 18px; }
         .estoque-stats, .veiculos-stats { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
         .estoque-stats span, .veiculos-stats span { background: #f0f2f5; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; color: #333; }
+
+        /* ===== FILTROS ===== */
         .filtros-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; padding: 12px; background: #f8f9fa; border-radius: 8px; align-items: flex-end; }
         .filtros-container .form-group { flex: 1; min-width: 120px; margin-bottom: 0; }
         .filtros-container .form-group label { font-size: 11px; color: #666; }
@@ -112,11 +129,15 @@
         .filtros-container .btn-limpar:hover { background: #d0d4d9; }
         .filtros-container .btn-pdf-parcial { padding: 6px 16px; background: #c62828; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.3s; height: 34px; font-size: 12px; }
         .filtros-container .btn-pdf-parcial:hover { background: #b71c1c; }
+
+        /* ===== TABLES ===== */
         .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -4px; }
         table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 600px; }
         table th { background: #f0f2f5; color: #333; font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 2px solid #dce0e5; font-size: 11px; white-space: nowrap; }
         table td { padding: 8px 10px; border-bottom: 1px solid #e8ecf0; vertical-align: middle; font-size: 12px; }
         table tr:hover td { background: #f8f9fa; }
+
+        /* ===== BADGES ===== */
         .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; }
         .badge-novo { background: #c8e6c9; color: #1b5e20; }
         .badge-meia { background: #fff9c4; color: #f57f17; }
@@ -139,6 +160,8 @@
         .contador-badge { background: #ffd700; color: #1a3a5c; padding: 1px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; display: inline-block; margin-left: 3px; }
         .empty-state { text-align: center; padding: 30px 15px; color: #888; }
         .empty-state p { font-size: 14px; }
+
+        /* ===== VEÍCULOS ===== */
         .veiculos-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
         @media (min-width: 600px) { .veiculos-grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); } }
         .veiculo-card { background: white; border: 2px solid #e8ecf0; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); position: relative; }
@@ -154,6 +177,8 @@
         .veiculo-card .resumo-alertas .alerta-item.critico { color: #c62828; font-weight: 700; }
         .veiculo-card .resumo-alertas .alerta-item.atencao { color: #f57c00; }
         .veiculo-card .resumo-alertas .alerta-item.ok { color: #2e7d32; }
+
+        /* ===== MODAIS ===== */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 10px; }
         .modal-overlay.show { display: flex; }
         .modal-content { background: white; border-radius: 12px; max-width: 100%; width: 100%; max-height: 95vh; overflow-y: auto; padding: 20px 16px; position: relative; max-width: 500px; }
@@ -162,6 +187,8 @@
         .modal-close { position: absolute; top: 10px; right: 14px; font-size: 24px; background: none; border: none; cursor: pointer; color: #888; transition: color 0.3s; z-index: 10; }
         .modal-close:hover { color: #333; }
         .modal-title { color: #1a3a5c; margin-bottom: 15px; font-size: 20px; padding-right: 30px; }
+
+        /* ===== MODAL CAMINHÃO ===== */
         .modal-info-top { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 12px; }
         @media (min-width: 600px) { .modal-info-top { flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; } }
         .modal-info-top .info-km { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -188,6 +215,8 @@
         .modal-mm-ref input { width: 70px; padding: 3px 6px; border: 2px solid #dce0e5; border-radius: 4px; font-size: 13px; }
         .modal-mm-ref .info-mm { font-size: 11px; color: #666; }
         .modal-mm-ref .info-mm .destaque { font-weight: 700; color: #1a3a5c; }
+
+        /* ===== CAMINHÃO ===== */
         .caminhao-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; overflow-x: auto; }
         .caminhao { display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 100%; }
         .eixos-row { display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap; }
@@ -212,6 +241,8 @@
         .pneu-slot .pneu-vida-restante { font-size: 6px; color: #1a3a5c; font-weight: 700; pointer-events: none; }
         .estepe-section { margin-top: 15px; padding-top: 15px; border-top: 2px dashed #e8ecf0; width: 100%; }
         .estepe-section .eixo-label { color: #f57c00; font-size: 12px; }
+
+        /* ===== SERVIÇOS ===== */
         .modal-servicos-alinhamento { background: #f8f9fa; padding: 12px; border-radius: 8px; margin: 12px 0; }
         .modal-servicos-alinhamento .servico-item { display: flex; flex-direction: column; gap: 3px; padding: 6px 0; border-bottom: 1px solid #e8ecf0; }
         .modal-servicos-alinhamento .servico-item:last-child { border-bottom: none; }
@@ -221,6 +252,8 @@
         .modal-servicos-alinhamento .servico-item .alerta-tempo.critico { background: #ffcdd2; color: #c62828; animation: piscar 1s infinite; }
         .modal-servicos-alinhamento .servico-item .alerta-tempo.atencao { background: #fff9c4; color: #f57f17; }
         .modal-servicos-alinhamento .servico-item .alerta-tempo.ok { background: #c8e6c9; color: #1b5e20; }
+
+        /* ===== PEÇAS ===== */
         .pecas-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
         @media (min-width: 500px) { .pecas-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); } }
         .peca-card { background: white; border: 2px solid #e8ecf0; border-radius: 10px; padding: 12px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
@@ -243,6 +276,8 @@
         .peca-instalada-item .btn-remover-peca:hover { background: #b71c1c; }
         .pecas-instaladas-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; max-height: 300px; overflow-y: auto; padding: 3px 0; }
         @media (min-width: 500px) { .pecas-instaladas-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
+
+        /* ===== MODAL SELEÇÃO ===== */
         .modal-selecao { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1100; justify-content: center; align-items: center; padding: 10px; }
         .modal-selecao.show { display: flex; }
         .modal-selecao-content { background: white; border-radius: 12px; max-width: 500px; width: 100%; padding: 20px 16px; max-height: 80vh; overflow-y: auto; }
@@ -257,6 +292,8 @@
         .item-disponivel .qtd { background: #7b1fa2; color: white; padding: 1px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
         .modal-selecao-close { margin-top: 12px; padding: 8px 16px; background: #e8ecf0; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; font-size: 14px; }
         .modal-selecao-close:hover { background: #d0d4d9; }
+
+        /* ===== MODAL INSTALAÇÃO ===== */
         .modal-instalacao-peca { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1200; justify-content: center; align-items: center; padding: 10px; }
         .modal-instalacao-peca.show { display: flex; }
         .modal-instalacao-peca-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; }
@@ -267,6 +304,8 @@
         .modal-instalacao-peca-content input { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-instalacao-peca-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-instalacao-peca-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+
+        /* ===== MODAL REMOÇÃO ===== */
         .modal-remocao { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1300; justify-content: center; align-items: center; padding: 10px; }
         .modal-remocao.show { display: flex; }
         .modal-remocao-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; }
@@ -277,6 +316,8 @@
         .modal-remocao-content input, .modal-remocao-content select { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-remocao-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-remocao-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+
+        /* ===== MODAL EDIÇÃO ===== */
         .modal-edicao { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1400; justify-content: center; align-items: center; padding: 10px; }
         .modal-edicao.show { display: flex; }
         .modal-edicao-content { background: white; border-radius: 12px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 20px 16px; position: relative; }
@@ -290,6 +331,8 @@
         .pneu-info-box .info-row .label { font-weight: 600; color: #555; }
         .modal-edicao-actions { display: flex; gap: 8px; margin-top: 12px; }
         .modal-edicao-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+
+        /* ===== MODAL MANUTENÇÃO ===== */
         .modal-manutencao-simplificada { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; justify-content: center; align-items: center; padding: 10px; }
         .modal-manutencao-simplificada.show { display: flex; }
         .modal-manutencao-simplificada-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; max-height: 90vh; overflow-y: auto; }
@@ -300,6 +343,8 @@
         .modal-manutencao-simplificada-content input, .modal-manutencao-simplificada-content select, .modal-manutencao-simplificada-content textarea { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-manutencao-simplificada-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-manutencao-simplificada-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+
+        /* ===== MODAL COMBINAR ===== */
         .modal-combinar { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1600; justify-content: center; align-items: center; padding: 10px; }
         .modal-combinar.show { display: flex; }
         .modal-combinar-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; }
@@ -310,6 +355,8 @@
         .modal-combinar-content select { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-combinar-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-combinar-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+
+        /* ===== MODAL VENDER ===== */
         .modal-vender-veiculo { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1700; justify-content: center; align-items: center; padding: 10px; }
         .modal-vender-veiculo.show { display: flex; }
         .modal-vender-veiculo-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; }
@@ -320,6 +367,8 @@
         .modal-vender-veiculo-content input, .modal-vender-veiculo-content select, .modal-vender-veiculo-content textarea { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-vender-veiculo-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-vender-veiculo-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+
+        /* ===== MODAL FAIXAS ===== */
         .modal-faixas { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 10px; }
         .modal-faixas.show { display: flex; }
         .modal-faixas-content { background: white; border-radius: 12px; max-width: 500px; width: 100%; max-height: 95vh; overflow-y: auto; padding: 20px 16px; position: relative; }
@@ -335,6 +384,8 @@
         .modal-faixas-content .analise-item .valor { font-size: 20px; font-weight: 700; color: #1a3a5c; }
         .modal-faixas-content .analise-item .label { font-size: 11px; color: #666; }
         .modal-faixas-content .analise-detalhada { margin-top: 10px; font-size: 13px; color: #666; text-align: center; padding: 8px; background: #f8f9fa; border-radius: 6px; }
+
+        /* ===== MODAL CADASTRO MÚLTIPLO ===== */
         .modal-cadastro-multiplo { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1800; justify-content: center; align-items: center; padding: 10px; }
         .modal-cadastro-multiplo.show { display: flex; }
         .modal-cadastro-multiplo-content { background: white; border-radius: 12px; max-width: 500px; width: 100%; padding: 20px 16px; max-height: 80vh; overflow-y: auto; }
@@ -342,6 +393,8 @@
         .modal-cadastro-multiplo-content .subtitle { color: #666; font-size: 13px; margin-bottom: 15px; }
         .modal-cadastro-multiplo-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-cadastro-multiplo-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+
+        /* ===== MASTER ===== */
         .master-container { background: #fff8e1; border: 2px solid #ffd700; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
         .master-container h3 { color: #1a3a5c; margin-bottom: 12px; font-size: 18px; }
         .master-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
@@ -352,6 +405,8 @@
         .master-card .empresa-status { display: flex; gap: 8px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
         .master-card .empresa-status .badge { font-size: 10px; }
         .master-card .empresa-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+
+        /* ===== PLANOS ===== */
         .planos-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
         @media (min-width: 600px) { .planos-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
         .plano-card { background: white; border-radius: 10px; padding: 15px; border: 2px solid #e8ecf0; text-align: center; transition: all 0.3s; }
@@ -360,6 +415,8 @@
         .plano-card .plano-limite { font-size: 24px; font-weight: 700; color: #2a5f7a; margin: 8px 0; }
         .plano-card .plano-limite small { font-size: 13px; font-weight: 400; color: #666; }
         .plano-card .plano-status { margin-top: 8px; }
+
+        /* ===== RELATÓRIOS ===== */
         .relatorio-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e8ecf0; }
         .relatorio-card h3 { color: #1a3a5c; margin-bottom: 12px; font-size: 16px; }
         .relatorio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -381,6 +438,8 @@
         .relatorio-filtros-extra .form-group { flex: 1; min-width: 120px; margin-bottom: 0; }
         .relatorio-filtros-extra .form-group label { font-size: 11px; color: #666; }
         .relatorio-filtros-extra .form-group input, .relatorio-filtros-extra .form-group select { padding: 6px 10px; font-size: 12px; width: 100%; border: 2px solid #dce0e5; border-radius: 6px; }
+
+        /* ===== DESGASTE VEÍCULO ===== */
         .veiculo-desgaste-item { background: white; border: 2px solid #e8ecf0; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .veiculo-desgaste-item:hover { border-color: #2a5f7a; box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
         .veiculo-desgaste-item .veiculo-placa { font-weight: 700; color: #1a3a5c; font-size: 18px; }
@@ -392,13 +451,17 @@
         .veiculo-desgaste-item .resumo-pneus .mini-pneu.ok { border-color: #2e7d32; background: #c8e6c9; }
         .veiculo-desgaste-item .resumo-pneus .mini-pneu .tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 3px 6px; border-radius: 4px; font-size: 8px; white-space: nowrap; z-index: 10; }
         .veiculo-desgaste-item .resumo-pneus .mini-pneu:hover .tooltip { display: block; }
+
+        /* ===== MODAL DESGASTE DETALHES ===== */
         .modal-desgaste-detalhes { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 10px; }
         .modal-desgaste-detalhes.show { display: flex; }
         .modal-desgaste-detalhes-content { background: white; border-radius: 12px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 20px 16px; position: relative; }
         .modal-desgaste-detalhes-content .modal-close { position: absolute; top: 10px; right: 14px; font-size: 24px; background: none; border: none; cursor: pointer; color: #888; transition: color 0.3s; z-index: 10; }
         .modal-desgaste-detalhes-content .modal-close:hover { color: #333; }
         .modal-desgaste-detalhes-content h3 { color: #1a3a5c; margin-bottom: 15px; font-size: 18px; padding-right: 30px; }
+
         @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
         @media (max-width: 480px) {
             .container { padding: 8px 10px; }
             .tab-content { padding: 12px 10px; }
@@ -1077,7 +1140,7 @@
         }
         function clearCurrentUser() { currentUserFirebase = null; currentUserId = null; }
 
-        // CRUD Firebase
+        // CRUD Firebase - Cada empresa tem seu próprio estoque (usuário logado)
         async function getPneus() {
             if (!currentUserId) return [];
             try {
@@ -1289,6 +1352,36 @@
                 });
                 await batch.commit();
             } catch (error) { console.error('Erro ao salvar usuários:', error); }
+        }
+
+        // ============================================
+        //  HISTÓRICO
+        // ============================================
+        async function adicionarHistorico(acao, dados, batchId) {
+            const item = { acao: acao, dados: JSON.parse(JSON.stringify(dados)), timestamp: Date.now(), batchId: batchId || null };
+            if (batchId) item.batchId = batchId;
+            historicoAcoes.push(item);
+            if (historicoAcoes.length > 50) historicoAcoes.shift();
+            if (currentUserId) {
+                try { await db.collection('users').doc(currentUserId).collection('historico').doc(String(item.timestamp)).set(item); } 
+                catch (error) { console.error('Erro ao salvar histórico:', error); }
+            }
+            localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes));
+        }
+
+        function iniciarBatch() { ultimoBatch = Date.now() + Math.random() * 1000; return ultimoBatch; }
+
+        async function carregarHistorico() {
+            const data = localStorage.getItem(`historico_${getCurrentUserId()}`);
+            if (data) historicoAcoes = JSON.parse(data);
+            if (currentUserId) {
+                try {
+                    const snapshot = await db.collection('users').doc(currentUserId).collection('historico').orderBy('timestamp', 'desc').limit(50).get();
+                    const historicoFirestore = [];
+                    snapshot.forEach(doc => historicoFirestore.push(doc.data()));
+                    if (historicoFirestore.length > 0) { historicoAcoes = historicoFirestore; localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes)); }
+                } catch (error) { console.error('Erro ao carregar histórico do Firestore:', error); }
+            }
         }
 
         // ============================================
@@ -1830,43 +1923,24 @@
         }
 
         // ============================================
-        //  CADASTRAR PNEU - CORRIGIDO
+        //  CADASTRAR PNEU
         // ============================================
         let pneusParaCadastrar = [];
 
         async function cadastrarPneu(e) {
             e.preventDefault();
             if (!verificarEAcessar()) return;
-            if (!verificarLimitePneus()) { 
-                alert('⚠️ Limite de pneus atingido!'); 
-                return; 
-            }
+            if (!verificarLimitePneus()) { alert('⚠️ Limite de pneus atingido!'); return; }
 
             let nome = document.getElementById('pneuNomeSelect').value;
-            if (nome === 'outros') {
-                nome = document.getElementById('pneuNomeOutros').value.trim();
-                if (!nome) {
-                    alert('Por favor, digite o nome do pneu.');
-                    return;
-                }
-            } else if (!nome) {
-                alert('Por favor, selecione ou digite o nome do pneu.');
-                return;
-            }
+            if (nome === 'outros') nome = document.getElementById('pneuNomeOutros').value.trim();
+            if (!nome) { alert('Por favor, selecione ou digite o nome do pneu.'); return; }
 
             let tamanho = document.getElementById('pneuTamanhoSelect').value;
-            if (tamanho === 'outros') {
-                tamanho = document.getElementById('pneuTamanhoOutros').value.trim();
-                if (!tamanho) {
-                    alert('Por favor, digite o tamanho do pneu.');
-                    return;
-                }
-            } else if (!tamanho) {
-                alert('Por favor, selecione ou digite o tamanho do pneu.');
-                return;
-            }
+            if (tamanho === 'outros') tamanho = document.getElementById('pneuTamanhoOutros').value.trim();
+            if (!tamanho) { alert('Por favor, selecione ou digite o tamanho do pneu.'); return; }
 
-            const dot = document.getElementById('pneuDot').value.trim() || 'Não informado';
+            const dot = document.getElementById('pneuDot').value.trim();
             const tipo = document.getElementById('pneuTipo').value;
             const situacao = document.getElementById('pneuSituacao').value;
             const valor = parseFloat(document.getElementById('pneuValor').value) || 0;
@@ -1880,37 +1954,35 @@
                 return;
             }
 
-            try {
-                const ids = [];
-                const batchId = iniciarBatch();
-                
-                for (let i = 0; i < quantidade; i++) {
-                    const pneu = criarPneu(
-                        nome, 
-                        i === 0 ? dot : `${dot}-${i+1}`, 
-                        tamanho, 
-                        tipo, 
-                        situacao, 
-                        valor, 
-                        dataEntrada
-                    );
-                    pneus.push(pneu);
-                    ids.push(pneu.id);
-                }
-
+            if (quantidade === 1) {
+                const pneu = criarPneu(nome, dot, tamanho, tipo, situacao, valor, dataEntrada);
+                pneus.push(pneu);
                 dadosCache.pneus = pneus;
                 await setPneus(pneus);
-                ids.forEach(id => adicionarHistorico('cadastrar_pneu', { id: id }, batchId));
-
+                await adicionarHistorico('cadastrar_pneu', { id: pneu.id });
                 limparFormPneu();
                 await renderEstoque();
                 await atualizarLimitesUI();
                 switchTab('tab-estoque');
-                alert(`✅ ${quantidade} pneu(s) cadastrado(s) com sucesso!`);
-            } catch (error) {
-                console.error('Erro ao cadastrar pneu:', error);
-                alert('❌ Erro ao cadastrar pneu. Verifique o console para mais detalhes.');
+                alert('✅ 1 pneu cadastrado com sucesso!');
+                return;
             }
+
+            const batchId = iniciarBatch();
+            pneusParaCadastrar = [];
+            for (let i = 0; i < quantidade; i++) {
+                pneusParaCadastrar.push({
+                    index: i + 1,
+                    nome: nome,
+                    dot: i === 0 ? dot : '',
+                    tamanho: tamanho,
+                    tipo: tipo,
+                    situacao: situacao,
+                    valor: valor,
+                    dataEntrada: dataEntrada
+                });
+            }
+            abrirModalCadastroMultiplo(batchId);
         }
 
         function criarPneu(nome, dot, tamanho, tipo, situacao, valor, dataEntrada) {
@@ -2127,8 +2199,10 @@
         }
 
         // ============================================
-        //  FUNÇÕES DE RENDERIZAÇÃO - ESTOQUE
+        //  FUNÇÕES DE RENDERIZAÇÃO
         // ============================================
+        
+        // RENDER ESTOQUE
         async function renderEstoque() {
             const pneus = dadosCache.pneus || [];
             const filtroNome = document.getElementById('filtroPneuNome')?.value.toLowerCase() || '';
@@ -2175,7 +2249,8 @@
                 let posicaoLabel = p.posicao || '-';
                 if (p.veiculoTipo) posicaoLabel += ` (${p.veiculoTipo})`;
 
-                let profundidadeHtml = '<span style="color:#999;">N/A</span>';
+                // Profundidade
+                let profundidadeHtml = 'N/A';
                 if (p.faixas) {
                     const vals = [p.faixas.f1 || 0, p.faixas.f2 || 0, p.faixas.f3 || 0, p.faixas.f4 || 0];
                     const valsFiltrados = vals.filter(v => v > 0);
@@ -2243,43 +2318,15 @@
 
         async function excluirPneuIndividual(id) {
             if (!verificarEAcessar()) return;
-            
-            const veiculos = dadosCache.veiculos || [];
-            let emUso = false;
-            let veiculoNome = '';
-            
-            veiculos.forEach(v => {
-                if (v.pneus) {
-                    Object.values(v.pneus).forEach(pneuId => {
-                        if (pneuId === id) {
-                            emUso = true;
-                            veiculoNome = v.placa;
-                        }
-                    });
-                }
-            });
-            
-            if (emUso) {
-                alert(`❌ Este pneu está instalado no veículo ${veiculoNome}. Remova-o do veículo primeiro.`);
-                return;
-            }
-            
             if (!confirm('Tem certeza que deseja excluir este pneu?')) return;
-            
-            try {
-                let pneus = dadosCache.pneus || [];
-                const pneu = pneus.find(p => p.id === id);
-                if (pneu) await adicionarHistorico('excluir_pneu', pneu);
-                pneus = pneus.filter(p => p.id !== id);
-                dadosCache.pneus = pneus;
-                await setPneus(pneus);
-                await renderEstoque();
-                await atualizarLimitesUI();
-                alert('✅ Pneu excluído com sucesso!');
-            } catch (error) {
-                console.error('Erro ao excluir pneu:', error);
-                alert('❌ Erro ao excluir pneu. Verifique o console para mais detalhes.');
-            }
+            let pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === id);
+            if (pneu) await adicionarHistorico('excluir_pneu', pneu);
+            pneus = pneus.filter(p => p.id !== id);
+            dadosCache.pneus = pneus;
+            await setPneus(pneus);
+            await renderEstoque();
+            await atualizarLimitesUI();
         }
 
         // ============================================
@@ -2677,7 +2724,7 @@
         }
 
         // ============================================
-        //  RENDER VEÍCULOS - CORRIGIDO
+        //  RENDER VEÍCULOS
         // ============================================
         async function renderVeiculos() {
             const permissoes = getPermissoes(getCurrentUser());
@@ -2756,8 +2803,8 @@
                         <div class="veiculo-card-actions">
                             <button class="btn-orange btn-small" onclick="event.stopPropagation(); abrirModalManutencaoSimplificada()" title="Serviço">🔧</button>
                             <button class="btn-purple btn-small" onclick="event.stopPropagation(); abrirModalSelecaoPeca(${v.id})" title="Instalar Peça">🔧</button>
-                            <button class="btn-danger btn-small" onclick="event.stopPropagation(); excluirVeiculo(${v.id})" title="Excluir veículo">🗑️</button>
-                            <button class="btn-info btn-small" onclick="event.stopPropagation(); toggleStatusVeiculo(${v.id})" title="Alterar status">${v.status === 'ativo' ? '🔄' : '✅'}</button>
+                            <button class="btn-danger btn-small" onclick="event.stopPropagation(); excluirVeiculo(${v.id})">🗑️</button>
+                            <button class="btn-info btn-small" onclick="event.stopPropagation(); toggleStatusVeiculo(${v.id})">${v.status === 'ativo' ? '🔄' : '✅'}</button>
                         </div>
                     </div>
                 `;
@@ -2780,25 +2827,10 @@
             if (!verificarEAcessar()) return;
             if (!confirm('Tem certeza que deseja excluir este veículo? Isso devolverá todos os pneus e peças ao estoque.')) return;
 
-            try {
-                let veiculos = dadosCache.veiculos || [];
-                const veiculo = veiculos.find(v => v.id === id);
-                
-                if (!veiculo) {
-                    alert('Veículo não encontrado.');
-                    return;
-                }
-
-                if (veiculo.combinadoCom) {
-                    const combinado = veiculos.find(v => v.id === veiculo.combinadoCom);
-                    if (combinado) {
-                        combinado.combinadoCom = null;
-                        combinado.combinadoTipo = null;
-                    }
-                }
-
+            let veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === id);
+            if (veiculo) {
                 await adicionarHistorico('excluir_veiculo', veiculo);
-                
                 if (veiculo.pneus) {
                     let pneus = dadosCache.pneus || [];
                     Object.values(veiculo.pneus).forEach(pneuId => {
@@ -2811,17 +2843,12 @@
                             pneu.kmInstalacao = null;
                             pneu.veiculoTipo = null;
                             pneu.historico = pneu.historico || [];
-                            pneu.historico.push({ 
-                                data: new Date().toLocaleString('pt-BR'), 
-                                acao: 'Remoção (Exclusão Veículo)', 
-                                detalhes: `Removido do veículo ${veiculo.placa}` 
-                            });
+                            pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Remoção (Exclusão Veículo)', detalhes: `Removido do veículo ${veiculo.placa}` });
                         }
                     });
                     dadosCache.pneus = pneus;
                     await setPneus(pneus);
                 }
-                
                 if (veiculo.pecas) {
                     let pecas = dadosCache.pecas || [];
                     Object.values(veiculo.pecas).forEach(pecaId => {
@@ -2834,52 +2861,33 @@
                             peca.dataInstalacao = null;
                             peca.kmInstalacao = null;
                             peca.historico = peca.historico || [];
-                            peca.historico.push({ 
-                                data: new Date().toLocaleString('pt-BR'), 
-                                acao: 'Remoção (Exclusão Veículo)', 
-                                detalhes: `Removido do veículo ${veiculo.placa}` 
-                            });
+                            peca.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Remoção (Exclusão Veículo)', detalhes: `Removido do veículo ${veiculo.placa}` });
                         }
                     });
                     dadosCache.pecas = pecas;
                     await setPecas(pecas);
                 }
-                
                 let manutencoes = dadosCache.manutencoes || [];
                 manutencoes = manutencoes.filter(m => m.veiculoId !== id);
                 dadosCache.manutencoes = manutencoes;
                 await setManutencoes(manutencoes);
-
-                veiculos = veiculos.filter(v => v.id !== id);
-                dadosCache.veiculos = veiculos;
-                await setVeiculos(veiculos);
-
-                await renderVeiculos();
-                await renderManutencao();
-                await renderEstoque();
-                await renderPecas();
-                await renderRelatorios();
-                await atualizarLimitesUI();
-                
-                alert('✅ Veículo excluído com sucesso!');
-                
-            } catch (error) {
-                console.error('Erro ao excluir veículo:', error);
-                alert('❌ Erro ao excluir veículo. Verifique o console para mais detalhes.');
             }
+
+            veiculos = veiculos.filter(v => v.id !== id);
+            dadosCache.veiculos = veiculos;
+            await setVeiculos(veiculos);
+            await renderVeiculos();
+            await renderManutencao();
+            await renderEstoque();
+            await renderPecas();
+            await renderRelatorios();
+            await atualizarLimitesUI();
         }
 
         function toggleStatusVeiculo(id) {
             let veiculos = dadosCache.veiculos || [];
             const idx = veiculos.findIndex(v => v.id === id);
-            if (idx !== -1) { 
-                veiculos[idx].status = veiculos[idx].status === 'ativo' ? 'inativo' : 'ativo'; 
-                dadosCache.veiculos = veiculos; 
-                setVeiculos(veiculos); 
-                renderVeiculos(); 
-                renderManutencao(); 
-                alert(`✅ Status do veículo alterado para ${veiculos[idx].status === 'ativo' ? 'Ativo' : 'Inativo'}`);
-            }
+            if (idx !== -1) { veiculos[idx].status = veiculos[idx].status === 'ativo' ? 'inativo' : 'ativo'; dadosCache.veiculos = veiculos; setVeiculos(veiculos); renderVeiculos(); renderManutencao(); }
         }
 
         // ============================================
@@ -3138,7 +3146,7 @@
         }
 
         // ============================================
-        //  RENDER CAMINHÃO E FUNÇÕES RELACIONADAS
+        //  RENDER CAMINHÃO - FUNÇÃO CORRIGIDA
         // ============================================
         let veiculoAtual = null;
         let slotSelecionado = null;
@@ -3326,7 +3334,7 @@
         }
 
         // ============================================
-        //  RENDER CAMINHÃO - CORRIGIDO
+        //  RENDER CAMINHÃO
         // ============================================
         function renderCaminhao(veiculo) {
             const container = document.getElementById('caminhaoContainer');
@@ -3373,6 +3381,7 @@
                 html += `</div></div></div>`;
             });
 
+            // Estepes
             html += `<div class="estepe-section"><div class="eixos-row"><div class="eixo"><div class="eixo-label" style="color:#f57c00;">🟧 Estepes</div><div class="eixo-pneus">`;
             html += renderPneuSlot(veiculo, 'estepe-1', veiculo.pneus ? veiculo.pneus['estepe-1'] : null, true);
             html += renderPneuSlot(veiculo, 'estepe-2', veiculo.pneus ? veiculo.pneus['estepe-2'] : null, true);
@@ -3380,6 +3389,7 @@
             html += renderPneuSlot(veiculo, 'estepe-4', veiculo.pneus ? veiculo.pneus['estepe-4'] : null, true);
             html += `</div></div></div></div>`;
 
+            // Peças instaladas
             const pecas = dadosCache.pecas || [];
             const pecasInstaladas = pecas.filter(p => p.veiculoId === (veiculo._idOriginal || veiculo.id) && p.status === 'instalado');
             html += `<div style="width:100%;margin-top:20px;"><div class="pecas-titulo-modal"><span>🔧 Peças Instaladas</span><span>${pecasInstaladas.length}</span></div>`;
@@ -3447,35 +3457,21 @@
         // ============================================
         //  SELEÇÃO DE PNEU PARA INSTALAÇÃO - CORRIGIDO
         // ============================================
+
         function abrirModalSelecao(veiculoId, slotId) {
             if (!verificarEAcessar()) return;
-            
             const veiculos = dadosCache.veiculos || [];
             const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo) {
-                alert('Veículo não encontrado.');
-                return;
-            }
+            if (!veiculo) return;
 
             veiculoInstalacaoId = veiculoId;
             slotSelecionado = slotId;
 
             const pneus = dadosCache.pneus || [];
-            const pneusDisponiveis = pneus.filter(p => {
-                const estaDisponivel = p.status === 'disponivel' || !p.status || p.status === '';
-                let estaInstalado = false;
-                veiculos.forEach(v => {
-                    if (v.pneus) {
-                        Object.values(v.pneus).forEach(pneuId => {
-                            if (pneuId === p.id) estaInstalado = true;
-                        });
-                    }
-                });
-                return estaDisponivel && !estaInstalado;
-            });
+            const pneusDisponiveis = pneus.filter(p => p.status === 'disponivel' || !p.status);
 
             if (pneusDisponiveis.length === 0) { 
-                alert('❌ Não há pneus disponíveis no estoque. Cadastre pneus primeiro ou verifique se os pneus existentes estão disponíveis!'); 
+                alert('❌ Não há pneus disponíveis no estoque. Cadastre pneus primeiro!'); 
                 return; 
             }
 
@@ -3532,9 +3528,6 @@
             pneuSelecionadoId = null; 
         }
 
-        // ============================================
-        //  CONFIRMAR INSTALAÇÃO - CORRIGIDO
-        // ============================================
         async function confirmarInstalacao() {
             if (!veiculoAtual || !slotSelecionado || !pneuSelecionadoId) { 
                 alert('Erro: Dados incompletos.'); 
@@ -3543,114 +3536,83 @@
             }
 
             const km = parseInt(document.getElementById('kmInstalacao').value);
-            if (!km || km < 0) { 
-                alert('Por favor, informe uma quilometragem válida.'); 
-                return; 
+            if (!km || km < 0) { alert('Por favor, informe uma quilometragem válida.'); return; }
+            if (km < veiculoAtual.km) { alert('A KM não pode ser menor que a atual do veículo.'); return; }
+
+            let veiculos = dadosCache.veiculos || [];
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx !== -1) { 
+                veiculos[idx].km = km; 
+                veiculoAtual.km = km; 
+                dadosCache.veiculos = veiculos; 
+                await setVeiculos(veiculos); 
             }
-            if (km < veiculoAtual.km) { 
-                alert('A KM não pode ser menor que a atual do veículo.'); 
-                return; 
-            }
 
-            try {
-                let veiculos = dadosCache.veiculos || [];
-                const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
-                if (idx !== -1) { 
-                    veiculos[idx].km = km; 
-                    veiculoAtual.km = km; 
-                    dadosCache.veiculos = veiculos; 
-                    await setVeiculos(veiculos); 
+            let pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === pneuSelecionadoId);
+            if (!pneu) { alert('Pneu não encontrado.'); fecharModalInstalacao(); return; }
+
+            const emUso = veiculos.some(v => {
+                if (v.pneus) {
+                    return Object.values(v.pneus).some(id => id === pneuSelecionadoId);
                 }
+                return false;
+            });
 
-                let pneus = dadosCache.pneus || [];
-                const pneu = pneus.find(p => p.id === pneuSelecionadoId);
-                if (!pneu) { 
-                    alert('Pneu não encontrado.'); 
-                    fecharModalInstalacao(); 
-                    return; 
-                }
-
-                const emUso = veiculos.some(v => {
-                    if (v.pneus) {
-                        return Object.values(v.pneus).some(id => id === pneuSelecionadoId);
-                    }
-                    return false;
-                });
-
-                if (emUso) {
-                    alert('❌ Este pneu já está instalado em outro veículo!');
-                    fecharModalInstalacao();
-                    return;
-                }
-
-                if (veiculoAtual.pneus && veiculoAtual.pneus[slotSelecionado]) {
-                    const pneuExistente = pneus.find(p => p.id === veiculoAtual.pneus[slotSelecionado]);
-                    if (pneuExistente && confirm(`O slot ${slotSelecionado} já possui o pneu ${pneuExistente.nome}. Deseja substituir?`)) {
-                        pneuExistente.status = 'disponivel';
-                        pneuExistente.veiculoInstalado = null;
-                        pneuExistente.veiculoId = null;
-                        pneuExistente.posicao = null;
-                        pneuExistente.kmInstalacao = null;
-                        pneuExistente.veiculoTipo = null;
-                    } else {
-                        fecharModalInstalacao();
-                        return;
-                    }
-                }
-
-                const veiculoOrigem = pneu.veiculoInstalado || null;
-                pneu.kmTotal = pneu.kmTotal || 0;
-                pneu.status = 'instalado';
-                pneu.veiculoInstalado = veiculoAtual.placa;
-                pneu.veiculoId = veiculoAtual.id;
-                pneu.posicao = slotSelecionado.replace(/-/g, ' ');
-                pneu.veiculoTipo = veiculoAtual.tipo === 'cavalo_3_eixos' ? 'Cavalo' : veiculoAtual.tipo === 'carreta' ? 'Carreta' : 'Veículo';
-                pneu.kmInstalacao = km;
-                pneu.veiculoOrigem = veiculoOrigem;
-
-                if (!veiculoAtual.pneus) veiculoAtual.pneus = {};
-                veiculoAtual.pneus[slotSelecionado] = pneuSelecionadoId;
-
-                pneu.historico = pneu.historico || [];
-                pneu.historico.push({ 
-                    data: new Date().toLocaleString('pt-BR'), 
-                    acao: 'Instalação', 
-                    detalhes: `Instalado no veículo ${veiculoAtual.placa} na posição ${slotSelecionado} com KM ${km}` 
-                });
-
-                dadosCache.pneus = pneus;
-                await setPneus(pneus);
-
-                const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
-                if (idxVeiculo !== -1) { 
-                    veiculos[idxVeiculo] = veiculoAtual; 
-                    dadosCache.veiculos = veiculos; 
-                    await setVeiculos(veiculos); 
-                }
-
-                await adicionarHistorico('instalar_pneu', { 
-                    pneuId: pneuSelecionadoId, 
-                    veiculoId: veiculoAtual.id, 
-                    slot: slotSelecionado 
-                });
-
+            if (emUso) {
+                alert('❌ Este pneu já está instalado em outro veículo!');
                 fecharModalInstalacao();
-                renderCaminhao(veiculoAtual);
-                await renderVeiculos();
-                await renderEstoque();
-                await renderRelatorios();
-                alert(`✅ Pneu ${pneu.nome} instalado com sucesso!`);
-                
-            } catch (error) {
-                console.error('Erro ao instalar pneu:', error);
-                alert('❌ Erro ao instalar pneu. Verifique o console para mais detalhes.');
-                fecharModalInstalacao();
+                return;
             }
+
+            const veiculoOrigem = pneu.veiculoInstalado || null;
+            pneu.kmTotal = pneu.kmTotal || 0;
+            pneu.status = 'instalado';
+            pneu.veiculoInstalado = veiculoAtual.placa;
+            pneu.veiculoId = veiculoAtual.id;
+            pneu.posicao = slotSelecionado.replace(/-/g, ' ');
+            pneu.veiculoTipo = veiculoAtual.tipo === 'cavalo_3_eixos' ? 'Cavalo' : veiculoAtual.tipo === 'carreta' ? 'Carreta' : 'Veículo';
+            pneu.kmInstalacao = km;
+            pneu.veiculoOrigem = veiculoOrigem;
+
+            if (!veiculoAtual.pneus) veiculoAtual.pneus = {};
+            veiculoAtual.pneus[slotSelecionado] = pneuSelecionadoId;
+
+            pneu.historico = pneu.historico || [];
+            pneu.historico.push({ 
+                data: new Date().toLocaleString('pt-BR'), 
+                acao: 'Instalação', 
+                detalhes: `Instalado no veículo ${veiculoAtual.placa} na posição ${slotSelecionado} com KM ${km}` 
+            });
+
+            dadosCache.pneus = pneus;
+            await setPneus(pneus);
+
+            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idxVeiculo !== -1) { 
+                veiculos[idxVeiculo] = veiculoAtual; 
+                dadosCache.veiculos = veiculos; 
+                await setVeiculos(veiculos); 
+            }
+
+            await adicionarHistorico('instalar_pneu', { 
+                pneuId: pneuSelecionadoId, 
+                veiculoId: veiculoAtual.id, 
+                slot: slotSelecionado 
+            });
+
+            fecharModalInstalacao();
+            renderCaminhao(veiculoAtual);
+            await renderVeiculos();
+            await renderEstoque();
+            await renderRelatorios();
+            alert(`✅ Pneu ${pneu.nome} instalado com sucesso!`);
         }
 
         // ============================================
-        //  REMOÇÃO DE PNEU
+        //  REMOÇÃO DE PNEU - CORRIGIDO
         // ============================================
+
         let slotRemocao = null;
 
         function abrirModalRemocao(veiculoId, slotId) {
@@ -3841,8 +3803,9 @@
         }
 
         // ============================================
-        //  MANUTENÇÃO SIMPLIFICADA
+        //  MANUTENÇÃO SIMPLIFICADA - CORRIGIDO
         // ============================================
+
         function abrirModalManutencaoSimplificada() {
             if (!verificarEAcessar()) return;
             if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
@@ -3933,8 +3896,9 @@
         }
 
         // ============================================
-        //  INSTALAR PEÇAS
+        //  INSTALAR PEÇAS - CORRIGIDO
         // ============================================
+
         let veiculoPecaId = null;
         let pecaSelecionadoId = null;
 
@@ -4121,8 +4085,9 @@
         }
 
         // ============================================
-        //  COMBINAR VEÍCULOS
+        //  COMBINAR VEÍCULOS - CORRIGIDO
         // ============================================
+
         function abrirModalCombinar() {
             if (!verificarEAcessar()) return;
             if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
@@ -4227,45 +4192,61 @@
         }
 
         // ============================================
-        //  VENDER/SINISTRO VEÍCULO
+        //  DRAG AND DROP
         // ============================================
-        function abrirModalVenderVeiculo() {
-            if (!verificarEAcessar()) return;
-            if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
-            if (veiculoAtual.status === 'vendido') { alert('Este veículo já foi vendido/sinistrado.'); return; }
-
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('venderData').value = hoje;
-            document.getElementById('venderTipo').value = '';
-            document.getElementById('venderValor').value = '';
-            document.getElementById('venderObs').value = '';
-            document.getElementById('modalVenderVeiculo').classList.add('show');
+        function iniciarDrag(e, veiculoId, slotId) {
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) return;
+            const pneuId = veiculo.pneus[slotId];
+            if (!pneuId) return;
+            dragData = { veiculoId: veiculoId, slotOrigem: slotId, pneuId: pneuId };
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', slotId);
         }
 
-        function fecharModalVenderVeiculo() { document.getElementById('modalVenderVeiculo').classList.remove('show'); }
+        function permitirDrop(e) { e.preventDefault(); e.target.closest('.pneu-slot')?.classList.add('drag-over'); }
 
-        async function confirmarVenderVeiculo() {
-            const tipo = document.getElementById('venderTipo').value;
-            const data = document.getElementById('venderData').value;
-            const valor = parseFloat(document.getElementById('venderValor').value) || 0;
-            const obs = document.getElementById('venderObs').value.trim();
+        function limparDrag(e) { document.querySelectorAll('.pneu-slot').forEach(el => el.classList.remove('dragging', 'drag-over')); }
 
-            if (!tipo) { alert('Selecione o tipo (Venda ou Sinistro).'); return; }
-            if (!data) { alert('Informe a data.'); return; }
+        async function finalizarDrop(e, veiculoId, slotDestino) {
+            e.preventDefault();
+            limparDrag(e);
+            if (!dragData) return;
+            if (dragData.veiculoId !== veiculoId) { alert('Não é possível mover pneus entre veículos diferentes.'); dragData = null; return; }
+            if (dragData.slotOrigem === slotDestino) { dragData = null; return; }
 
             let veiculos = dadosCache.veiculos || [];
-            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
-            if (idx === -1) { alert('Veículo não encontrado.'); return; }
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) { dragData = null; return; }
 
-            veiculos[idx].status = 'vendido';
-            veiculos[idx].historicoVenda = { tipo, data, valor, obs: obs || 'Sem observações', dataRegistro: new Date().toLocaleString('pt-BR') };
+            const pneuDestinoId = veiculo.pneus[slotDestino];
+            const pneuOrigemId = veiculo.pneus[dragData.slotOrigem];
+            if (!pneuOrigemId) { dragData = null; return; }
 
-            dadosCache.veiculos = veiculos;
-            await setVeiculos(veiculos);
-            fecharModalVenderVeiculo();
+            let pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === pneuOrigemId);
+            if (pneu) {
+                pneu.posicao = slotDestino.replace(/-/g, ' ');
+                pneu.historico = pneu.historico || [];
+                pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Movimentação', detalhes: `Movido de ${dragData.slotOrigem} para ${slotDestino}` });
+                dadosCache.pneus = pneus;
+                await setPneus(pneus);
+            }
+
+            delete veiculo.pneus[dragData.slotOrigem];
+            if (pneuDestinoId) { veiculo.pneus[dragData.slotOrigem] = pneuDestinoId; }
+            veiculo.pneus[slotDestino] = pneuOrigemId;
+
+            const idx = veiculos.findIndex(v => v.id === veiculoId);
+            if (idx !== -1) { veiculos[idx] = veiculo; dadosCache.veiculos = veiculos; await setVeiculos(veiculos); }
+
+            dragData = null;
+            renderCaminhao(veiculo);
             await renderVeiculos();
-            await renderManutencao();
-            alert(`✅ Veículo marcado como ${tipo === 'venda' ? 'Vendido' : 'Sinistro'}!`);
+            await renderEstoque();
+            await renderRelatorios();
         }
 
         // ============================================
@@ -4444,61 +4425,46 @@
         }
 
         // ============================================
-        //  DRAG AND DROP
+        //  MODAL VENDER VEÍCULO
         // ============================================
-        function iniciarDrag(e, veiculoId, slotId) {
-            const veiculos = dadosCache.veiculos || [];
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo || !veiculo.pneus) return;
-            const pneuId = veiculo.pneus[slotId];
-            if (!pneuId) return;
-            dragData = { veiculoId: veiculoId, slotOrigem: slotId, pneuId: pneuId };
-            e.target.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', slotId);
+
+        function abrirModalVenderVeiculo() {
+            if (!verificarEAcessar()) return;
+            if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
+            if (veiculoAtual.status === 'vendido') { alert('Este veículo já foi vendido/sinistrado.'); return; }
+
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('venderData').value = hoje;
+            document.getElementById('venderTipo').value = '';
+            document.getElementById('venderValor').value = '';
+            document.getElementById('venderObs').value = '';
+            document.getElementById('modalVenderVeiculo').classList.add('show');
         }
 
-        function permitirDrop(e) { e.preventDefault(); e.target.closest('.pneu-slot')?.classList.add('drag-over'); }
+        function fecharModalVenderVeiculo() { document.getElementById('modalVenderVeiculo').classList.remove('show'); }
 
-        function limparDrag(e) { document.querySelectorAll('.pneu-slot').forEach(el => el.classList.remove('dragging', 'drag-over')); }
+        async function confirmarVenderVeiculo() {
+            const tipo = document.getElementById('venderTipo').value;
+            const data = document.getElementById('venderData').value;
+            const valor = parseFloat(document.getElementById('venderValor').value) || 0;
+            const obs = document.getElementById('venderObs').value.trim();
 
-        async function finalizarDrop(e, veiculoId, slotDestino) {
-            e.preventDefault();
-            limparDrag(e);
-            if (!dragData) return;
-            if (dragData.veiculoId !== veiculoId) { alert('Não é possível mover pneus entre veículos diferentes.'); dragData = null; return; }
-            if (dragData.slotOrigem === slotDestino) { dragData = null; return; }
+            if (!tipo) { alert('Selecione o tipo (Venda ou Sinistro).'); return; }
+            if (!data) { alert('Informe a data.'); return; }
 
             let veiculos = dadosCache.veiculos || [];
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo || !veiculo.pneus) { dragData = null; return; }
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx === -1) { alert('Veículo não encontrado.'); return; }
 
-            const pneuDestinoId = veiculo.pneus[slotDestino];
-            const pneuOrigemId = veiculo.pneus[dragData.slotOrigem];
-            if (!pneuOrigemId) { dragData = null; return; }
+            veiculos[idx].status = 'vendido';
+            veiculos[idx].historicoVenda = { tipo, data, valor, obs: obs || 'Sem observações', dataRegistro: new Date().toLocaleString('pt-BR') };
 
-            let pneus = dadosCache.pneus || [];
-            const pneu = pneus.find(p => p.id === pneuOrigemId);
-            if (pneu) {
-                pneu.posicao = slotDestino.replace(/-/g, ' ');
-                pneu.historico = pneu.historico || [];
-                pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Movimentação', detalhes: `Movido de ${dragData.slotOrigem} para ${slotDestino}` });
-                dadosCache.pneus = pneus;
-                await setPneus(pneus);
-            }
-
-            delete veiculo.pneus[dragData.slotOrigem];
-            if (pneuDestinoId) { veiculo.pneus[dragData.slotOrigem] = pneuDestinoId; }
-            veiculo.pneus[slotDestino] = pneuOrigemId;
-
-            const idx = veiculos.findIndex(v => v.id === veiculoId);
-            if (idx !== -1) { veiculos[idx] = veiculo; dadosCache.veiculos = veiculos; await setVeiculos(veiculos); }
-
-            dragData = null;
-            renderCaminhao(veiculo);
+            dadosCache.veiculos = veiculos;
+            await setVeiculos(veiculos);
+            fecharModalVenderVeiculo();
             await renderVeiculos();
-            await renderEstoque();
-            await renderRelatorios();
+            await renderManutencao();
+            alert(`✅ Veículo marcado como ${tipo === 'venda' ? 'Vendido' : 'Sinistro'}!`);
         }
 
         // ============================================
@@ -4613,35 +4579,6 @@
         }
 
         // ============================================
-        //  PDF E RELATÓRIOS SIMPLIFICADOS
-        // ============================================
-        function gerarPDFPneus() {
-            const pneus = window._pneusFiltrados || dadosCache.pneus || [];
-            if (pneus.length === 0) { alert('Não há pneus para gerar o PDF.'); return; }
-            const user = getCurrentUser();
-            const empresa = user?.companyName || user?.company || 'Minha Empresa';
-            let html = `<html><head><meta charset="UTF-8"><title>Relatório de Pneus</title><style>body{font-family:Arial,sans-serif;margin:30px;font-size:12px;}h1{color:#1a3a5c;text-align:center;font-size:20px;}table{width:100%;border-collapse:collapse;margin-top:15px;}th{background:#1a3a5c;color:white;padding:8px;text-align:left;font-size:11px;}td{padding:6px 8px;border-bottom:1px solid #ddd;font-size:11px;}.header{text-align:center;margin-bottom:15px;}.header .empresa{font-size:18px;font-weight:bold;color:#1a3a5c;}.header .data{color:#666;font-size:12px;}</style></head><body><div class="header"><div class="empresa">${empresa}</div><div class="data">Relatório de Pneus - ${new Date().toLocaleString('pt-BR')}</div></div><table><thead><tr><th>#</th><th>ID</th><th>Nome</th><th>DOT</th><th>Tamanho</th><th>Situação</th><th>Status</th><th>Valor</th><th>KM</th></tr></thead><tbody>`;
-            pneus.slice(0, 100).forEach((p, index) => {
-                const statusLabel = p.status === 'instalado' ? `Instalado${p.veiculoInstalado ? ` (${p.veiculoInstalado})` : ''}` : p.status === 'recapagem' ? 'Em Recapagem' : p.status === 'vulcanizacao' ? 'Em Vulcanização' : 'Disponível';
-                html += `<tr><td>${index+1}</td><td>#${p.id.toString().slice(-6)}</td><td>${p.nome}</td><td>${p.dot||'-'}</td><td>${p.tamanho}</td><td>${p.situacao}</td><td>${statusLabel}</td><td>R$ ${p.valor.toFixed(2)}</td><td>${(p.kmTotal||0).toLocaleString('pt-BR')}</td></tr>`;
-            });
-            html += `</tbody></table><div style="margin-top:15px;text-align:center;color:#666;font-size:11px;">Total: ${pneus.length} pneus</div></body></html>`;
-            abrirPDF(html, `Relatorio_Pneus_${new Date().toISOString().split('T')[0]}.pdf`);
-        }
-
-        function abrirPDF(html, nomeArquivo) {
-            const win = window.open('', '_blank', 'width=900,height=700');
-            if (!win) { 
-                alert('Por favor, permita pop-ups para gerar o PDF.'); 
-                return; 
-            }
-            win.document.write(html);
-            win.document.close();
-            win.focus();
-            win.print();
-        }
-
-        // ============================================
         //  INICIALIZAÇÃO
         // ============================================
         (function init() {
@@ -4705,11 +4642,16 @@
         console.log('✅ Sistema atualizado com sucesso!');
         console.log('🔥 Integrado com Firebase!');
         console.log('📋 Cada empresa tem seu próprio estoque separado!');
-        console.log('📋 VEÍCULOS: Estrutura de eixos corrigida');
-        console.log('📋 PNEUS: Cadastro e instalação corrigidos');
-        console.log('📋 PEÇAS: Instalação e remoção corrigidas');
-        console.log('📋 MANUTENÇÃO: Registro de serviços corrigido');
-        console.log('📋 COMBINAR: Combinação de veículos corrigida');
+        console.log('📋 VEÍCULOS: Estrutura de eixos corrigida para cada tipo de veículo');
+        console.log('📋 VEÍCULOS: Dianteiro = 2 pneus (E/D), Tração/Truck = 4 pneus (EE/EI/DI/DE)');
+        console.log('📋 VEÍCULOS: Carreta = 4 pneus por eixo numerados');
+        console.log('📋 VEÍCULOS: Remoção de pneu mostra placa e eixo de origem');
+        console.log('📋 VEÍCULOS: KM atualizada desconta da vida restante dos pneus');
+        console.log('📋 PNEUS: Filtro por DOT e Placa com profundidade');
+        console.log('📋 PEÇAS: Filtro por placa mostrando veículo');
+        console.log('📋 RELATÓRIOS: Filtros integrados e PDF parcial');
+        console.log('📋 EXTRA: Desfazer em batch');
+        console.log('👑 PLANOS: Grátis (1), Básico (10), Pro (50), Ultra (200)');
         console.log('📞 Suporte: (45) 99983-2590 - WhatsApp');
     </script>
 </body>
