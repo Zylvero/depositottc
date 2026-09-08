@@ -10,12 +10,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
     <style>
-        /* ===== RESET E BASE ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .top-bar { background: #c62828; height: 4px; width: 100%; position: fixed; top: 0; left: 0; z-index: 9999; }
         body { background: #f0f2f5; min-height: 100vh; padding-top: 4px; font-size: 14px; }
-        
-        /* ===== HEADER ===== */
         .header { background: linear-gradient(135deg, #1a3a5c, #2a5f7a); color: white; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .header-title h1 { font-size: 18px; font-weight: 300; cursor: pointer; padding: 4px 10px; border-radius: 6px; transition: background 0.3s; border: 2px solid transparent; }
@@ -35,8 +32,6 @@
         .btn-logout { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.3s; font-size: 13px; }
         .btn-logout:hover { background: rgba(255,255,255,0.25); }
         .container { max-width: 1400px; margin: 0 auto; padding: 12px 15px; }
-
-        /* ===== AUTH ===== */
         .auth-container { max-width: 400px; margin: 40px auto; background: white; border-radius: 16px; padding: 30px 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
         .auth-container h2 { color: #1a3a5c; margin-bottom: 6px; font-size: 24px; }
         .auth-container .subtitle { color: #666; font-size: 13px; margin-bottom: 20px; }
@@ -56,12 +51,8 @@
         .btn-recuperar:hover { color: #1a3a5c; }
         .recuperacao-container { margin-top: 10px; padding: 12px; background: #f0f7ff; border-radius: 8px; display: none; }
         .recuperacao-container.show { display: block; }
-
-        /* ===== APP ===== */
         .app-container { display: none; }
         .app-container.show { display: block; }
-
-        /* ===== TABS ===== */
         .tabs { display: flex; gap: 3px; background: white; border-radius: 10px 10px 0 0; padding: 5px 10px 0 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.04); overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
         .tabs::-webkit-scrollbar { display: none; }
         .tabs button { background: none; border: none; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; white-space: nowrap; flex-shrink: 0; }
@@ -71,8 +62,6 @@
         .tab-content { background: white; border-radius: 0 0 10px 10px; padding: 16px 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); min-height: 300px; }
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
-
-        /* ===== FORMS ===== */
         .form-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
         .form-group { display: flex; flex-direction: column; gap: 4px; }
         .form-group.full { grid-column: 1 / -1; }
@@ -83,8 +72,6 @@
         .form-group .input-group input { flex: 1; min-width: 100px; }
         .form-actions { grid-column: 1 / -1; display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
         .form-actions button { flex: 1; min-width: 100px; padding: 10px 16px; font-size: 14px; }
-
-        /* ===== BUTTONS ===== */
         .btn-success { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.3s; font-size: 14px; }
         .btn-success:hover { background: #1b5e20; }
         .btn-secondary { background: #e8ecf0; color: #333; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.3s; font-size: 14px; }
@@ -113,14 +100,10 @@
         .btn-undo:hover { background: #4a148c; }
         .btn-small { padding: 4px 10px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.3s; }
         .hidden { display: none !important; }
-
-        /* ===== HEADERS ===== */
         .estoque-header, .veiculos-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 8px; }
         .estoque-header h2, .veiculos-header h2 { color: #1a3a5c; font-size: 18px; }
         .estoque-stats, .veiculos-stats { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
         .estoque-stats span, .veiculos-stats span { background: #f0f2f5; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; color: #333; }
-
-        /* ===== FILTROS ===== */
         .filtros-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; padding: 12px; background: #f8f9fa; border-radius: 8px; align-items: flex-end; }
         .filtros-container .form-group { flex: 1; min-width: 120px; margin-bottom: 0; }
         .filtros-container .form-group label { font-size: 11px; color: #666; }
@@ -129,15 +112,11 @@
         .filtros-container .btn-limpar:hover { background: #d0d4d9; }
         .filtros-container .btn-pdf-parcial { padding: 6px 16px; background: #c62828; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.3s; height: 34px; font-size: 12px; }
         .filtros-container .btn-pdf-parcial:hover { background: #b71c1c; }
-
-        /* ===== TABLES ===== */
         .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -4px; }
         table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 600px; }
         table th { background: #f0f2f5; color: #333; font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 2px solid #dce0e5; font-size: 11px; white-space: nowrap; }
         table td { padding: 8px 10px; border-bottom: 1px solid #e8ecf0; vertical-align: middle; font-size: 12px; }
         table tr:hover td { background: #f8f9fa; }
-
-        /* ===== BADGES ===== */
         .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; }
         .badge-novo { background: #c8e6c9; color: #1b5e20; }
         .badge-meia { background: #fff9c4; color: #f57f17; }
@@ -160,8 +139,6 @@
         .contador-badge { background: #ffd700; color: #1a3a5c; padding: 1px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; display: inline-block; margin-left: 3px; }
         .empty-state { text-align: center; padding: 30px 15px; color: #888; }
         .empty-state p { font-size: 14px; }
-
-        /* ===== VEÍCULOS ===== */
         .veiculos-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
         @media (min-width: 600px) { .veiculos-grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); } }
         .veiculo-card { background: white; border: 2px solid #e8ecf0; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); position: relative; }
@@ -177,8 +154,6 @@
         .veiculo-card .resumo-alertas .alerta-item.critico { color: #c62828; font-weight: 700; }
         .veiculo-card .resumo-alertas .alerta-item.atencao { color: #f57c00; }
         .veiculo-card .resumo-alertas .alerta-item.ok { color: #2e7d32; }
-
-        /* ===== MODAIS ===== */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 10px; }
         .modal-overlay.show { display: flex; }
         .modal-content { background: white; border-radius: 12px; max-width: 100%; width: 100%; max-height: 95vh; overflow-y: auto; padding: 20px 16px; position: relative; max-width: 500px; }
@@ -187,8 +162,6 @@
         .modal-close { position: absolute; top: 10px; right: 14px; font-size: 24px; background: none; border: none; cursor: pointer; color: #888; transition: color 0.3s; z-index: 10; }
         .modal-close:hover { color: #333; }
         .modal-title { color: #1a3a5c; margin-bottom: 15px; font-size: 20px; padding-right: 30px; }
-
-        /* ===== MODAL CAMINHÃO ===== */
         .modal-info-top { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 12px; }
         @media (min-width: 600px) { .modal-info-top { flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; } }
         .modal-info-top .info-km { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -215,8 +188,6 @@
         .modal-mm-ref input { width: 70px; padding: 3px 6px; border: 2px solid #dce0e5; border-radius: 4px; font-size: 13px; }
         .modal-mm-ref .info-mm { font-size: 11px; color: #666; }
         .modal-mm-ref .info-mm .destaque { font-weight: 700; color: #1a3a5c; }
-
-        /* ===== CAMINHÃO ===== */
         .caminhao-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; overflow-x: auto; }
         .caminhao { display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 100%; }
         .eixos-row { display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap; }
@@ -241,8 +212,6 @@
         .pneu-slot .pneu-vida-restante { font-size: 6px; color: #1a3a5c; font-weight: 700; pointer-events: none; }
         .estepe-section { margin-top: 15px; padding-top: 15px; border-top: 2px dashed #e8ecf0; width: 100%; }
         .estepe-section .eixo-label { color: #f57c00; font-size: 12px; }
-
-        /* ===== SERVIÇOS ===== */
         .modal-servicos-alinhamento { background: #f8f9fa; padding: 12px; border-radius: 8px; margin: 12px 0; }
         .modal-servicos-alinhamento .servico-item { display: flex; flex-direction: column; gap: 3px; padding: 6px 0; border-bottom: 1px solid #e8ecf0; }
         .modal-servicos-alinhamento .servico-item:last-child { border-bottom: none; }
@@ -252,8 +221,6 @@
         .modal-servicos-alinhamento .servico-item .alerta-tempo.critico { background: #ffcdd2; color: #c62828; animation: piscar 1s infinite; }
         .modal-servicos-alinhamento .servico-item .alerta-tempo.atencao { background: #fff9c4; color: #f57f17; }
         .modal-servicos-alinhamento .servico-item .alerta-tempo.ok { background: #c8e6c9; color: #1b5e20; }
-
-        /* ===== PEÇAS ===== */
         .pecas-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
         @media (min-width: 500px) { .pecas-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); } }
         .peca-card { background: white; border: 2px solid #e8ecf0; border-radius: 10px; padding: 12px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
@@ -276,8 +243,6 @@
         .peca-instalada-item .btn-remover-peca:hover { background: #b71c1c; }
         .pecas-instaladas-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; max-height: 300px; overflow-y: auto; padding: 3px 0; }
         @media (min-width: 500px) { .pecas-instaladas-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
-
-        /* ===== MODAL SELEÇÃO ===== */
         .modal-selecao { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1100; justify-content: center; align-items: center; padding: 10px; }
         .modal-selecao.show { display: flex; }
         .modal-selecao-content { background: white; border-radius: 12px; max-width: 500px; width: 100%; padding: 20px 16px; max-height: 80vh; overflow-y: auto; }
@@ -292,8 +257,6 @@
         .item-disponivel .qtd { background: #7b1fa2; color: white; padding: 1px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
         .modal-selecao-close { margin-top: 12px; padding: 8px 16px; background: #e8ecf0; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; font-size: 14px; }
         .modal-selecao-close:hover { background: #d0d4d9; }
-
-        /* ===== MODAL INSTALAÇÃO ===== */
         .modal-instalacao-peca { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1200; justify-content: center; align-items: center; padding: 10px; }
         .modal-instalacao-peca.show { display: flex; }
         .modal-instalacao-peca-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; }
@@ -304,8 +267,6 @@
         .modal-instalacao-peca-content input { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-instalacao-peca-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-instalacao-peca-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
-
-        /* ===== MODAL REMOÇÃO ===== */
         .modal-remocao { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1300; justify-content: center; align-items: center; padding: 10px; }
         .modal-remocao.show { display: flex; }
         .modal-remocao-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; }
@@ -316,8 +277,6 @@
         .modal-remocao-content input, .modal-remocao-content select { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-remocao-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-remocao-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
-
-        /* ===== MODAL EDIÇÃO ===== */
         .modal-edicao { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1400; justify-content: center; align-items: center; padding: 10px; }
         .modal-edicao.show { display: flex; }
         .modal-edicao-content { background: white; border-radius: 12px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 20px 16px; position: relative; }
@@ -331,8 +290,6 @@
         .pneu-info-box .info-row .label { font-weight: 600; color: #555; }
         .modal-edicao-actions { display: flex; gap: 8px; margin-top: 12px; }
         .modal-edicao-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
-
-        /* ===== MODAL MANUTENÇÃO ===== */
         .modal-manutencao-simplificada { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; justify-content: center; align-items: center; padding: 10px; }
         .modal-manutencao-simplificada.show { display: flex; }
         .modal-manutencao-simplificada-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; max-height: 90vh; overflow-y: auto; }
@@ -343,8 +300,6 @@
         .modal-manutencao-simplificada-content input, .modal-manutencao-simplificada-content select, .modal-manutencao-simplificada-content textarea { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-manutencao-simplificada-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-manutencao-simplificada-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
-
-        /* ===== MODAL COMBINAR ===== */
         .modal-combinar { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1600; justify-content: center; align-items: center; padding: 10px; }
         .modal-combinar.show { display: flex; }
         .modal-combinar-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; }
@@ -355,8 +310,6 @@
         .modal-combinar-content select { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-combinar-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-combinar-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
-
-        /* ===== MODAL VENDER ===== */
         .modal-vender-veiculo { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1700; justify-content: center; align-items: center; padding: 10px; }
         .modal-vender-veiculo.show { display: flex; }
         .modal-vender-veiculo-content { background: white; border-radius: 12px; max-width: 400px; width: 100%; padding: 20px 16px; }
@@ -367,8 +320,6 @@
         .modal-vender-veiculo-content input, .modal-vender-veiculo-content select, .modal-vender-veiculo-content textarea { width: 100%; padding: 8px 12px; border: 2px solid #dce0e5; border-radius: 6px; font-size: 14px; }
         .modal-vender-veiculo-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-vender-veiculo-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
-
-        /* ===== MODAL FAIXAS ===== */
         .modal-faixas { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 10px; }
         .modal-faixas.show { display: flex; }
         .modal-faixas-content { background: white; border-radius: 12px; max-width: 500px; width: 100%; max-height: 95vh; overflow-y: auto; padding: 20px 16px; position: relative; }
@@ -384,8 +335,6 @@
         .modal-faixas-content .analise-item .valor { font-size: 20px; font-weight: 700; color: #1a3a5c; }
         .modal-faixas-content .analise-item .label { font-size: 11px; color: #666; }
         .modal-faixas-content .analise-detalhada { margin-top: 10px; font-size: 13px; color: #666; text-align: center; padding: 8px; background: #f8f9fa; border-radius: 6px; }
-
-        /* ===== MODAL CADASTRO MÚLTIPLO ===== */
         .modal-cadastro-multiplo { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1800; justify-content: center; align-items: center; padding: 10px; }
         .modal-cadastro-multiplo.show { display: flex; }
         .modal-cadastro-multiplo-content { background: white; border-radius: 12px; max-width: 500px; width: 100%; padding: 20px 16px; max-height: 80vh; overflow-y: auto; }
@@ -393,8 +342,6 @@
         .modal-cadastro-multiplo-content .subtitle { color: #666; font-size: 13px; margin-bottom: 15px; }
         .modal-cadastro-multiplo-actions { display: flex; gap: 8px; margin-top: 15px; }
         .modal-cadastro-multiplo-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
-
-        /* ===== MASTER ===== */
         .master-container { background: #fff8e1; border: 2px solid #ffd700; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
         .master-container h3 { color: #1a3a5c; margin-bottom: 12px; font-size: 18px; }
         .master-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
@@ -405,8 +352,6 @@
         .master-card .empresa-status { display: flex; gap: 8px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
         .master-card .empresa-status .badge { font-size: 10px; }
         .master-card .empresa-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-
-        /* ===== PLANOS ===== */
         .planos-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
         @media (min-width: 600px) { .planos-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
         .plano-card { background: white; border-radius: 10px; padding: 15px; border: 2px solid #e8ecf0; text-align: center; transition: all 0.3s; }
@@ -415,8 +360,6 @@
         .plano-card .plano-limite { font-size: 24px; font-weight: 700; color: #2a5f7a; margin: 8px 0; }
         .plano-card .plano-limite small { font-size: 13px; font-weight: 400; color: #666; }
         .plano-card .plano-status { margin-top: 8px; }
-
-        /* ===== RELATÓRIOS ===== */
         .relatorio-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e8ecf0; }
         .relatorio-card h3 { color: #1a3a5c; margin-bottom: 12px; font-size: 16px; }
         .relatorio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -438,8 +381,6 @@
         .relatorio-filtros-extra .form-group { flex: 1; min-width: 120px; margin-bottom: 0; }
         .relatorio-filtros-extra .form-group label { font-size: 11px; color: #666; }
         .relatorio-filtros-extra .form-group input, .relatorio-filtros-extra .form-group select { padding: 6px 10px; font-size: 12px; width: 100%; border: 2px solid #dce0e5; border-radius: 6px; }
-
-        /* ===== DESGASTE VEÍCULO ===== */
         .veiculo-desgaste-item { background: white; border: 2px solid #e8ecf0; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .veiculo-desgaste-item:hover { border-color: #2a5f7a; box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
         .veiculo-desgaste-item .veiculo-placa { font-weight: 700; color: #1a3a5c; font-size: 18px; }
@@ -451,17 +392,13 @@
         .veiculo-desgaste-item .resumo-pneus .mini-pneu.ok { border-color: #2e7d32; background: #c8e6c9; }
         .veiculo-desgaste-item .resumo-pneus .mini-pneu .tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 3px 6px; border-radius: 4px; font-size: 8px; white-space: nowrap; z-index: 10; }
         .veiculo-desgaste-item .resumo-pneus .mini-pneu:hover .tooltip { display: block; }
-
-        /* ===== MODAL DESGASTE DETALHES ===== */
         .modal-desgaste-detalhes { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 10px; }
         .modal-desgaste-detalhes.show { display: flex; }
         .modal-desgaste-detalhes-content { background: white; border-radius: 12px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 20px 16px; position: relative; }
         .modal-desgaste-detalhes-content .modal-close { position: absolute; top: 10px; right: 14px; font-size: 24px; background: none; border: none; cursor: pointer; color: #888; transition: color 0.3s; z-index: 10; }
         .modal-desgaste-detalhes-content .modal-close:hover { color: #333; }
         .modal-desgaste-detalhes-content h3 { color: #1a3a5c; margin-bottom: 15px; font-size: 18px; padding-right: 30px; }
-
         @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
         @media (max-width: 480px) {
             .container { padding: 8px 10px; }
             .tab-content { padding: 12px 10px; }
@@ -1140,7 +1077,7 @@
         }
         function clearCurrentUser() { currentUserFirebase = null; currentUserId = null; }
 
-        // CRUD Firebase - Cada empresa tem seu próprio estoque (usuário logado)
+        // CRUD Firebase
         async function getPneus() {
             if (!currentUserId) return [];
             try {
@@ -1352,36 +1289,6 @@
                 });
                 await batch.commit();
             } catch (error) { console.error('Erro ao salvar usuários:', error); }
-        }
-
-        // ============================================
-        //  HISTÓRICO
-        // ============================================
-        async function adicionarHistorico(acao, dados, batchId) {
-            const item = { acao: acao, dados: JSON.parse(JSON.stringify(dados)), timestamp: Date.now(), batchId: batchId || null };
-            if (batchId) item.batchId = batchId;
-            historicoAcoes.push(item);
-            if (historicoAcoes.length > 50) historicoAcoes.shift();
-            if (currentUserId) {
-                try { await db.collection('users').doc(currentUserId).collection('historico').doc(String(item.timestamp)).set(item); } 
-                catch (error) { console.error('Erro ao salvar histórico:', error); }
-            }
-            localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes));
-        }
-
-        function iniciarBatch() { ultimoBatch = Date.now() + Math.random() * 1000; return ultimoBatch; }
-
-        async function carregarHistorico() {
-            const data = localStorage.getItem(`historico_${getCurrentUserId()}`);
-            if (data) historicoAcoes = JSON.parse(data);
-            if (currentUserId) {
-                try {
-                    const snapshot = await db.collection('users').doc(currentUserId).collection('historico').orderBy('timestamp', 'desc').limit(50).get();
-                    const historicoFirestore = [];
-                    snapshot.forEach(doc => historicoFirestore.push(doc.data()));
-                    if (historicoFirestore.length > 0) { historicoAcoes = historicoFirestore; localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes)); }
-                } catch (error) { console.error('Erro ao carregar histórico do Firestore:', error); }
-            }
         }
 
         // ============================================
@@ -2199,10 +2106,8 @@
         }
 
         // ============================================
-        //  FUNÇÕES DE RENDERIZAÇÃO
+        //  FUNÇÕES DE RENDERIZAÇÃO - ESTOQUE
         // ============================================
-        
-        // RENDER ESTOQUE
         async function renderEstoque() {
             const pneus = dadosCache.pneus || [];
             const filtroNome = document.getElementById('filtroPneuNome')?.value.toLowerCase() || '';
@@ -2249,7 +2154,6 @@
                 let posicaoLabel = p.posicao || '-';
                 if (p.veiculoTipo) posicaoLabel += ` (${p.veiculoTipo})`;
 
-                // Profundidade
                 let profundidadeHtml = 'N/A';
                 if (p.faixas) {
                     const vals = [p.faixas.f1 || 0, p.faixas.f2 || 0, p.faixas.f3 || 0, p.faixas.f4 || 0];
@@ -3131,7 +3035,7 @@
         }
 
         // ============================================
-        //  RELATÓRIOS
+        //  RELATÓRIOS - FUNÇÃO COMPLETA CORRIGIDA
         // ============================================
         async function atualizarFiltrosRelatorios() {
             const pneus = dadosCache.pneus || [];
@@ -3145,8 +3049,857 @@
             }
         }
 
+        async function renderRelatorios() {
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.relatorios && !isMaster()) {
+                document.getElementById('relatoriosContent').style.display = 'none';
+                document.getElementById('relatoriosBlocked').style.display = 'block';
+                return;
+            }
+            document.getElementById('relatoriosContent').style.display = 'block';
+            document.getElementById('relatoriosBlocked').style.display = 'none';
+
+            let pneus = dadosCache.pneus || [];
+            const veiculos = dadosCache.veiculos || [];
+            const pecas = dadosCache.pecas || [];
+            let manutencoes = dadosCache.manutencoes || [];
+            const descartados = dadosCache.descartados || [];
+
+            const filtroMarca = document.getElementById('filtroRelatorioMarca')?.value || '';
+            const filtroTamanho = document.getElementById('filtroRelatorioTamanho')?.value || '';
+            const filtroDot = document.getElementById('filtroRelatorioDot')?.value.toLowerCase() || '';
+            const filtroPlaca = document.getElementById('filtroRelatorioPlaca')?.value.toUpperCase() || '';
+            const filtroDataInicio = document.getElementById('filtroRelatorioDataInicio')?.value || '';
+            const filtroDataFim = document.getElementById('filtroRelatorioDataFim')?.value || '';
+            const filtroTipo = document.getElementById('filtroRelatorioTipo')?.value || 'todos';
+
+            // Aplicar filtros
+            if (filtroMarca) pneus = pneus.filter(p => p.nome === filtroMarca);
+            if (filtroTamanho) pneus = pneus.filter(p => p.tamanho === filtroTamanho);
+            if (filtroDot) pneus = pneus.filter(p => p.dot.toLowerCase().includes(filtroDot));
+            if (filtroPlaca) {
+                pneus = pneus.filter(p => p.veiculoInstalado && p.veiculoInstalado.includes(filtroPlaca));
+            }
+            if (filtroDataInicio) {
+                const dataInicio = new Date(filtroDataInicio);
+                pneus = pneus.filter(p => new Date(p.dataEntrada || p.dataCadastro) >= dataInicio);
+                manutencoes = manutencoes.filter(m => new Date(m.data) >= dataInicio);
+            }
+            if (filtroDataFim) {
+                const dataFim = new Date(filtroDataFim);
+                dataFim.setHours(23, 59, 59);
+                pneus = pneus.filter(p => new Date(p.dataEntrada || p.dataCadastro) <= dataFim);
+                manutencoes = manutencoes.filter(m => new Date(m.data) <= dataFim);
+            }
+
+            // Salvar filtros para PDF parcial
+            window._filtrosRelatorio = { marca: filtroMarca, tamanho: filtroTamanho, dot: filtroDot, placa: filtroPlaca, dataInicio: filtroDataInicio, dataFim: filtroDataFim, tipo: filtroTipo };
+
+            // ===== RESUMO GERAL =====
+            const totalPneus = pneus.length;
+            const pneusInstalados = pneus.filter(p => p.status === 'instalado').length;
+            const pneusDisponiveis = pneus.filter(p => p.status === 'disponivel' || !p.status).length;
+            const valorTotal = pneus.reduce((sum, p) => sum + p.valor, 0);
+
+            document.getElementById('totalPneusRelatorio').textContent = totalPneus;
+            document.getElementById('totalPneusInstalados').textContent = pneusInstalados;
+            document.getElementById('totalPneusDisponiveis').textContent = pneusDisponiveis;
+            document.getElementById('valorTotalPneus').textContent = `R$ ${valorTotal.toFixed(2)}`;
+
+            // ===== CUSTO POR KM =====
+            const tbodyCusto = document.getElementById('relatorioCustoKmBody');
+            const custoResumo = document.getElementById('custoKmResumo');
+            const pneusComKm = pneus.filter(p => (p.kmTotal || 0) > 0);
+
+            if (pneusComKm.length === 0) {
+                tbodyCusto.innerHTML = `<tr><td colspan="8" class="empty-state"><p>Nenhum pneu com KM registrado.</p></td></tr>`;
+                custoResumo.textContent = '';
+            } else {
+                let htmlCusto = '';
+                let index = 0;
+                let custoTotal = 0;
+                let kmTotal = 0;
+                
+                const grupos = {};
+                pneusComKm.forEach(p => {
+                    const chave = p.veiculoInstalado || 'Não instalado';
+                    if (!grupos[chave]) grupos[chave] = { pneus: [], custoTotal: 0, kmTotal: 0 };
+                    grupos[chave].pneus.push(p);
+                    grupos[chave].custoTotal += p.valor;
+                    grupos[chave].kmTotal += p.kmTotal || 0;
+                });
+                
+                Object.keys(grupos).forEach(chave => {
+                    const grupo = grupos[chave];
+                    grupo.custoKm = grupo.kmTotal > 0 ? grupo.custoTotal / grupo.kmTotal : 0;
+                });
+                
+                const gruposOrdenados = Object.entries(grupos).sort((a, b) => a[1].custoKm - b[1].custoKm);
+
+                gruposOrdenados.forEach(([chave, grupo]) => {
+                    const label = `🚗 ${chave}`;
+                    const corCustoKm = grupo.custoKm < 0.5 ? '#2e7d32' : grupo.custoKm < 1 ? '#f57c00' : '#c62828';
+                    
+                    htmlCusto += `
+                        <tr style="background: #f0f2f5; font-weight: 700;">
+                            <td colspan="8" style="padding: 8px 12px; color: #1a3a5c;">
+                                ${label} - Total: ${grupo.pneus.length} pneus | 
+                                KM Total: ${grupo.kmTotal.toLocaleString('pt-BR')} | 
+                                Custo Total: R$ ${grupo.custoTotal.toFixed(2)} | 
+                                Custo/KM: <span style="color: ${corCustoKm}">R$ ${grupo.custoKm.toFixed(4)}</span>
+                            </td>
+                        </tr>
+                    `;
+                    
+                    grupo.pneus.forEach(p => {
+                        index++;
+                        const custoPorKm = (p.kmTotal || 0) > 0 ? p.valor / (p.kmTotal || 1) : p.valor;
+                        const statusLabel = p.status === 'instalado' ? 'Instalado' : 'Disponível';
+                        htmlCusto += `
+                            <tr>
+                                <td>${index}</td>
+                                <td><strong>${p.nome}</strong> (${p.tamanho})</td>
+                                <td>${p.veiculoInstalado || 'N/A'}</td>
+                                <td>${p.posicao || '-'}</td>
+                                <td>R$ ${p.valor.toFixed(2)}</td>
+                                <td>${(p.kmTotal || 0).toLocaleString('pt-BR')}</td>
+                                <td><strong>R$ ${custoPorKm.toFixed(4)}</strong></td>
+                                <td><span class="badge ${p.status === 'instalado' ? 'badge-instalado' : 'badge-disponivel'}">${statusLabel}</span></td>
+                            </tr>
+                        `;
+                    });
+                    
+                    custoTotal += grupo.custoTotal;
+                    kmTotal += grupo.kmTotal;
+                });
+
+                tbodyCusto.innerHTML = htmlCusto;
+                custoResumo.textContent = `📊 Resumo: ${pneusComKm.length} pneus | KM Total: ${kmTotal.toLocaleString('pt-BR')} | Custo Total: R$ ${custoTotal.toFixed(2)} | Custo Médio/KM: R$ ${(custoTotal / (kmTotal || 1)).toFixed(4)}`;
+            }
+
+            // ===== CUSTO DE PEÇAS =====
+            const tbodyPecas = document.getElementById('relatorioCustoPecasBody');
+            const pecasInstaladas = pecas.filter(p => p.status === 'instalado');
+            
+            let pecasFiltradas = pecasInstaladas;
+            if (filtroPlaca) {
+                pecasFiltradas = pecasInstaladas.filter(p => p.veiculoInstalado && p.veiculoInstalado.includes(filtroPlaca));
+            }
+
+            if (pecasFiltradas.length === 0) {
+                tbodyPecas.innerHTML = `<tr><td colspan="5" class="empty-state"><p>Nenhuma peça instalada em veículos.</p></td></tr>`;
+            } else {
+                const custoPorVeiculo = {};
+                pecasFiltradas.forEach(p => {
+                    const veiculo = p.veiculoInstalado || 'Não identificado';
+                    if (!custoPorVeiculo[veiculo]) custoPorVeiculo[veiculo] = { total: 0, quantidade: 0 };
+                    custoPorVeiculo[veiculo].total += p.valor;
+                    custoPorVeiculo[veiculo].quantidade += 1;
+                });
+                
+                let htmlPecas = '';
+                let indexPecas = 0;
+                Object.entries(custoPorVeiculo).forEach(([veiculo, dados]) => {
+                    indexPecas++;
+                    let veiculoInfo = veiculo;
+                    const veiculoEncontrado = veiculos.find(v => v.placa === veiculo);
+                    if (veiculoEncontrado) veiculoInfo = `${veiculoEncontrado.marca} ${veiculoEncontrado.modelo}`;
+                    htmlPecas += `<tr><td>${indexPecas}</td><td><strong>${veiculoInfo}</strong></td><td>${veiculo}</td><td>${dados.quantidade}</td><td>R$ ${dados.total.toFixed(2)}</td></tr>`;
+                });
+                tbodyPecas.innerHTML = htmlPecas;
+            }
+
+            // ===== CUSTO DE MANUTENÇÃO =====
+            const tbodyManutencao = document.getElementById('relatorioCustoManutencaoBody');
+            let manutencoesFiltradas = manutencoes;
+            if (filtroPlaca) {
+                manutencoesFiltradas = manutencoes.filter(m => m.veiculoPlaca && m.veiculoPlaca.includes(filtroPlaca));
+            }
+
+            if (manutencoesFiltradas.length === 0) {
+                tbodyManutencao.innerHTML = `<tr><td colspan="5" class="empty-state"><p>Nenhuma manutenção registrada.</p></td></tr>`;
+            } else {
+                const custoManutencao = {};
+                manutencoesFiltradas.forEach(m => {
+                    const key = m.veiculoPlaca || 'Não identificado';
+                    if (!custoManutencao[key]) custoManutencao[key] = { total: 0, quantidade: 0, marca: m.veiculoMarca || '', modelo: m.veiculoModelo || '' };
+                    custoManutencao[key].total += m.valor || 0;
+                    custoManutencao[key].quantidade += 1;
+                });
+                
+                let htmlManutencao = '';
+                let indexManutencao = 0;
+                Object.entries(custoManutencao).forEach(([placa, dados]) => {
+                    indexManutencao++;
+                    const nomeVeiculo = dados.marca && dados.modelo ? `${dados.marca} ${dados.modelo}` : placa;
+                    htmlManutencao += `<tr><td>${indexManutencao}</td><td><strong>${nomeVeiculo}</strong></td><td>${placa}</td><td>${dados.quantidade}</td><td>R$ ${dados.total.toFixed(2)}</td></tr>`;
+                });
+                tbodyManutencao.innerHTML = htmlManutencao;
+            }
+
+            // ===== HISTÓRICO DE PNEUS REMOVIDOS =====
+            const tbodyHistorico = document.getElementById('relatorioHistoricoBody');
+            const removidos = [];
+            
+            pneus.forEach(p => {
+                if (p.historico) {
+                    p.historico.forEach(h => {
+                        if (h.acao === 'Remoção' || h.acao.includes('Remoção')) {
+                            removidos.push({
+                                pneu: p,
+                                historico: h,
+                                veiculo: p.veiculoInstalado || p.veiculoOrigem || 'Não identificado',
+                                posicao: p.posicao || 'Não informado',
+                                isDescartado: false
+                            });
+                        }
+                    });
+                }
+            });
+            
+            descartados.forEach(p => {
+                removidos.push({
+                    pneu: p,
+                    historico: { 
+                        data: p.dataDescarte || p.dataCadastro,
+                        acao: 'Descarte',
+                        detalhes: p.motivoDescarte || 'Descartado'
+                    },
+                    veiculo: p.veiculoInstalado || p.veiculoOrigem || 'Não identificado',
+                    posicao: p.posicao || 'Não informado',
+                    isDescartado: true
+                });
+            });
+
+            let removidosFiltrados = removidos;
+            if (filtroPlaca) {
+                removidosFiltrados = removidos.filter(r => r.veiculo && r.veiculo.includes(filtroPlaca));
+            }
+
+            if (removidosFiltrados.length === 0) {
+                tbodyHistorico.innerHTML = `<tr><td colspan="9" class="empty-state"><p>Nenhum pneu removido ainda.</p></td></tr>`;
+            } else {
+                let htmlHistorico = '';
+                let indexHistorico = 0;
+                removidosFiltrados.slice(0, 100).forEach(r => {
+                    indexHistorico++;
+                    const p = r.pneu;
+                    const custoPorKm = (p.kmTotal || 0) > 0 ? p.valor / (p.kmTotal || 1) : p.valor;
+                    htmlHistorico += `
+                        <tr>
+                            <td>${indexHistorico}</td>
+                            <td><strong>${p.nome}</strong> (${p.tamanho})</td>
+                            <td>${r.veiculo}</td>
+                            <td>${r.posicao}</td>
+                            <td>R$ ${p.valor.toFixed(2)}</td>
+                            <td>${(p.kmTotal || 0).toLocaleString('pt-BR')}</td>
+                            <td>${(p.kmTotal || 0) > 0 ? `R$ ${custoPorKm.toFixed(4)}` : 'N/A'}</td>
+                            <td><span class="badge ${r.isDescartado ? 'badge-descarte' : 'badge-meia'}">${r.isDescartado ? 'Descartado' : 'Removido'}</span></td>
+                            <td>${r.historico?.data || p.dataDescarte || '-'}</td>
+                        </tr>
+                    `;
+                });
+                tbodyHistorico.innerHTML = htmlHistorico;
+            }
+
+            // ===== DESGASTE POR VEÍCULO =====
+            await renderDesgastePorVeiculo(pneus, veiculos, filtroPlaca);
+
+            // ===== VISIBILIDADE DAS SEÇÕES =====
+            const secoes = {
+                custo_km: document.getElementById('relatorioCustoKm'),
+                pecas: document.getElementById('relatorioCustoPecas'),
+                manutencao: document.getElementById('relatorioCustoManutencao'),
+                historico: document.getElementById('relatorioHistorico'),
+                desgaste: document.getElementById('relatorioDesgaste'),
+                resumo: document.getElementById('relatorioResumoGeral')
+            };
+
+            const tiposVisiveis = {
+                'todos': ['resumo', 'custo_km', 'pecas', 'manutencao', 'historico', 'desgaste'],
+                'custo_km': ['resumo', 'custo_km'],
+                'pecas': ['resumo', 'pecas'],
+                'manutencao': ['resumo', 'manutencao'],
+                'historico': ['resumo', 'historico'],
+                'desgaste': ['resumo', 'desgaste']
+            };
+
+            const visiveis = tiposVisiveis[filtroTipo] || tiposVisiveis['todos'];
+            Object.keys(secoes).forEach(key => {
+                const visivel = visiveis.includes(key);
+                secoes[key].style.display = visivel ? 'block' : 'none';
+            });
+        }
+
         // ============================================
-        //  RENDER CAMINHÃO - FUNÇÃO CORRIGIDA
+        //  DESGASTE POR VEÍCULO
+        // ============================================
+        async function renderDesgastePorVeiculo(pneus, veiculos, filtroPlaca) {
+            const container = document.getElementById('desgasteRelatorioContainer');
+            
+            let pneusComFaixas = pneus.filter(p => 
+                p.status === 'instalado' && 
+                p.faixas && 
+                (p.faixas.f1 > 0 || p.faixas.f2 > 0 || p.faixas.f3 > 0 || p.faixas.f4 > 0)
+            );
+            
+            if (filtroPlaca) {
+                pneusComFaixas = pneusComFaixas.filter(p => p.veiculoInstalado && p.veiculoInstalado.includes(filtroPlaca));
+            }
+
+            const desgastePorVeiculo = {};
+            
+            pneusComFaixas.forEach(p => {
+                const veiculoKey = p.veiculoInstalado || 'Não identificado';
+                if (!desgastePorVeiculo[veiculoKey]) {
+                    desgastePorVeiculo[veiculoKey] = { 
+                        pneus: [], 
+                        mediaGeral: 0, 
+                        status: 'ok',
+                        veiculoInfo: veiculos.find(v => v.placa === veiculoKey) 
+                    };
+                }
+                
+                const valores = [p.faixas.f1 || 0, p.faixas.f2 || 0, p.faixas.f3 || 0, p.faixas.f4 || 0];
+                const filtrados = valores.filter(v => v > 0);
+                const media = filtrados.length > 0 ? filtrados.reduce((a, b) => a + b, 0) / filtrados.length : 0;
+                const diff = filtrados.length > 1 ? Math.max(...filtrados) - Math.min(...filtrados) : 0;
+                const temAlerta = filtrados.some(v => v > 0 && v < 5);
+                
+                desgastePorVeiculo[veiculoKey].pneus.push({ 
+                    nome: p.nome, 
+                    tamanho: p.tamanho, 
+                    posicao: p.posicao || 'N/A', 
+                    media, 
+                    diff, 
+                    faixas: p.faixas, 
+                    temAlerta,
+                    kmTotal: p.kmTotal || 0
+                });
+                
+                if (temAlerta) desgastePorVeiculo[veiculoKey].status = 'critico';
+                else if (diff > 1) desgastePorVeiculo[veiculoKey].status = 'atencao';
+            });
+
+            const veiculosParaMostrar = Object.entries(desgastePorVeiculo);
+            
+            if (veiculosParaMostrar.length === 0) {
+                container.innerHTML = `<div class="empty-state"><p>${filtroPlaca ? 'Nenhum veículo encontrado.' : 'Nenhum dado de desgaste registrado.'}</p></div>`;
+                return;
+            }
+
+            let html = '';
+            veiculosParaMostrar.forEach(([veiculo, dados]) => {
+                const statusIcon = dados.status === 'critico' ? '🔴' : dados.status === 'atencao' ? '🟡' : '🟢';
+                const statusText = dados.status === 'critico' ? 'Crítico' : dados.status === 'atencao' ? 'Atenção' : 'OK';
+                const medias = dados.pneus.map(p => p.media);
+                const mediaGeral = medias.length > 0 ? medias.reduce((a, b) => a + b, 0) / medias.length : 0;
+                const veiculoInfo = dados.veiculoInfo || { marca: '', modelo: '' };
+                const veiculoLabel = veiculoInfo.marca && veiculoInfo.modelo ? `${veiculoInfo.marca} ${veiculoInfo.modelo}` : veiculo;
+                
+                const miniPneus = dados.pneus.map(p => {
+                    const classe = p.temAlerta ? 'critico' : p.diff > 1 ? 'atencao' : 'ok';
+                    return `<div class="mini-pneu ${classe}" title="${p.nome}: ${p.media.toFixed(1)}mm | KM: ${(p.kmTotal || 0).toLocaleString('pt-BR')}">
+                        <span>${p.media > 0 ? p.media.toFixed(0) : '?'}</span>
+                        <span class="tooltip">${p.nome} - ${p.media.toFixed(1)}mm${p.temAlerta ? ' 🔴' : ''}</span>
+                    </div>`;
+                }).join('');
+
+                const totalPneus = dados.pneus.length;
+                const criticos = dados.pneus.filter(p => p.temAlerta).length;
+
+                html += `
+                    <div class="veiculo-desgaste-item" onclick="abrirModalDesgasteDetalhes('${veiculo}', ${JSON.stringify(dados.pneus).replace(/"/g, '&quot;')})">
+                        <div class="veiculo-placa">🚗 ${veiculo}</div>
+                        <div class="veiculo-info">
+                            <span>${veiculoLabel}</span>
+                            <span class="badge ${dados.status === 'critico' ? 'badge-alerta' : dados.status === 'atencao' ? 'badge-meia' : 'badge-ativo'}">${statusIcon} ${statusText}</span>
+                            <span>Média: ${mediaGeral.toFixed(1)}mm</span>
+                            <span>Pneus: ${totalPneus}</span>
+                            ${criticos > 0 ? `<span style="color:#c62828; font-weight:700;">⚠️ ${criticos} crítico(s)</span>` : ''}
+                        </div>
+                        <div class="resumo-pneus">${miniPneus}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ============================================
+        //  MODAL DESGASTE DETALHES
+        // ============================================
+        function abrirModalDesgasteDetalhes(veiculo, pneusData) {
+            const modal = document.getElementById('modalDesgasteDetalhes');
+            const title = document.getElementById('modalDesgasteDetalhesTitle');
+            const body = document.getElementById('modalDesgasteDetalhesBody');
+            
+            title.textContent = `📏 Desgaste - ${veiculo}`;
+            
+            let html = `<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">`;
+            
+            const pneus = Array.isArray(pneusData) ? pneusData : JSON.parse(pneusData);
+            
+            pneus.forEach(p => {
+                const faixas = p.faixas || {};
+                const media = p.media || 0;
+                const statusCor = p.temAlerta ? '#c62828' : p.diff > 1 ? '#f57c00' : '#2e7d32';
+                const statusLabel = p.temAlerta ? '🔴 Crítico' : p.diff > 1 ? '🟡 Atenção' : '🟢 OK';
+                
+                html += `
+                    <div style="background:#f8f9fa; padding:12px; border-radius:8px; border-left:4px solid ${statusCor};">
+                        <div style="font-weight:700; color:#1a3a5c;">${p.nome} (${p.tamanho})</div>
+                        <div style="font-size:12px; color:#666;">Posição: ${p.posicao}</div>
+                        <div style="font-size:12px; color:#666;">KM Total: ${(p.kmTotal || 0).toLocaleString('pt-BR')}</div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px; margin-top:6px; font-size:12px;">
+                            <span>F1: <strong>${faixas.f1 || 0}mm</strong></span>
+                            <span>F2: <strong>${faixas.f2 || 0}mm</strong></span>
+                            <span>F3: <strong>${faixas.f3 || 0}mm</strong></span>
+                            <span>F4: <strong>${faixas.f4 || 0}mm</strong></span>
+                        </div>
+                        <div style="margin-top:4px; font-size:13px; font-weight:600; color:${statusCor};">Média: ${media.toFixed(1)}mm - ${statusLabel}</div>
+                        ${p.diff > 1 ? `<div style="font-size:11px; color:#f57c00;">⚠️ Diferença > 1mm (${p.diff.toFixed(1)}mm)</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            body.innerHTML = html;
+            modal.classList.add('show');
+        }
+
+        function fecharModalDesgasteDetalhes() {
+            document.getElementById('modalDesgasteDetalhes').classList.remove('show');
+        }
+
+        // ============================================
+        //  PDF PARCIAL
+        // ============================================
+        function gerarPDFRelatorioParcial() {
+            const tipo = document.getElementById('filtroRelatorioTipo')?.value || 'todos';
+            const pneus = dadosCache.pneus || [];
+            const veiculos = dadosCache.veiculos || [];
+            const pecas = dadosCache.pecas || [];
+            const manutencoes = dadosCache.manutencoes || [];
+            const filtros = window._filtrosRelatorio || {};
+            
+            let titulo = 'Relatório';
+            let dados = [];
+            let colunas = [];
+            
+            let pneusFiltrados = [...pneus];
+            let pecasFiltradas = [...pecas];
+            let manutencoesFiltradas = [...manutencoes];
+            
+            if (filtros.marca) pneusFiltrados = pneusFiltrados.filter(p => p.nome === filtros.marca);
+            if (filtros.tamanho) pneusFiltrados = pneusFiltrados.filter(p => p.tamanho === filtros.tamanho);
+            if (filtros.dot) pneusFiltrados = pneusFiltrados.filter(p => p.dot.toLowerCase().includes(filtros.dot.toLowerCase()));
+            if (filtros.placa) {
+                pneusFiltrados = pneusFiltrados.filter(p => p.veiculoInstalado && p.veiculoInstalado.includes(filtros.placa));
+                pecasFiltradas = pecasFiltradas.filter(p => p.veiculoInstalado && p.veiculoInstalado.includes(filtros.placa));
+                manutencoesFiltradas = manutencoesFiltradas.filter(m => m.veiculoPlaca && m.veiculoPlaca.includes(filtros.placa));
+            }
+            
+            switch(tipo) {
+                case 'custo_km':
+                    titulo = 'Relatório de Custo por KM';
+                    const pneusComKm = pneusFiltrados.filter(p => (p.kmTotal || 0) > 0);
+                    dados = pneusComKm.map(p => ({
+                        'Pneu': p.nome,
+                        'Tamanho': p.tamanho,
+                        'Veículo': p.veiculoInstalado || 'N/A',
+                        'Posição': p.posicao || '-',
+                        'Valor (R$)': p.valor.toFixed(2),
+                        'KM Total': (p.kmTotal || 0).toLocaleString('pt-BR'),
+                        'Custo/KM (R$)': ((p.kmTotal || 0) > 0 ? (p.valor / (p.kmTotal || 1)).toFixed(4) : '0.0000'),
+                        'Status': p.status === 'instalado' ? 'Instalado' : 'Disponível'
+                    }));
+                    colunas = ['Pneu', 'Tamanho', 'Veículo', 'Posição', 'Valor (R$)', 'KM Total', 'Custo/KM (R$)', 'Status'];
+                    break;
+                    
+                case 'pecas':
+                    titulo = 'Relatório de Custos de Peças por Veículo';
+                    const pecasInstaladas = pecasFiltradas.filter(p => p.status === 'instalado');
+                    const custoPorVeiculo = {};
+                    pecasInstaladas.forEach(p => {
+                        const veiculo = p.veiculoInstalado || 'Não identificado';
+                        if (!custoPorVeiculo[veiculo]) custoPorVeiculo[veiculo] = { total: 0, quantidade: 0 };
+                        custoPorVeiculo[veiculo].total += p.valor;
+                        custoPorVeiculo[veiculo].quantidade += 1;
+                    });
+                    dados = Object.entries(custoPorVeiculo).map(([veiculo, d]) => ({
+                        'Veículo': veiculo,
+                        'Total de Peças': d.quantidade,
+                        'Valor Total (R$)': d.total.toFixed(2)
+                    }));
+                    colunas = ['Veículo', 'Total de Peças', 'Valor Total (R$)'];
+                    break;
+                    
+                case 'manutencao':
+                    titulo = 'Relatório de Manutenção por Veículo';
+                    const custoManutencao = {};
+                    manutencoesFiltradas.forEach(m => {
+                        const veiculo = m.veiculoPlaca || 'Não identificado';
+                        if (!custoManutencao[veiculo]) custoManutencao[veiculo] = { total: 0, quantidade: 0 };
+                        custoManutencao[veiculo].total += m.valor || 0;
+                        custoManutencao[veiculo].quantidade += 1;
+                    });
+                    dados = Object.entries(custoManutencao).map(([veiculo, d]) => ({
+                        'Veículo': veiculo,
+                        'Total de Manutenções': d.quantidade,
+                        'Valor Total (R$)': d.total.toFixed(2)
+                    }));
+                    colunas = ['Veículo', 'Total de Manutenções', 'Valor Total (R$)'];
+                    break;
+                    
+                case 'historico':
+                    titulo = 'Relatório de Histórico de Pneus Removidos';
+                    const removidos = [];
+                    pneusFiltrados.forEach(p => {
+                        if (p.historico) {
+                            p.historico.forEach(h => {
+                                if (h.acao === 'Remoção' || h.acao.includes('Remoção')) {
+                                    removidos.push({
+                                        'Pneu': p.nome,
+                                        'Tamanho': p.tamanho,
+                                        'Veículo': p.veiculoInstalado || p.veiculoOrigem || 'N/A',
+                                        'Posição': p.posicao || '-',
+                                        'Valor (R$)': p.valor.toFixed(2),
+                                        'KM Total': (p.kmTotal || 0).toLocaleString('pt-BR'),
+                                        'Destino': h.detalhes || 'Removido',
+                                        'Data': h.data || p.dataDescarte || '-'
+                                    });
+                                }
+                            });
+                        }
+                    });
+                    const descartados = dadosCache.descartados || [];
+                    descartados.forEach(p => {
+                        removidos.push({
+                            'Pneu': p.nome,
+                            'Tamanho': p.tamanho,
+                            'Veículo': p.veiculoInstalado || p.veiculoOrigem || 'N/A',
+                            'Posição': p.posicao || '-',
+                            'Valor (R$)': p.valor.toFixed(2),
+                            'KM Total': (p.kmTotal || 0).toLocaleString('pt-BR'),
+                            'Destino': 'Descartado',
+                            'Data': p.dataDescarte || p.dataCadastro || '-'
+                        });
+                    });
+                    dados = removidos.slice(0, 100);
+                    colunas = ['Pneu', 'Tamanho', 'Veículo', 'Posição', 'Valor (R$)', 'KM Total', 'Destino', 'Data'];
+                    break;
+                    
+                case 'desgaste':
+                    titulo = 'Relatório de Desgaste por Veículo';
+                    const pneusDesgaste = pneusFiltrados.filter(p => 
+                        p.status === 'instalado' && 
+                        p.faixas && 
+                        (p.faixas.f1 > 0 || p.faixas.f2 > 0 || p.faixas.f3 > 0 || p.faixas.f4 > 0)
+                    );
+                    dados = pneusDesgaste.map(p => {
+                        const vals = [p.faixas.f1 || 0, p.faixas.f2 || 0, p.faixas.f3 || 0, p.faixas.f4 || 0];
+                        const filtrados = vals.filter(v => v > 0);
+                        const media = filtrados.length > 0 ? filtrados.reduce((a, b) => a + b, 0) / filtrados.length : 0;
+                        return {
+                            'Veículo': p.veiculoInstalado || 'N/A',
+                            'Pneu': p.nome,
+                            'Tamanho': p.tamanho,
+                            'Posição': p.posicao || 'N/A',
+                            'F1 (mm)': p.faixas.f1 || 0,
+                            'F2 (mm)': p.faixas.f2 || 0,
+                            'F3 (mm)': p.faixas.f3 || 0,
+                            'F4 (mm)': p.faixas.f4 || 0,
+                            'Média (mm)': media.toFixed(1),
+                            'KM Total': (p.kmTotal || 0).toLocaleString('pt-BR')
+                        };
+                    });
+                    colunas = ['Veículo', 'Pneu', 'Tamanho', 'Posição', 'F1 (mm)', 'F2 (mm)', 'F3 (mm)', 'F4 (mm)', 'Média (mm)', 'KM Total'];
+                    break;
+                    
+                default:
+                    titulo = 'Relatório Completo';
+                    dados = pneusFiltrados.slice(0, 50).map(p => ({
+                        'Pneu': p.nome,
+                        'Tamanho': p.tamanho,
+                        'Situação': p.situacao,
+                        'Status': p.status === 'instalado' ? 'Instalado' : p.status === 'recapagem' ? 'Recapagem' : p.status === 'vulcanizacao' ? 'Vulcanização' : 'Disponível',
+                        'Valor (R$)': p.valor.toFixed(2),
+                        'KM': (p.kmTotal || 0).toLocaleString('pt-BR'),
+                        'Veículo': p.veiculoInstalado || 'N/A'
+                    }));
+                    colunas = ['Pneu', 'Tamanho', 'Situação', 'Status', 'Valor (R$)', 'KM', 'Veículo'];
+                    
+                    const user = getCurrentUser();
+                    const empresa = user?.companyName || user?.company || 'Minha Empresa';
+                    const totalPneus = pneusFiltrados.length;
+                    const totalValor = pneusFiltrados.reduce((sum, p) => sum + p.valor, 0);
+                    const pneusInstaladosCount = pneusFiltrados.filter(p => p.status === 'instalado').length;
+                    
+                    let html = `<html><head><meta charset="UTF-8"><title>${titulo}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 30px; font-size: 12px; }
+                        h1 { color: #1a3a5c; text-align: center; font-size: 20px; }
+                        .header { text-align: center; margin-bottom: 15px; }
+                        .header .empresa { font-size: 18px; font-weight: bold; color: #1a3a5c; }
+                        .header .data { color: #666; font-size: 12px; }
+                        .resumo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
+                        .resumo-item { background: #f8f9fa; padding: 10px; border-radius: 6px; text-align: center; }
+                        .resumo-item .valor { font-size: 18px; font-weight: bold; color: #1a3a5c; }
+                        .resumo-item .label { font-size: 10px; color: #666; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                        th { background: #1a3a5c; color: white; padding: 6px; text-align: left; font-size: 10px; }
+                        td { padding: 5px 6px; border-bottom: 1px solid #ddd; font-size: 10px; }
+                        .total { margin-top: 15px; text-align: center; color: #666; font-size: 11px; }
+                    </style></head>
+                    <body>
+                        <div class="header">
+                            <div class="empresa">${empresa}</div>
+                            <div class="data">${titulo} - ${new Date().toLocaleString('pt-BR')}</div>
+                        </div>
+                        <div class="resumo-grid">
+                            <div class="resumo-item"><div class="valor">${totalPneus}</div><div class="label">Total de Pneus</div></div>
+                            <div class="resumo-item"><div class="valor">${pneusInstaladosCount}</div><div class="label">Pneus Instalados</div></div>
+                            <div class="resumo-item"><div class="valor">R$ ${totalValor.toFixed(2)}</div><div class="label">Valor Total</div></div>
+                        </div>
+                        <table><thead><tr>${colunas.map(c => `<th>${c}</th>`).join('')}</tr></thead>
+                        <tbody>${dados.map(item => `<tr>${colunas.map(c => `<td>${item[c] || '-'}</td>`).join('')}</tr>`).join('')}</tbody>
+                        </table>
+                        <div class="total">Total de registros: ${dados.length}</div>
+                    </body></html>`;
+                    abrirPDF(html, `${titulo.replace(/ /g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+                    return;
+            }
+            
+            if (dados.length === 0) { 
+                alert('Não há dados para este relatório com os filtros aplicados.'); 
+                return; 
+            }
+            
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `
+                <html><head><meta charset="UTF-8"><title>${titulo}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 30px; font-size: 12px; }
+                    h1 { color: #1a3a5c; text-align: center; font-size: 20px; }
+                    .header { text-align: center; margin-bottom: 15px; }
+                    .header .empresa { font-size: 18px; font-weight: bold; color: #1a3a5c; }
+                    .header .data { color: #666; font-size: 12px; }
+                    .header .filtros { font-size: 11px; color: #666; margin-top: 5px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                    th { background: #1a3a5c; color: white; padding: 6px; text-align: left; font-size: 10px; }
+                    td { padding: 5px 6px; border-bottom: 1px solid #ddd; font-size: 10px; }
+                    .total { margin-top: 15px; text-align: center; color: #666; font-size: 11px; }
+                </style></head>
+                <body>
+                    <div class="header">
+                        <div class="empresa">${empresa}</div>
+                        <div class="data">${titulo} - ${new Date().toLocaleString('pt-BR')}</div>
+                        <div class="filtros">
+                            ${filtros.marca ? `Marca: ${filtros.marca} | ` : ''}
+                            ${filtros.tamanho ? `Tamanho: ${filtros.tamanho} | ` : ''}
+                            ${filtros.dot ? `DOT: ${filtros.dot} | ` : ''}
+                            ${filtros.placa ? `Placa: ${filtros.placa} | ` : ''}
+                            ${filtros.dataInicio ? `Data Início: ${filtros.dataInicio} | ` : ''}
+                            ${filtros.dataFim ? `Data Fim: ${filtros.dataFim}` : ''}
+                            ${!filtros.marca && !filtros.tamanho && !filtros.dot && !filtros.placa && !filtros.dataInicio && !filtros.dataFim ? 'Sem filtros' : ''}
+                        </div>
+                    </div>
+                    <table><thead><tr>${colunas.map(c => `<th>${c}</th>`).join('')}</tr></thead>
+                    <tbody>${dados.map(item => `<tr>${colunas.map(c => `<td>${item[c] || '-'}</td>`).join('')}</tr>`).join('')}</tbody>
+                    </table>
+                    <div class="total">Total de registros: ${dados.length}</div>
+                </body></html>
+            `;
+            abrirPDF(html, `${titulo.replace(/ /g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function abrirPDF(html, nomeArquivo) {
+            const win = window.open('', '_blank', 'width=900,height=700');
+            if (!win) { 
+                alert('Por favor, permita pop-ups para gerar o PDF.'); 
+                return; 
+            }
+            win.document.write(html);
+            win.document.close();
+            win.focus();
+            win.print();
+        }
+
+        function limparFiltrosRelatorios() {
+            document.getElementById('filtroRelatorioTipo').value = 'todos';
+            document.getElementById('filtroRelatorioMarca').value = '';
+            document.getElementById('filtroRelatorioTamanho').value = '';
+            document.getElementById('filtroRelatorioDot').value = '';
+            document.getElementById('filtroRelatorioPlaca').value = '';
+            document.getElementById('filtroRelatorioDataInicio').value = '';
+            document.getElementById('filtroRelatorioDataFim').value = '';
+            renderRelatorios();
+        }
+
+        // ============================================
+        //  PDF PNEUS, PEÇAS, VEÍCULOS, MOTORISTAS, MANUTENÇÕES, DESCARTADOS
+        // ============================================
+        function gerarPDFPneus() { 
+            let pneus = window._pneusFiltrados || dadosCache.pneus || []; 
+            if (pneus.length === 0) { alert('Não há pneus para gerar o PDF.'); return; } 
+            const user = getCurrentUser(); 
+            const empresa = user?.companyName || user?.company || 'Minha Empresa'; 
+            let html = `<html><head><meta charset="UTF-8"><title>Relatório de Pneus</title><style>body{font-family:Arial,sans-serif;margin:30px;font-size:12px;}h1{color:#1a3a5c;text-align:center;font-size:20px;}table{width:100%;border-collapse:collapse;margin-top:15px;}th{background:#1a3a5c;color:white;padding:8px;text-align:left;font-size:11px;}td{padding:6px 8px;border-bottom:1px solid #ddd;font-size:11px;}.header{text-align:center;margin-bottom:15px;}.header .empresa{font-size:18px;font-weight:bold;color:#1a3a5c;}.header .data{color:#666;font-size:12px;}</style></head><body><div class="header"><div class="empresa">${empresa}</div><div class="data">Relatório de Pneus - ${new Date().toLocaleString('pt-BR')}</div></div><table><thead><tr><th>#</th><th>ID</th><th>Nome</th><th>DOT</th><th>Tamanho</th><th>Situação</th><th>Status</th><th>Valor</th><th>KM</th></tr></thead><tbody>`;
+            pneus.slice(0, 100).forEach((p, index) => {
+                const statusLabel = p.status === 'instalado' ? `Instalado${p.veiculoInstalado ? ` (${p.veiculoInstalado})` : ''}` : p.status === 'recapagem' ? 'Em Recapagem' : p.status === 'vulcanizacao' ? 'Em Vulcanização' : 'Disponível';
+                html += `<tr><td>${index+1}</td><td>#${p.id.toString().slice(-6)}</td><td>${p.nome}</td><td>${p.dot||'-'}</td><td>${p.tamanho}</td><td>${p.situacao}</td><td>${statusLabel}</td><td>R$ ${p.valor.toFixed(2)}</td><td>${(p.kmTotal||0).toLocaleString('pt-BR')}</td></tr>`;
+            });
+            html += `</tbody></table><div style="margin-top:15px;text-align:center;color:#666;font-size:11px;">Total: ${pneus.length} pneus</div></body></html>`;
+            abrirPDF(html, `Relatorio_Pneus_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFPecas() { 
+            const pecas = dadosCache.pecas || []; 
+            if (pecas.length === 0) { alert('Não há peças.'); return; } 
+            const user = getCurrentUser(); 
+            const empresa = user?.companyName || user?.company || 'Minha Empresa'; 
+            let html = `<html><head><meta charset="UTF-8"><title>Relatório de Peças</title><style>body{font-family:Arial,sans-serif;margin:30px;font-size:12px;}h1{color:#1a3a5c;text-align:center;font-size:20px;}table{width:100%;border-collapse:collapse;margin-top:15px;}th{background:#7b1fa2;color:white;padding:8px;text-align:left;font-size:11px;}td{padding:6px 8px;border-bottom:1px solid #ddd;font-size:11px;}.header{text-align:center;margin-bottom:15px;}.header .empresa{font-size:18px;font-weight:bold;color:#1a3a5c;}.header .data{color:#666;font-size:12px;}</style></head><body><div class="header"><div class="empresa">${empresa}</div><div class="data">Relatório de Peças - ${new Date().toLocaleString('pt-BR')}</div></div><table><thead><tr><th>#</th><th>Nome</th><th>Categoria</th><th>Valor</th><th>Status</th><th>Veículo</th></tr></thead><tbody>`;
+            pecas.slice(0, 100).forEach((p, index) => {
+                const statusLabel = p.status === 'instalado' ? `Instalado${p.veiculoInstalado ? ` (${p.veiculoInstalado})` : ''}` : 'Disponível';
+                html += `<tr><td>${index+1}</td><td>${p.nome}</td><td>${p.categoria}</td><td>R$ ${p.valor.toFixed(2)}</td><td>${statusLabel}</td><td>${p.veiculoInstalado||'-'}</td></tr>`;
+            });
+            html += `</tbody></table><div style="margin-top:15px;text-align:center;color:#666;font-size:11px;">Total: ${pecas.length} peças</div></body></html>`;
+            abrirPDF(html, `Relatorio_Pecas_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFVeiculos() { 
+            const veiculos = dadosCache.veiculos || []; 
+            if (veiculos.length === 0) { alert('Não há veículos.'); return; } 
+            const user = getCurrentUser(); 
+            const empresa = user?.companyName || user?.company || 'Minha Empresa'; 
+            let html = `<html><head><meta charset="UTF-8"><title>Relatório de Veículos</title><style>body{font-family:Arial,sans-serif;margin:30px;font-size:12px;}h1{color:#1a3a5c;text-align:center;font-size:20px;}table{width:100%;border-collapse:collapse;margin-top:15px;}th{background:#00695c;color:white;padding:8px;text-align:left;font-size:11px;}td{padding:6px 8px;border-bottom:1px solid #ddd;font-size:11px;}.header{text-align:center;margin-bottom:15px;}.header .empresa{font-size:18px;font-weight:bold;color:#1a3a5c;}.header .data{color:#666;font-size:12px;}</style></head><body><div class="header"><div class="empresa">${empresa}</div><div class="data">Relatório de Veículos - ${new Date().toLocaleString('pt-BR')}</div></div><table><thead><tr><th>#</th><th>Placa</th><th>Veículo</th><th>KM</th><th>Eixos</th><th>Status</th></tr></thead><tbody>`;
+            veiculos.forEach((v, index) => {
+                const tipoLabel = { 'cavalo_3_eixos': 'Cavalo-3E', '4_eixos': '4Eixos', 'carreta': 'Carreta' } [v.tipo] || v.tipo;
+                html += `<tr><td>${index+1}</td><td>${v.placa}</td><td>${v.marca} ${v.modelo} (${tipoLabel})</td><td>${v.km.toLocaleString('pt-BR')}</td><td>${v.eixos}</td><td>${v.status}</td></tr>`;
+            });
+            html += `</tbody></table><div style="margin-top:15px;text-align:center;color:#666;font-size:11px;">Total: ${veiculos.length} veículos</div></body></html>`;
+            abrirPDF(html, `Relatorio_Veiculos_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFMotoristas() { 
+            const motoristas = dadosCache.motoristas || []; 
+            if (motoristas.length === 0) { alert('Não há motoristas.'); return; } 
+            const user = getCurrentUser(); 
+            const empresa = user?.companyName || user?.company || 'Minha Empresa'; 
+            let html = `<html><head><meta charset="UTF-8"><title>Relatório de Motoristas</title><style>body{font-family:Arial,sans-serif;margin:30px;font-size:12px;}h1{color:#1a3a5c;text-align:center;font-size:20px;}table{width:100%;border-collapse:collapse;margin-top:15px;}th{background:#f57c00;color:white;padding:8px;text-align:left;font-size:11px;}td{padding:6px 8px;border-bottom:1px solid #ddd;font-size:11px;}.header{text-align:center;margin-bottom:15px;}.header .empresa{font-size:18px;font-weight:bold;color:#1a3a5c;}.header .data{color:#666;font-size:12px;}</style></head><body><div class="header"><div class="empresa">${empresa}</div><div class="data">Relatório de Motoristas - ${new Date().toLocaleString('pt-BR')}</div></div><table><thead><tr><th>#</th><th>Nome</th><th>CPF</th><th>Celular</th></tr></thead><tbody>`;
+            motoristas.forEach((m, index) => { html += `<tr><td>${index+1}</td><td>${m.nome}</td><td>${m.cpf||'-'}</td><td>${m.celular||'-'}</td></tr>`; });
+            html += `</tbody></table><div style="margin-top:15px;text-align:center;color:#666;font-size:11px;">Total: ${motoristas.length} motoristas</div></body></html>`;
+            abrirPDF(html, `Relatorio_Motoristas_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFManutencoes() { 
+            const manutencoes = dadosCache.manutencoes || []; 
+            if (manutencoes.length === 0) { alert('Não há manutenções.'); return; } 
+            const user = getCurrentUser(); 
+            const empresa = user?.companyName || user?.company || 'Minha Empresa'; 
+            let html = `<html><head><meta charset="UTF-8"><title>Relatório de Manutenções</title><style>body{font-family:Arial,sans-serif;margin:30px;font-size:12px;}h1{color:#1a3a5c;text-align:center;font-size:20px;}table{width:100%;border-collapse:collapse;margin-top:15px;}th{background:#e65100;color:white;padding:8px;text-align:left;font-size:11px;}td{padding:6px 8px;border-bottom:1px solid #ddd;font-size:11px;}.header{text-align:center;margin-bottom:15px;}.header .empresa{font-size:18px;font-weight:bold;color:#1a3a5c;}.header .data{color:#666;font-size:12px;}</style></head><body><div class="header"><div class="empresa">${empresa}</div><div class="data">Relatório de Manutenções - ${new Date().toLocaleString('pt-BR')}</div></div><table><thead><tr><th>#</th><th>Veículo</th><th>Tipo</th><th>Data</th><th>KM</th><th>Valor</th></tr></thead><tbody>`;
+            manutencoes.slice(0, 100).forEach((m, index) => { html += `<tr><td>${index+1}</td><td>${m.veiculoMarca||''} ${m.veiculoModelo||''}</td><td>${m.tipo}</td><td>${m.data}</td><td>${m.km}</td><td>R$ ${m.valor.toFixed(2)}</td></tr>`; });
+            html += `</tbody></table><div style="margin-top:15px;text-align:center;color:#666;font-size:11px;">Total: ${manutencoes.length} manutenções</div></body></html>`;
+            abrirPDF(html, `Relatorio_Manutencoes_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFDescartados() { 
+            const descartados = dadosCache.descartados || []; 
+            if (descartados.length === 0) { alert('Não há pneus descartados.'); return; } 
+            const user = getCurrentUser(); 
+            const empresa = user?.companyName || user?.company || 'Minha Empresa'; 
+            let html = `<html><head><meta charset="UTF-8"><title>Relatório de Pneus Descartados</title><style>body{font-family:Arial,sans-serif;margin:30px;font-size:12px;}h1{color:#1a3a5c;text-align:center;font-size:20px;}table{width:100%;border-collapse:collapse;margin-top:15px;}th{background:#c62828;color:white;padding:8px;text-align:left;font-size:11px;}td{padding:6px 8px;border-bottom:1px solid #ddd;font-size:11px;}.header{text-align:center;margin-bottom:15px;}.header .empresa{font-size:18px;font-weight:bold;color:#1a3a5c;}.header .data{color:#666;font-size:12px;}</style></head><body><div class="header"><div class="empresa">${empresa}</div><div class="data">Relatório de Descartados - ${new Date().toLocaleString('pt-BR')}</div></div><table><thead><tr><th>#</th><th>Nome</th><th>Veículo</th><th>Motivo</th><th>Data</th></tr></thead><tbody>`;
+            descartados.slice(0, 100).forEach((p, index) => { html += `<tr><td>${index+1}</td><td>${p.nome}</td><td>${p.veiculoInstalado||'-'}</td><td>${p.motivoDescarte||'Descarte'}</td><td>${p.dataDescarte||p.dataCadastro}</td></tr>`; });
+            html += `</tbody></table><div style="margin-top:15px;text-align:center;color:#666;font-size:11px;">Total: ${descartados.length} descartados</div></body></html>`;
+            abrirPDF(html, `Relatorio_Descartados_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function gerarPDFRelatorios() {
+            const pneus = dadosCache.pneus || [];
+            const veiculos = dadosCache.veiculos || [];
+            const pecas = dadosCache.pecas || [];
+            const motoristas = dadosCache.motoristas || [];
+            const user = getCurrentUser();
+            const empresa = user?.companyName || user?.company || 'Minha Empresa';
+            
+            let html = `<html><head><meta charset="UTF-8"><title>Relatório Completo</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 30px; font-size: 12px; }
+                h1 { color: #1a3a5c; text-align: center; font-size: 20px; }
+                h2 { color: #1a3a5c; margin-top: 25px; border-bottom: 2px solid #1a3a5c; padding-bottom: 5px; font-size: 16px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                th { background: #1a3a5c; color: white; padding: 6px; text-align: left; font-size: 10px; }
+                td { padding: 5px 6px; border-bottom: 1px solid #ddd; font-size: 10px; }
+                .header { text-align: center; margin-bottom: 15px; }
+                .header .empresa { font-size: 18px; font-weight: bold; color: #1a3a5c; }
+                .header .data { color: #666; font-size: 12px; }
+                .resumo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
+                .resumo-item { background: #f8f9fa; padding: 10px; border-radius: 6px; text-align: center; }
+                .resumo-item .valor { font-size: 18px; font-weight: bold; color: #1a3a5c; }
+                .resumo-item .label { font-size: 10px; color: #666; }
+            </style></head>
+            <body>
+                <div class="header">
+                    <div class="empresa">${empresa}</div>
+                    <div class="data">Relatório Completo - ${new Date().toLocaleString('pt-BR')}</div>
+                </div>
+                <div class="resumo-grid">
+                    <div class="resumo-item"><div class="valor">${pneus.length}</div><div class="label">Pneus</div></div>
+                    <div class="resumo-item"><div class="valor">${veiculos.length}</div><div class="label">Veículos</div></div>
+                    <div class="resumo-item"><div class="valor">${pecas.length}</div><div class="label">Peças</div></div>
+                    <div class="resumo-item"><div class="valor">${motoristas.length}</div><div class="label">Motoristas</div></div>
+                </div>
+                <h2>📦 Pneus (${pneus.length})</h2>`;
+                
+            if (pneus.length > 0) {
+                html += `<table><thead><tr><th>#</th><th>Nome</th><th>Tamanho</th><th>Situação</th><th>Status</th><th>KM</th></tr></thead><tbody>`;
+                pneus.slice(0, 30).forEach((p, i) => {
+                    const statusLabel = p.status === 'instalado' ? 'Instalado' : p.status === 'recapagem' ? 'Recapagem' : p.status === 'vulcanizacao' ? 'Vulcanização' : 'Disponível';
+                    html += `<tr><td>${i+1}</td><td>${p.nome}</td><td>${p.tamanho}</td><td>${p.situacao}</td><td>${statusLabel}</td><td>${(p.kmTotal||0).toLocaleString('pt-BR')}</td></tr>`;
+                });
+                if (pneus.length > 30) html += `<tr><td colspan="6" style="text-align:center;color:#666;">... e mais ${pneus.length - 30} pneus</td></tr>`;
+                html += `</tbody></table>`;
+            } else { html += '<p style="color:#666;">Nenhum pneu cadastrado.</p>'; }
+            
+            html += `<h2>🚗 Veículos (${veiculos.length})</h2>`;
+            if (veiculos.length > 0) {
+                html += `<table><thead><tr><th>#</th><th>Placa</th><th>Veículo</th><th>KM</th><th>Status</th></tr></thead><tbody>`;
+                veiculos.slice(0, 30).forEach((v, i) => {
+                    html += `<tr><td>${i+1}</td><td>${v.placa}</td><td>${v.marca} ${v.modelo}</td><td>${v.km.toLocaleString('pt-BR')}</td><td>${v.status}</td></tr>`;
+                });
+                if (veiculos.length > 30) html += `<tr><td colspan="5" style="text-align:center;color:#666;">... e mais ${veiculos.length - 30} veículos</td></tr>`;
+                html += `</tbody></table>`;
+            } else { html += '<p style="color:#666;">Nenhum veículo cadastrado.</p>'; }
+            
+            html += `<h2>🔧 Peças (${pecas.length})</h2>`;
+            if (pecas.length > 0) {
+                html += `<table><thead><tr><th>#</th><th>Nome</th><th>Categoria</th><th>Valor</th></tr></thead><tbody>`;
+                pecas.slice(0, 30).forEach((p, i) => {
+                    html += `<tr><td>${i+1}</td><td>${p.nome}</td><td>${p.categoria}</td><td>R$ ${p.valor.toFixed(2)}</td></tr>`;
+                });
+                if (pecas.length > 30) html += `<tr><td colspan="4" style="text-align:center;color:#666;">... e mais ${pecas.length - 30} peças</td></tr>`;
+                html += `</tbody></table>`;
+            } else { html += '<p style="color:#666;">Nenhuma peça cadastrada.</p>'; }
+            
+            html += `<h2>👤 Motoristas (${motoristas.length})</h2>`;
+            if (motoristas.length > 0) {
+                html += `<table><thead><tr><th>#</th><th>Nome</th><th>CPF</th></tr></thead><tbody>`;
+                motoristas.slice(0, 30).forEach((m, i) => {
+                    html += `<tr><td>${i+1}</td><td>${m.nome}</td><td>${m.cpf||'-'}</td></tr>`;
+                });
+                if (motoristas.length > 30) html += `<tr><td colspan="3" style="text-align:center;color:#666;">... e mais ${motoristas.length - 30} motoristas</td></tr>`;
+                html += `</tbody></table>`;
+            } else { html += '<p style="color:#666;">Nenhum motorista cadastrado.</p>'; }
+            
+            html += `<div style="margin-top:20px;text-align:center;color:#666;font-size:10px;">Gerado em ${new Date().toLocaleString('pt-BR')}</div></body></html>`;
+            abrirPDF(html, `Relatorio_Completo_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        // ============================================
+        //  RENDER CAMINHÃO
         // ============================================
         let veiculoAtual = null;
         let slotSelecionado = null;
@@ -3381,7 +4134,6 @@
                 html += `</div></div></div>`;
             });
 
-            // Estepes
             html += `<div class="estepe-section"><div class="eixos-row"><div class="eixo"><div class="eixo-label" style="color:#f57c00;">🟧 Estepes</div><div class="eixo-pneus">`;
             html += renderPneuSlot(veiculo, 'estepe-1', veiculo.pneus ? veiculo.pneus['estepe-1'] : null, true);
             html += renderPneuSlot(veiculo, 'estepe-2', veiculo.pneus ? veiculo.pneus['estepe-2'] : null, true);
@@ -3389,7 +4141,6 @@
             html += renderPneuSlot(veiculo, 'estepe-4', veiculo.pneus ? veiculo.pneus['estepe-4'] : null, true);
             html += `</div></div></div></div>`;
 
-            // Peças instaladas
             const pecas = dadosCache.pecas || [];
             const pecasInstaladas = pecas.filter(p => p.veiculoId === (veiculo._idOriginal || veiculo.id) && p.status === 'instalado');
             html += `<div style="width:100%;margin-top:20px;"><div class="pecas-titulo-modal"><span>🔧 Peças Instaladas</span><span>${pecasInstaladas.length}</span></div>`;
@@ -3455,9 +4206,8 @@
         }
 
         // ============================================
-        //  SELEÇÃO DE PNEU PARA INSTALAÇÃO - CORRIGIDO
+        //  SELEÇÃO DE PNEU PARA INSTALAÇÃO
         // ============================================
-
         function abrirModalSelecao(veiculoId, slotId) {
             if (!verificarEAcessar()) return;
             const veiculos = dadosCache.veiculos || [];
@@ -3610,9 +4360,8 @@
         }
 
         // ============================================
-        //  REMOÇÃO DE PNEU - CORRIGIDO
+        //  REMOÇÃO DE PNEU
         // ============================================
-
         let slotRemocao = null;
 
         function abrirModalRemocao(veiculoId, slotId) {
@@ -3803,9 +4552,8 @@
         }
 
         // ============================================
-        //  MANUTENÇÃO SIMPLIFICADA - CORRIGIDO
+        //  MANUTENÇÃO SIMPLIFICADA
         // ============================================
-
         function abrirModalManutencaoSimplificada() {
             if (!verificarEAcessar()) return;
             if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
@@ -3896,9 +4644,8 @@
         }
 
         // ============================================
-        //  INSTALAR PEÇAS - CORRIGIDO
+        //  INSTALAR PEÇAS
         // ============================================
-
         let veiculoPecaId = null;
         let pecaSelecionadoId = null;
 
@@ -4085,9 +4832,8 @@
         }
 
         // ============================================
-        //  COMBINAR VEÍCULOS - CORRIGIDO
+        //  COMBINAR VEÍCULOS
         // ============================================
-
         function abrirModalCombinar() {
             if (!verificarEAcessar()) return;
             if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
@@ -4192,61 +4938,45 @@
         }
 
         // ============================================
-        //  DRAG AND DROP
+        //  VENDER/SINISTRO VEÍCULO
         // ============================================
-        function iniciarDrag(e, veiculoId, slotId) {
-            const veiculos = dadosCache.veiculos || [];
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo || !veiculo.pneus) return;
-            const pneuId = veiculo.pneus[slotId];
-            if (!pneuId) return;
-            dragData = { veiculoId: veiculoId, slotOrigem: slotId, pneuId: pneuId };
-            e.target.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', slotId);
+        function abrirModalVenderVeiculo() {
+            if (!verificarEAcessar()) return;
+            if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
+            if (veiculoAtual.status === 'vendido') { alert('Este veículo já foi vendido/sinistrado.'); return; }
+
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('venderData').value = hoje;
+            document.getElementById('venderTipo').value = '';
+            document.getElementById('venderValor').value = '';
+            document.getElementById('venderObs').value = '';
+            document.getElementById('modalVenderVeiculo').classList.add('show');
         }
 
-        function permitirDrop(e) { e.preventDefault(); e.target.closest('.pneu-slot')?.classList.add('drag-over'); }
+        function fecharModalVenderVeiculo() { document.getElementById('modalVenderVeiculo').classList.remove('show'); }
 
-        function limparDrag(e) { document.querySelectorAll('.pneu-slot').forEach(el => el.classList.remove('dragging', 'drag-over')); }
+        async function confirmarVenderVeiculo() {
+            const tipo = document.getElementById('venderTipo').value;
+            const data = document.getElementById('venderData').value;
+            const valor = parseFloat(document.getElementById('venderValor').value) || 0;
+            const obs = document.getElementById('venderObs').value.trim();
 
-        async function finalizarDrop(e, veiculoId, slotDestino) {
-            e.preventDefault();
-            limparDrag(e);
-            if (!dragData) return;
-            if (dragData.veiculoId !== veiculoId) { alert('Não é possível mover pneus entre veículos diferentes.'); dragData = null; return; }
-            if (dragData.slotOrigem === slotDestino) { dragData = null; return; }
+            if (!tipo) { alert('Selecione o tipo (Venda ou Sinistro).'); return; }
+            if (!data) { alert('Informe a data.'); return; }
 
             let veiculos = dadosCache.veiculos || [];
-            const veiculo = veiculos.find(v => v.id === veiculoId);
-            if (!veiculo || !veiculo.pneus) { dragData = null; return; }
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx === -1) { alert('Veículo não encontrado.'); return; }
 
-            const pneuDestinoId = veiculo.pneus[slotDestino];
-            const pneuOrigemId = veiculo.pneus[dragData.slotOrigem];
-            if (!pneuOrigemId) { dragData = null; return; }
+            veiculos[idx].status = 'vendido';
+            veiculos[idx].historicoVenda = { tipo, data, valor, obs: obs || 'Sem observações', dataRegistro: new Date().toLocaleString('pt-BR') };
 
-            let pneus = dadosCache.pneus || [];
-            const pneu = pneus.find(p => p.id === pneuOrigemId);
-            if (pneu) {
-                pneu.posicao = slotDestino.replace(/-/g, ' ');
-                pneu.historico = pneu.historico || [];
-                pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Movimentação', detalhes: `Movido de ${dragData.slotOrigem} para ${slotDestino}` });
-                dadosCache.pneus = pneus;
-                await setPneus(pneus);
-            }
-
-            delete veiculo.pneus[dragData.slotOrigem];
-            if (pneuDestinoId) { veiculo.pneus[dragData.slotOrigem] = pneuDestinoId; }
-            veiculo.pneus[slotDestino] = pneuOrigemId;
-
-            const idx = veiculos.findIndex(v => v.id === veiculoId);
-            if (idx !== -1) { veiculos[idx] = veiculo; dadosCache.veiculos = veiculos; await setVeiculos(veiculos); }
-
-            dragData = null;
-            renderCaminhao(veiculo);
+            dadosCache.veiculos = veiculos;
+            await setVeiculos(veiculos);
+            fecharModalVenderVeiculo();
             await renderVeiculos();
-            await renderEstoque();
-            await renderRelatorios();
+            await renderManutencao();
+            alert(`✅ Veículo marcado como ${tipo === 'venda' ? 'Vendido' : 'Sinistro'}!`);
         }
 
         // ============================================
@@ -4425,46 +5155,61 @@
         }
 
         // ============================================
-        //  MODAL VENDER VEÍCULO
+        //  DRAG AND DROP
         // ============================================
-
-        function abrirModalVenderVeiculo() {
-            if (!verificarEAcessar()) return;
-            if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
-            if (veiculoAtual.status === 'vendido') { alert('Este veículo já foi vendido/sinistrado.'); return; }
-
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('venderData').value = hoje;
-            document.getElementById('venderTipo').value = '';
-            document.getElementById('venderValor').value = '';
-            document.getElementById('venderObs').value = '';
-            document.getElementById('modalVenderVeiculo').classList.add('show');
+        function iniciarDrag(e, veiculoId, slotId) {
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) return;
+            const pneuId = veiculo.pneus[slotId];
+            if (!pneuId) return;
+            dragData = { veiculoId: veiculoId, slotOrigem: slotId, pneuId: pneuId };
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', slotId);
         }
 
-        function fecharModalVenderVeiculo() { document.getElementById('modalVenderVeiculo').classList.remove('show'); }
+        function permitirDrop(e) { e.preventDefault(); e.target.closest('.pneu-slot')?.classList.add('drag-over'); }
 
-        async function confirmarVenderVeiculo() {
-            const tipo = document.getElementById('venderTipo').value;
-            const data = document.getElementById('venderData').value;
-            const valor = parseFloat(document.getElementById('venderValor').value) || 0;
-            const obs = document.getElementById('venderObs').value.trim();
+        function limparDrag(e) { document.querySelectorAll('.pneu-slot').forEach(el => el.classList.remove('dragging', 'drag-over')); }
 
-            if (!tipo) { alert('Selecione o tipo (Venda ou Sinistro).'); return; }
-            if (!data) { alert('Informe a data.'); return; }
+        async function finalizarDrop(e, veiculoId, slotDestino) {
+            e.preventDefault();
+            limparDrag(e);
+            if (!dragData) return;
+            if (dragData.veiculoId !== veiculoId) { alert('Não é possível mover pneus entre veículos diferentes.'); dragData = null; return; }
+            if (dragData.slotOrigem === slotDestino) { dragData = null; return; }
 
             let veiculos = dadosCache.veiculos || [];
-            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
-            if (idx === -1) { alert('Veículo não encontrado.'); return; }
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) { dragData = null; return; }
 
-            veiculos[idx].status = 'vendido';
-            veiculos[idx].historicoVenda = { tipo, data, valor, obs: obs || 'Sem observações', dataRegistro: new Date().toLocaleString('pt-BR') };
+            const pneuDestinoId = veiculo.pneus[slotDestino];
+            const pneuOrigemId = veiculo.pneus[dragData.slotOrigem];
+            if (!pneuOrigemId) { dragData = null; return; }
 
-            dadosCache.veiculos = veiculos;
-            await setVeiculos(veiculos);
-            fecharModalVenderVeiculo();
+            let pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === pneuOrigemId);
+            if (pneu) {
+                pneu.posicao = slotDestino.replace(/-/g, ' ');
+                pneu.historico = pneu.historico || [];
+                pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Movimentação', detalhes: `Movido de ${dragData.slotOrigem} para ${slotDestino}` });
+                dadosCache.pneus = pneus;
+                await setPneus(pneus);
+            }
+
+            delete veiculo.pneus[dragData.slotOrigem];
+            if (pneuDestinoId) { veiculo.pneus[dragData.slotOrigem] = pneuDestinoId; }
+            veiculo.pneus[slotDestino] = pneuOrigemId;
+
+            const idx = veiculos.findIndex(v => v.id === veiculoId);
+            if (idx !== -1) { veiculos[idx] = veiculo; dadosCache.veiculos = veiculos; await setVeiculos(veiculos); }
+
+            dragData = null;
+            renderCaminhao(veiculo);
             await renderVeiculos();
-            await renderManutencao();
-            alert(`✅ Veículo marcado como ${tipo === 'venda' ? 'Vendido' : 'Sinistro'}!`);
+            await renderEstoque();
+            await renderRelatorios();
         }
 
         // ============================================
@@ -4649,7 +5394,7 @@
         console.log('📋 VEÍCULOS: KM atualizada desconta da vida restante dos pneus');
         console.log('📋 PNEUS: Filtro por DOT e Placa com profundidade');
         console.log('📋 PEÇAS: Filtro por placa mostrando veículo');
-        console.log('📋 RELATÓRIOS: Filtros integrados e PDF parcial');
+        console.log('📋 RELATÓRIOS: Filtros integrados, PDF parcial e desgaste por veículo funcionando');
         console.log('📋 EXTRA: Desfazer em batch');
         console.log('👑 PLANOS: Grátis (1), Básico (10), Pro (50), Ultra (200)');
         console.log('📞 Suporte: (45) 99983-2590 - WhatsApp');
