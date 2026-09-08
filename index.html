@@ -685,8 +685,8 @@
 
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>#</th><th>ID</th><th>Nome</th><th>DOT</th><th>Tamanho</th><th>Tipo</th><th>Situação</th><th>Status</th><th>Veículo/Posição</th><th>Valor (R$)</th><th>KM</th><th>Data</th><th>Ações</th></tr></thead>
-                            <tbody id="estoqueTableBody"><tr><td colspan="13" class="empty-state"><p>Nenhum pneu cadastrado ainda.</p></td></tr></tbody>
+                            <thead><tr><th>#</th><th>ID</th><th>Nome</th><th>DOT</th><th>Tamanho</th><th>Tipo</th><th>Situação</th><th>Status</th><th>Veículo/Posição</th><th>Profundidade</th><th>Valor (R$)</th><th>KM</th><th>Data</th><th>Ações</th></tr></thead>
+                            <tbody id="estoqueTableBody"><tr><td colspan="14" class="empty-state"><p>Nenhum pneu cadastrado ainda.</p></td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -2225,7 +2225,7 @@
             const tbody = document.getElementById('estoqueTableBody');
 
             if (pneusFiltrados.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="13" class="empty-state"><p>${pneus.length === 0 ? 'Nenhum pneu cadastrado ainda.' : 'Nenhum pneu encontrado.'}</p></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="14" class="empty-state"><p>${pneus.length === 0 ? 'Nenhum pneu cadastrado ainda.' : 'Nenhum pneu encontrado.'}</p></td></tr>`;
                 document.getElementById('totalPneus').textContent = `Total: ${pneus.length}`;
                 document.getElementById('totalItensPneus').textContent = `Itens: ${pneus.length}`;
                 return;
@@ -2248,6 +2248,18 @@
 
                 let posicaoLabel = p.posicao || '-';
                 if (p.veiculoTipo) posicaoLabel += ` (${p.veiculoTipo})`;
+
+                // Profundidade
+                let profundidadeHtml = 'N/A';
+                if (p.faixas) {
+                    const vals = [p.faixas.f1 || 0, p.faixas.f2 || 0, p.faixas.f3 || 0, p.faixas.f4 || 0];
+                    const valsFiltrados = vals.filter(v => v > 0);
+                    if (valsFiltrados.length > 0) {
+                        const media = valsFiltrados.reduce((a, b) => a + b, 0) / valsFiltrados.length;
+                        const cor = media < 5 ? '#c62828' : media < 8 ? '#f57c00' : '#2e7d32';
+                        profundidadeHtml = `<span style="color:${cor};font-weight:700;">${media.toFixed(1)}mm</span>`;
+                    }
+                }
 
                 const emUso = (() => {
                     const veiculos = dadosCache.veiculos || [];
@@ -2275,6 +2287,7 @@
                         <td><span class="badge ${badgeSituacao}">${p.situacao}</span></td>
                         <td><span class="badge ${badgeStatus}">${statusLabel}</span></td>
                         <td style="font-size:11px;">${posicaoLabel}</td>
+                        <td style="font-size:12px;">${profundidadeHtml}</td>
                         <td>R$ ${p.valor.toFixed(2)}</td>
                         <td>${(p.kmTotal || 0).toLocaleString('pt-BR')}</td>
                         <td>${p.dataEntrada || p.dataCadastro}</td>
@@ -3133,7 +3146,7 @@
         }
 
         // ============================================
-        //  RENDER CAMINHÃO - CORRIGIDO
+        //  RENDER CAMINHÃO - FUNÇÃO CORRIGIDA
         // ============================================
         let veiculoAtual = null;
         let slotSelecionado = null;
@@ -3321,7 +3334,7 @@
         }
 
         // ============================================
-        //  RENDER CAMINHÃO - FUNÇÃO CORRIGIDA
+        //  RENDER CAMINHÃO
         // ============================================
         function renderCaminhao(veiculo) {
             const container = document.getElementById('caminhaoContainer');
@@ -3338,7 +3351,6 @@
                 const qtd = eixo.qtd || 4;
                 const tipo = eixo.tipo || 'traseiro';
                 
-                // Gerar slots baseado na quantidade de pneus do eixo
                 let slots = [];
                 if (qtd === 2) {
                     slots.push({ id: `${eixoNome.toLowerCase().replace(/ /g, '-')}-esquerdo`, label: 'E' });
@@ -3396,7 +3408,7 @@
         }
 
         // ============================================
-        //  RENDER PNEU SLOT - FUNÇÃO CORRIGIDA
+        //  RENDER PNEU SLOT
         // ============================================
         function renderPneuSlot(veiculo, slotId, pneuId, isEstepe = false) {
             const pneus = dadosCache.pneus || [];
@@ -3440,6 +3452,1019 @@
                     <span style="font-size:18px;">➕</span>${isEstepe ? '<div style="font-size:7px;color:#f57c00;">Estepe</div>' : ''}
                 </div>`;
             }
+        }
+
+        // ============================================
+        //  SELEÇÃO DE PNEU PARA INSTALAÇÃO - CORRIGIDO
+        // ============================================
+
+        function abrirModalSelecao(veiculoId, slotId) {
+            if (!verificarEAcessar()) return;
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo) return;
+
+            veiculoInstalacaoId = veiculoId;
+            slotSelecionado = slotId;
+
+            const pneus = dadosCache.pneus || [];
+            const pneusDisponiveis = pneus.filter(p => p.status === 'disponivel' || !p.status);
+
+            if (pneusDisponiveis.length === 0) { 
+                alert('❌ Não há pneus disponíveis no estoque. Cadastre pneus primeiro!'); 
+                return; 
+            }
+
+            const modal = document.getElementById('modalSelecao');
+            const lista = document.getElementById('listaPneusDisponiveis');
+            const info = document.getElementById('infoPneuSelecao');
+
+            const nomeSlot = slotId.replace(/-/g, ' ').replace(/estepe/g, 'Estepe');
+            info.innerHTML = `Selecione um pneu para <strong>${veiculo.placa}</strong> - Posição: ${nomeSlot}`;
+
+            lista.innerHTML = pneusDisponiveis.map(p => `
+                <div class="item-disponivel" onclick="abrirModalInstalacao(${p.id})">
+                    <div class="info">
+                        <span class="nome">${p.nome}</span>
+                        <span class="detalhes">${p.tamanho} • ${p.tipo} • ${p.situacao} • R$ ${p.valor.toFixed(2)}</span>
+                        <span class="dot-info">📋 DOT: ${p.dot || 'N/A'} • KM: ${(p.kmTotal || 0).toLocaleString('pt-BR')}</span>
+                        ${p.faixas && (p.faixas.f1 > 0 || p.faixas.f2 > 0 || p.faixas.f3 > 0 || p.faixas.f4 > 0) ? 
+                            `<span class="dot-info" style="color:#1a3a5c;">📏 Profundidade: F1:${p.faixas.f1||0} F2:${p.faixas.f2||0} F3:${p.faixas.f3||0} F4:${p.faixas.f4||0}mm</span>` : ''}
+                    </div>
+                    <span class="qtd">1</span>
+                </div>
+            `).join('');
+
+            modal.classList.add('show');
+        }
+
+        function fecharModalSelecao() { 
+            document.getElementById('modalSelecao').classList.remove('show'); 
+        }
+
+        function abrirModalInstalacao(pneuId) {
+            pneuSelecionadoId = pneuId;
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoInstalacaoId);
+            if (!veiculo) { alert('Veículo não encontrado.'); return; }
+            veiculoAtual = veiculo;
+
+            const pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === pneuId);
+            
+            document.getElementById('infoInstalacao').innerHTML = `
+                Instalando <strong>${pneu ? pneu.nome : 'Pneu'}</strong> em <strong>${veiculo.marca} ${veiculo.modelo}</strong><br>
+                Posição: <strong>${slotSelecionado.replace(/-/g, ' ')}</strong>
+            `;
+            document.getElementById('kmInstalacao').value = veiculo.km;
+            document.getElementById('kmInstalacao').min = veiculo.km;
+
+            fecharModalSelecao();
+            document.getElementById('modalInstalacao').classList.add('show');
+        }
+
+        function fecharModalInstalacao() { 
+            document.getElementById('modalInstalacao').classList.remove('show'); 
+            pneuSelecionadoId = null; 
+        }
+
+        async function confirmarInstalacao() {
+            if (!veiculoAtual || !slotSelecionado || !pneuSelecionadoId) { 
+                alert('Erro: Dados incompletos.'); 
+                fecharModalInstalacao(); 
+                return; 
+            }
+
+            const km = parseInt(document.getElementById('kmInstalacao').value);
+            if (!km || km < 0) { alert('Por favor, informe uma quilometragem válida.'); return; }
+            if (km < veiculoAtual.km) { alert('A KM não pode ser menor que a atual do veículo.'); return; }
+
+            let veiculos = dadosCache.veiculos || [];
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx !== -1) { 
+                veiculos[idx].km = km; 
+                veiculoAtual.km = km; 
+                dadosCache.veiculos = veiculos; 
+                await setVeiculos(veiculos); 
+            }
+
+            let pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === pneuSelecionadoId);
+            if (!pneu) { alert('Pneu não encontrado.'); fecharModalInstalacao(); return; }
+
+            const emUso = veiculos.some(v => {
+                if (v.pneus) {
+                    return Object.values(v.pneus).some(id => id === pneuSelecionadoId);
+                }
+                return false;
+            });
+
+            if (emUso) {
+                alert('❌ Este pneu já está instalado em outro veículo!');
+                fecharModalInstalacao();
+                return;
+            }
+
+            const veiculoOrigem = pneu.veiculoInstalado || null;
+            pneu.kmTotal = pneu.kmTotal || 0;
+            pneu.status = 'instalado';
+            pneu.veiculoInstalado = veiculoAtual.placa;
+            pneu.veiculoId = veiculoAtual.id;
+            pneu.posicao = slotSelecionado.replace(/-/g, ' ');
+            pneu.veiculoTipo = veiculoAtual.tipo === 'cavalo_3_eixos' ? 'Cavalo' : veiculoAtual.tipo === 'carreta' ? 'Carreta' : 'Veículo';
+            pneu.kmInstalacao = km;
+            pneu.veiculoOrigem = veiculoOrigem;
+
+            if (!veiculoAtual.pneus) veiculoAtual.pneus = {};
+            veiculoAtual.pneus[slotSelecionado] = pneuSelecionadoId;
+
+            pneu.historico = pneu.historico || [];
+            pneu.historico.push({ 
+                data: new Date().toLocaleString('pt-BR'), 
+                acao: 'Instalação', 
+                detalhes: `Instalado no veículo ${veiculoAtual.placa} na posição ${slotSelecionado} com KM ${km}` 
+            });
+
+            dadosCache.pneus = pneus;
+            await setPneus(pneus);
+
+            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idxVeiculo !== -1) { 
+                veiculos[idxVeiculo] = veiculoAtual; 
+                dadosCache.veiculos = veiculos; 
+                await setVeiculos(veiculos); 
+            }
+
+            await adicionarHistorico('instalar_pneu', { 
+                pneuId: pneuSelecionadoId, 
+                veiculoId: veiculoAtual.id, 
+                slot: slotSelecionado 
+            });
+
+            fecharModalInstalacao();
+            renderCaminhao(veiculoAtual);
+            await renderVeiculos();
+            await renderEstoque();
+            await renderRelatorios();
+            alert(`✅ Pneu ${pneu.nome} instalado com sucesso!`);
+        }
+
+        // ============================================
+        //  REMOÇÃO DE PNEU - CORRIGIDO
+        // ============================================
+
+        let slotRemocao = null;
+
+        function abrirModalRemocao(veiculoId, slotId) {
+            if (!verificarEAcessar()) return;
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) return;
+
+            const pneuId = veiculo.pneus[slotId];
+            if (!pneuId) return;
+
+            const pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === pneuId);
+            if (!pneu) return;
+
+            slotRemocao = slotId;
+            veiculoAtual = veiculo;
+
+            const infoBox = document.getElementById('pneuRemocaoInfo');
+            infoBox.innerHTML = `
+                <div class="info-row"><span class="label">Pneu:</span> <span><strong>${pneu.nome}</strong></span></div>
+                <div class="info-row"><span class="label">DOT:</span> <span>${pneu.dot || 'N/A'}</span></div>
+                <div class="info-row"><span class="label">Tamanho:</span> <span>${pneu.tamanho}</span></div>
+                <div class="info-row"><span class="label">Situação:</span> <span>${pneu.situacao}</span></div>
+                <div class="info-row"><span class="label">Valor:</span> <span>R$ ${pneu.valor.toFixed(2)}</span></div>
+                <div class="info-row"><span class="label">KM Total:</span> <span>${(pneu.kmTotal || 0).toLocaleString('pt-BR')}</span></div>
+                <div class="info-row"><span class="label">Posição:</span> <span>${slotId.replace(/-/g, ' ')}</span></div>
+                <div class="info-row"><span class="label">Veículo:</span> <span>${veiculo.marca} ${veiculo.modelo} (${veiculo.placa})</span></div>
+                ${pneu.faixas && (pneu.faixas.f1 > 0 || pneu.faixas.f2 > 0 || pneu.faixas.f3 > 0 || pneu.faixas.f4 > 0) ? 
+                    `<div class="info-row"><span class="label">Profundidade:</span> <span>F1:${pneu.faixas.f1||0} F2:${pneu.faixas.f2||0} F3:${pneu.faixas.f3||0} F4:${pneu.faixas.f4||0}mm</span></div>` : ''}
+                <div class="info-row"><span class="label">Recapagens:</span> <span>${pneu.contadorRecapagens || 0}x</span></div>
+                <div class="info-row"><span class="label">Vulcanizações:</span> <span>${pneu.contadorVulcanizacoes || 0}x</span></div>
+            `;
+
+            document.getElementById('kmRemocao').value = veiculo.km;
+            document.getElementById('kmRemocao').min = veiculo.km;
+            document.getElementById('destinoPneu').value = '';
+
+            document.getElementById('modalRemocao').classList.add('show');
+        }
+
+        function fecharModalRemocao() { 
+            document.getElementById('modalRemocao').classList.remove('show'); 
+            slotRemocao = null; 
+        }
+
+        async function confirmarRemocao() {
+            const km = parseInt(document.getElementById('kmRemocao').value);
+            const destino = document.getElementById('destinoPneu').value;
+
+            if (!km || km < 0) { alert('Por favor, informe uma KM válida.'); return; }
+            if (km < veiculoAtual.km) { alert('A KM não pode ser menor que a atual do veículo.'); return; }
+            if (!destino) { alert('Por favor, selecione o destino do pneu.'); return; }
+
+            let veiculos = dadosCache.veiculos || [];
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx !== -1) { 
+                veiculos[idx].km = km; 
+                veiculoAtual.km = km; 
+                dadosCache.veiculos = veiculos; 
+                await setVeiculos(veiculos); 
+            }
+
+            const pneuId = veiculoAtual.pneus[slotRemocao];
+            if (!pneuId) { alert('Erro: Pneu não encontrado.'); fecharModalRemocao(); return; }
+
+            let pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === pneuId);
+            
+            if (pneu) {
+                if (pneu.kmInstalacao !== null) { 
+                    const kmRodado = Math.max(0, km - pneu.kmInstalacao); 
+                    pneu.kmTotal = (pneu.kmTotal || 0) + kmRodado; 
+                }
+                pneu.kmRemocao = km;
+                const veiculoOrigem = veiculoAtual.placa;
+                pneu.veiculoOrigem = veiculoOrigem;
+                
+                pneu.historico = pneu.historico || [];
+                pneu.historico.push({ 
+                    data: new Date().toLocaleString('pt-BR'), 
+                    acao: 'Remoção', 
+                    detalhes: `Removido do veículo ${veiculoAtual.placa} na posição ${slotRemocao} com KM ${km}. KM total: ${pneu.kmTotal}` 
+                });
+            }
+
+            delete veiculoAtual.pneus[slotRemocao];
+            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idxVeiculo !== -1) { 
+                veiculos[idxVeiculo] = veiculoAtual; 
+                dadosCache.veiculos = veiculos; 
+                await setVeiculos(veiculos); 
+            }
+
+            if (!pneu) { alert('Erro: Pneu não encontrado.'); fecharModalRemocao(); return; }
+
+            const destinoLabels = { 
+                'estoque_meia_vida': 'Voltou ao estoque (Meia Vida)', 
+                'recapagem': 'Enviado para Recapagem', 
+                'vulcanizacao': 'Enviado para Vulcanização', 
+                'descarte': 'Descartado' 
+            };
+
+            if (destino === 'estoque_meia_vida') {
+                pneu.situacao = 'meia vida';
+                pneu.status = 'disponivel';
+                pneu.veiculoInstalado = null;
+                pneu.veiculoId = null;
+                pneu.posicao = null;
+                pneu.kmInstalacao = null;
+                pneu.veiculoTipo = null;
+                pneu.veiculoOrigem = veiculoAtual.placa;
+                if (pneu.faixas) {
+                    pneu.historico.push({
+                        data: new Date().toLocaleString('pt-BR'),
+                        acao: 'Medição Final',
+                        detalhes: `Profundidade final: F1:${pneu.faixas.f1||0} F2:${pneu.faixas.f2||0} F3:${pneu.faixas.f3||0} F4:${pneu.faixas.f4||0}mm`
+                    });
+                }
+            } else if (destino === 'recapagem') {
+                pneu.status = 'recapagem';
+                pneu.situacao = 'recapado';
+                pneu.veiculoInstalado = null;
+                pneu.veiculoId = null;
+                pneu.posicao = null;
+                pneu.kmInstalacao = null;
+                pneu.veiculoTipo = null;
+                pneu.veiculoOrigem = veiculoAtual.placa;
+                pneu.contadorRecapagens = (pneu.contadorRecapagens || 0) + 1;
+                pneu.historico.push({
+                    data: new Date().toLocaleString('pt-BR'),
+                    acao: 'Recapagem',
+                    detalhes: `Enviado para recapagem do veículo ${veiculoAtual.placa}`
+                });
+            } else if (destino === 'vulcanizacao') {
+                pneu.status = 'vulcanizacao';
+                pneu.situacao = 'vulcanizado';
+                pneu.veiculoInstalado = null;
+                pneu.veiculoId = null;
+                pneu.posicao = null;
+                pneu.kmInstalacao = null;
+                pneu.veiculoTipo = null;
+                pneu.veiculoOrigem = veiculoAtual.placa;
+                pneu.contadorVulcanizacoes = (pneu.contadorVulcanizacoes || 0) + 1;
+                pneu.historico.push({
+                    data: new Date().toLocaleString('pt-BR'),
+                    acao: 'Vulcanização',
+                    detalhes: `Enviado para vulcanização do veículo ${veiculoAtual.placa}`
+                });
+            } else if (destino === 'descarte') {
+                let descartados = dadosCache.descartados || [];
+                pneu.motivoDescarte = `Removido do veículo ${veiculoAtual.placa} - ${veiculoAtual.marca} ${veiculoAtual.modelo}`;
+                pneu.posicao = slotRemocao.replace(/-/g, ' ');
+                pneu.dataDescarte = new Date().toLocaleDateString('pt-BR');
+                pneu.veiculoOrigem = veiculoAtual.placa;
+                pneu.status = 'descartado';
+                descartados.push({...pneu});
+                dadosCache.descartados = descartados;
+                await setDescartados(descartados);
+                
+                const idxPneu = pneus.findIndex(p => p.id === pneuId);
+                if (idxPneu !== -1) pneus.splice(idxPneu, 1);
+                dadosCache.pneus = pneus;
+                await setPneus(pneus);
+                
+                await renderDescartados();
+                fecharModalRemocao();
+                renderCaminhao(veiculoAtual);
+                await renderVeiculos();
+                await renderEstoque();
+                await renderRelatorios();
+                await atualizarLimitesUI();
+                alert(`✅ Pneu descartado com sucesso!`);
+                return;
+            }
+
+            dadosCache.pneus = pneus;
+            await setPneus(pneus);
+            await adicionarHistorico('remover_pneu', { pneu: pneu, veiculoId: veiculoAtual.id, slot: slotRemocao });
+
+            fecharModalRemocao();
+            renderCaminhao(veiculoAtual);
+            await renderVeiculos();
+            await renderEstoque();
+            await renderRelatorios();
+            await atualizarLimitesUI();
+            alert(`✅ Pneu removido! Destino: ${destinoLabels[destino]}`);
+        }
+
+        // ============================================
+        //  MANUTENÇÃO SIMPLIFICADA - CORRIGIDO
+        // ============================================
+
+        function abrirModalManutencaoSimplificada() {
+            if (!verificarEAcessar()) return;
+            if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.manutencao && !isMaster()) { alert('🔒 Você não tem permissão.'); return; }
+
+            document.getElementById('modalManutencaoSimplificadaSubtitle').textContent = 
+                `Registre serviço para: ${veiculoAtual.marca} ${veiculoAtual.modelo} (${veiculoAtual.placa})`;
+            
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('manutencaoSimpData').value = hoje;
+            document.getElementById('manutencaoSimpKm').value = veiculoAtual.km || 0;
+            document.getElementById('manutencaoSimpKm').min = veiculoAtual.km || 0;
+            document.getElementById('manutencaoSimpTipo').value = '';
+            document.getElementById('manutencaoSimpLocal').value = '';
+            document.getElementById('manutencaoSimpValor').value = '';
+            document.getElementById('manutencaoSimpObs').value = '';
+            document.getElementById('modalManutencaoSimplificada').classList.add('show');
+        }
+
+        function fecharModalManutencaoSimplificada() { 
+            document.getElementById('modalManutencaoSimplificada').classList.remove('show'); 
+        }
+
+        async function confirmarManutencaoSimplificada() {
+            const tipo = document.getElementById('manutencaoSimpTipo').value;
+            const data = document.getElementById('manutencaoSimpData').value;
+            const km = parseInt(document.getElementById('manutencaoSimpKm').value);
+            const local = document.getElementById('manutencaoSimpLocal').value.trim();
+            const valor = parseFloat(document.getElementById('manutencaoSimpValor').value) || 0;
+            const obs = document.getElementById('manutencaoSimpObs').value.trim();
+
+            if (!tipo) { alert('Por favor, selecione o tipo de serviço.'); return; }
+            if (!data) { alert('Por favor, informe a data.'); return; }
+            if (!km || km < 0) { alert('Por favor, informe uma KM válida.'); return; }
+            if (km < veiculoAtual.km) { alert('A KM não pode ser menor que a atual do veículo.'); return; }
+            if (!local) { alert('Por favor, informe o local.'); return; }
+            if (!valor || valor <= 0) { alert('Por favor, informe o valor.'); return; }
+
+            let veiculos = dadosCache.veiculos || [];
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            
+            if (idx !== -1) {
+                veiculos[idx].km = km;
+                if (!veiculos[idx].servicos) veiculos[idx].servicos = [];
+                veiculos[idx].servicos.push({ 
+                    tipo, 
+                    data, 
+                    km, 
+                    local, 
+                    valor, 
+                    obs, 
+                    dataRegistro: new Date().toLocaleString('pt-BR') 
+                });
+                
+                dadosCache.veiculos = veiculos;
+                await setVeiculos(veiculos);
+                veiculoAtual = veiculos[idx];
+                
+                let manutencoes = dadosCache.manutencoes || [];
+                manutencoes.push({
+                    id: Date.now() + Math.random() * 1000,
+                    veiculoId: veiculoAtual.id,
+                    veiculoPlaca: veiculoAtual.placa,
+                    veiculoMarca: veiculoAtual.marca,
+                    veiculoModelo: veiculoAtual.modelo,
+                    tipo: tipo,
+                    data: data,
+                    km: km,
+                    local: local,
+                    valor: valor,
+                    obs: obs,
+                    dataRegistro: new Date().toLocaleString('pt-BR')
+                });
+                dadosCache.manutencoes = manutencoes;
+                await setManutencoes(manutencoes);
+            }
+
+            fecharModalManutencaoSimplificada();
+            await renderManutencao();
+            await renderVeiculos();
+            await renderRelatorios();
+            if (veiculoAtual) { 
+                renderCaminhao(veiculoAtual); 
+                renderServicosAlinhamento(veiculoAtual); 
+            }
+            alert(`✅ Serviço de ${tipo} registrado com sucesso!`);
+        }
+
+        // ============================================
+        //  INSTALAR PEÇAS - CORRIGIDO
+        // ============================================
+
+        let veiculoPecaId = null;
+        let pecaSelecionadoId = null;
+
+        function abrirModalSelecaoPeca(veiculoId) {
+            if (!verificarEAcessar()) return;
+            const permissoes = getPermissoes(getCurrentUser());
+            if (!permissoes.pecas && !isMaster()) { 
+                alert('🔒 Você não tem permissão para instalar peças.'); 
+                return; 
+            }
+
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo) return;
+            veiculoPecaId = veiculoId;
+
+            const pecas = dadosCache.pecas || [];
+            const pecasDisponiveis = pecas.filter(p => p.status === 'disponivel' || !p.status);
+            
+            if (pecasDisponiveis.length === 0) { 
+                alert('❌ Não há peças disponíveis. Cadastre peças primeiro!'); 
+                return; 
+            }
+
+            const modal = document.getElementById('modalSelecaoPeca');
+            const lista = document.getElementById('listaPecasDisponiveis');
+            const info = document.getElementById('infoPecaSelecao');
+
+            info.innerHTML = `Selecione uma peça para <strong>${veiculo.marca} ${veiculo.modelo}</strong> (${veiculo.placa})`;
+
+            lista.innerHTML = pecasDisponiveis.map(p => `
+                <div class="item-disponivel" onclick="abrirModalInstalacaoPeca(${p.id})">
+                    <div class="info">
+                        <span class="nome">${p.nome}</span>
+                        <span class="detalhes">${p.categoria} • R$ ${p.valor.toFixed(2)} • ${p.fornecedor || 'Sem fornecedor'}</span>
+                    </div>
+                    <span class="qtd">1</span>
+                </div>
+            `).join('');
+
+            modal.classList.add('show');
+        }
+
+        function fecharModalSelecaoPeca() { 
+            document.getElementById('modalSelecaoPeca').classList.remove('show'); 
+        }
+
+        function abrirModalInstalacaoPeca(pecaId) {
+            pecaSelecionadoId = pecaId;
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoPecaId);
+            if (!veiculo) { alert('Veículo não encontrado.'); return; }
+            veiculoAtual = veiculo;
+
+            const pecas = dadosCache.pecas || [];
+            const peca = pecas.find(p => p.id === pecaId);
+            if (!peca) { alert('Peça não encontrada.'); return; }
+
+            document.getElementById('infoInstalacaoPeca').innerHTML = `
+                Instalando <strong>${peca.nome}</strong> em <strong>${veiculo.marca} ${veiculo.modelo}</strong>
+            `;
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('dataInstalacaoPeca').value = hoje;
+            document.getElementById('posicaoInstalacaoPeca').value = '';
+
+            fecharModalSelecaoPeca();
+            document.getElementById('modalInstalacaoPeca').classList.add('show');
+        }
+
+        function fecharModalInstalacaoPeca() { 
+            document.getElementById('modalInstalacaoPeca').classList.remove('show'); 
+            pecaSelecionadoId = null; 
+        }
+
+        async function confirmarInstalacaoPeca() {
+            if (!veiculoAtual || !pecaSelecionadoId) { 
+                alert('Erro: Dados incompletos.'); 
+                fecharModalInstalacaoPeca(); 
+                return; 
+            }
+
+            const dataInstalacao = document.getElementById('dataInstalacaoPeca').value;
+            const posicao = document.getElementById('posicaoInstalacaoPeca').value.trim();
+
+            if (!dataInstalacao) { alert('Por favor, informe a data.'); return; }
+            if (!posicao) { alert('Por favor, informe a posição/eixo.'); return; }
+
+            let veiculos = dadosCache.veiculos || [];
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx !== -1) { 
+                veiculos[idx] = veiculoAtual; 
+                dadosCache.veiculos = veiculos; 
+                await setVeiculos(veiculos); 
+            }
+
+            let pecas = dadosCache.pecas || [];
+            const peca = pecas.find(p => p.id === pecaSelecionadoId);
+            if (!peca) { alert('Peça não encontrada.'); fecharModalInstalacaoPeca(); return; }
+
+            const emUso = veiculos.some(v => {
+                if (v.pecas) {
+                    return Object.values(v.pecas).some(id => id === pecaSelecionadoId);
+                }
+                return false;
+            });
+
+            if (emUso) {
+                alert('❌ Esta peça já está instalada em outro veículo!');
+                fecharModalInstalacaoPeca();
+                return;
+            }
+
+            peca.status = 'instalado';
+            peca.veiculoInstalado = veiculoAtual.placa;
+            peca.veiculoId = veiculoAtual.id;
+            peca.posicao = posicao;
+            peca.dataInstalacao = dataInstalacao;
+
+            if (!veiculoAtual.pecas) veiculoAtual.pecas = {};
+            veiculoAtual.pecas[Date.now()] = pecaSelecionadoId;
+
+            peca.historico = peca.historico || [];
+            peca.historico.push({ 
+                data: new Date().toLocaleString('pt-BR'), 
+                acao: 'Instalação', 
+                detalhes: `Instalado no veículo ${veiculoAtual.placa} em ${posicao} em ${dataInstalacao}` 
+            });
+
+            dadosCache.pecas = pecas;
+            await setPecas(pecas);
+
+            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idxVeiculo !== -1) { 
+                veiculos[idxVeiculo] = veiculoAtual; 
+                dadosCache.veiculos = veiculos; 
+                await setVeiculos(veiculos); 
+            }
+
+            fecharModalInstalacaoPeca();
+            await renderVeiculos();
+            await renderPecas();
+            await renderRelatorios();
+            if (veiculoAtual) renderCaminhao(veiculoAtual);
+            alert(`✅ Peça ${peca.nome} instalada com sucesso!`);
+        }
+
+        async function removerPecaInstalada(pecaId) {
+            if (!verificarEAcessar()) return;
+            if (!confirm('Tem certeza que deseja remover esta peça do veículo?')) return;
+
+            let pecas = dadosCache.pecas || [];
+            const peca = pecas.find(p => p.id === pecaId);
+            if (!peca) return;
+
+            let veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === peca.veiculoId);
+            
+            if (veiculo && veiculo.pecas) {
+                const chave = Object.keys(veiculo.pecas).find(k => veiculo.pecas[k] === pecaId);
+                if (chave) delete veiculo.pecas[chave];
+                dadosCache.veiculos = veiculos;
+                await setVeiculos(veiculos);
+            }
+
+            peca.status = 'disponivel';
+            peca.veiculoInstalado = null;
+            peca.veiculoId = null;
+            peca.posicao = null;
+            peca.dataInstalacao = null;
+            peca.historico = peca.historico || [];
+            peca.historico.push({ 
+                data: new Date().toLocaleString('pt-BR'), 
+                acao: 'Remoção', 
+                detalhes: `Removida do veículo ${veiculo ? veiculo.placa : 'N/A'}` 
+            });
+
+            dadosCache.pecas = pecas;
+            await setPecas(pecas);
+            await renderVeiculos();
+            await renderPecas();
+            await renderRelatorios();
+            if (veiculo) renderCaminhao(veiculo);
+            alert('✅ Peça removida com sucesso!');
+        }
+
+        // ============================================
+        //  COMBINAR VEÍCULOS - CORRIGIDO
+        // ============================================
+
+        function abrirModalCombinar() {
+            if (!verificarEAcessar()) return;
+            if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
+            if (veiculoAtual.combinadoCom) { alert('Este veículo já está combinado.'); return; }
+            if (veiculoAtual.status !== 'ativo') { alert('Apenas veículos ativos podem ser combinados.'); return; }
+
+            const veiculos = dadosCache.veiculos || [];
+            const disponiveis = veiculos.filter(v => 
+                v.id !== veiculoAtual.id && 
+                !v.combinadoCom && 
+                v.status === 'ativo'
+            );
+            
+            if (disponiveis.length === 0) { 
+                alert('Não há veículos disponíveis para combinar.'); 
+                return; 
+            }
+
+            const select = document.getElementById('combinarVeiculoSelect');
+            select.innerHTML = '<option value="">Selecione...</option>';
+            disponiveis.forEach(v => {
+                const tipoLabel = { 
+                    'cavalo_3_eixos': 'Cavalo - 3 Eixos', 
+                    '4_eixos': '4 Eixos', 
+                    'carreta': 'Carreta' 
+                } [v.tipo] || v.tipo;
+                select.innerHTML += `<option value="${v.id}">${v.placa} - ${v.marca} ${v.modelo} (${tipoLabel})</option>`;
+            });
+
+            document.getElementById('modalCombinar').classList.add('show');
+        }
+
+        function fecharModalCombinar() { 
+            document.getElementById('modalCombinar').classList.remove('show'); 
+        }
+
+        async function confirmarCombinar() {
+            const veiculoId = parseInt(document.getElementById('combinarVeiculoSelect').value);
+            if (!veiculoId) { alert('Selecione um veículo.'); return; }
+
+            let veiculos = dadosCache.veiculos || [];
+            const veiculo1 = veiculos.find(v => v.id === veiculoAtual.id);
+            const veiculo2 = veiculos.find(v => v.id === veiculoId);
+            
+            if (!veiculo1 || !veiculo2) { alert('Veículo não encontrado.'); return; }
+
+            const tipos = [veiculo1.tipo, veiculo2.tipo];
+            const temCavalo = tipos.includes('cavalo_3_eixos');
+            const temCarreta = tipos.includes('carreta');
+            
+            if (!(temCavalo && temCarreta)) { 
+                alert('⚠️ Para combinar, um veículo deve ser "Cavalo - 3 Eixos" e o outro "Carreta".'); 
+                return; 
+            }
+
+            let cavalo, carreta;
+            if (veiculo1.tipo === 'cavalo_3_eixos') { 
+                cavalo = veiculo1; 
+                carreta = veiculo2; 
+            } else { 
+                cavalo = veiculo2; 
+                carreta = veiculo1; 
+            }
+
+            cavalo.combinadoCom = carreta.id;
+            cavalo.combinadoTipo = 'cavalo';
+            carreta.combinadoCom = cavalo.id;
+            carreta.combinadoTipo = 'carreta';
+
+            dadosCache.veiculos = veiculos;
+            await setVeiculos(veiculos);
+            
+            fecharModalCombinar();
+            await renderVeiculos();
+            await renderManutencao();
+            alert(`✅ Veículos combinados: ${cavalo.placa} + ${carreta.placa}`);
+        }
+
+        async function desvincularVeiculos(id) {
+            if (!verificarEAcessar()) return;
+            if (!confirm('Deseja desvincular este veículo?')) return;
+
+            let veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === id);
+            if (!veiculo) return;
+
+            const combinado = veiculos.find(v => v.id === veiculo.combinadoCom);
+            if (combinado) { 
+                combinado.combinadoCom = null; 
+                combinado.combinadoTipo = null; 
+            }
+            veiculo.combinadoCom = null;
+            veiculo.combinadoTipo = null;
+
+            dadosCache.veiculos = veiculos;
+            await setVeiculos(veiculos);
+            
+            fecharModalCaminhao();
+            await renderVeiculos();
+            await renderManutencao();
+            alert('✅ Veículos desvinculados!');
+        }
+
+        // ============================================
+        //  DRAG AND DROP
+        // ============================================
+        function iniciarDrag(e, veiculoId, slotId) {
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) return;
+            const pneuId = veiculo.pneus[slotId];
+            if (!pneuId) return;
+            dragData = { veiculoId: veiculoId, slotOrigem: slotId, pneuId: pneuId };
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', slotId);
+        }
+
+        function permitirDrop(e) { e.preventDefault(); e.target.closest('.pneu-slot')?.classList.add('drag-over'); }
+
+        function limparDrag(e) { document.querySelectorAll('.pneu-slot').forEach(el => el.classList.remove('dragging', 'drag-over')); }
+
+        async function finalizarDrop(e, veiculoId, slotDestino) {
+            e.preventDefault();
+            limparDrag(e);
+            if (!dragData) return;
+            if (dragData.veiculoId !== veiculoId) { alert('Não é possível mover pneus entre veículos diferentes.'); dragData = null; return; }
+            if (dragData.slotOrigem === slotDestino) { dragData = null; return; }
+
+            let veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) { dragData = null; return; }
+
+            const pneuDestinoId = veiculo.pneus[slotDestino];
+            const pneuOrigemId = veiculo.pneus[dragData.slotOrigem];
+            if (!pneuOrigemId) { dragData = null; return; }
+
+            let pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === pneuOrigemId);
+            if (pneu) {
+                pneu.posicao = slotDestino.replace(/-/g, ' ');
+                pneu.historico = pneu.historico || [];
+                pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Movimentação', detalhes: `Movido de ${dragData.slotOrigem} para ${slotDestino}` });
+                dadosCache.pneus = pneus;
+                await setPneus(pneus);
+            }
+
+            delete veiculo.pneus[dragData.slotOrigem];
+            if (pneuDestinoId) { veiculo.pneus[dragData.slotOrigem] = pneuDestinoId; }
+            veiculo.pneus[slotDestino] = pneuOrigemId;
+
+            const idx = veiculos.findIndex(v => v.id === veiculoId);
+            if (idx !== -1) { veiculos[idx] = veiculo; dadosCache.veiculos = veiculos; await setVeiculos(veiculos); }
+
+            dragData = null;
+            renderCaminhao(veiculo);
+            await renderVeiculos();
+            await renderEstoque();
+            await renderRelatorios();
+        }
+
+        // ============================================
+        //  MODAL FAIXAS
+        // ============================================
+        let veiculoFaixasId = null;
+        let slotFaixasId = null;
+
+        function abrirModalFaixas(veiculoId, slotId) {
+            if (!verificarEAcessar()) return;
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoId);
+            if (!veiculo || !veiculo.pneus) return;
+
+            const pneuId = veiculo.pneus[slotId];
+            if (!pneuId) return;
+
+            const pneus = dadosCache.pneus || [];
+            const pneu = pneus.find(p => p.id === pneuId);
+            if (!pneu) return;
+
+            veiculoFaixasId = veiculoId;
+            slotFaixasId = slotId;
+
+            const faixas = pneu.faixas || { f1: 0, f2: 0, f3: 0, f4: 0 };
+            const nomeSlot = slotId.replace(/-/g, ' ').replace(/estepe/g, 'Estepe');
+
+            const modal = document.getElementById('modalFaixas');
+            document.getElementById('modalFaixasTitle').textContent = `📏 Desgaste - ${pneu.nome}`;
+            document.getElementById('modalFaixasInfo').innerHTML = `
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px;">
+                    <div><strong>ID:</strong> #${pneu.id.toString().slice(-6)}</div>
+                    <div><strong>Marca:</strong> ${pneu.nome}</div>
+                    <div><strong>DOT:</strong> ${pneu.dot||'N/A'}</div>
+                    <div><strong>Tamanho:</strong> ${pneu.tamanho}</div>
+                    <div><strong>Posição:</strong> ${nomeSlot}</div>
+                    <div><strong>KM Total:</strong> ${(pneu.kmTotal||0).toLocaleString('pt-BR')}</div>
+                </div>
+            `;
+
+            document.getElementById('faixaF1').value = faixas.f1 || 0;
+            document.getElementById('faixaF2').value = faixas.f2 || 0;
+            document.getElementById('faixaF3').value = faixas.f3 || 0;
+            document.getElementById('faixaF4').value = faixas.f4 || 0;
+
+            ['F1', 'F2', 'F3', 'F4'].forEach(f => {
+                const input = document.getElementById(`faixa${f}`);
+                if (input) {
+                    input.removeEventListener('input', window._faixaInputHandler);
+                    const handler = function() { atualizarStatusFaixa(f); atualizarResumoFaixasCompleto(); };
+                    window._faixaInputHandler = handler;
+                    input.addEventListener('input', handler);
+                }
+            });
+
+            document.getElementById('mmReferencia').removeEventListener('change', window._mmRefHandler);
+            const mmHandler = function() { atualizarResumoFaixasCompleto(); };
+            window._mmRefHandler = mmHandler;
+            document.getElementById('mmReferencia').addEventListener('change', mmHandler);
+
+            atualizarStatusFaixa('F1');
+            atualizarStatusFaixa('F2');
+            atualizarStatusFaixa('F3');
+            atualizarStatusFaixa('F4');
+            atualizarResumoFaixasCompleto();
+
+            modal.classList.add('show');
+        }
+
+        function atualizarStatusFaixa(faixa) {
+            const input = document.getElementById(`faixa${faixa}`);
+            const statusEl = document.getElementById(`status${faixa}`);
+            if (!input || !statusEl) return;
+            const valor = parseFloat(input.value) || 0;
+            if (valor === 0) { statusEl.textContent = '⏳'; statusEl.style.background = '#e0e0e0'; statusEl.style.color = '#666'; } 
+            else if (valor < 5) { statusEl.textContent = '🔴'; statusEl.style.background = '#ffcdd2'; statusEl.style.color = '#c62828'; } 
+            else if (valor < 8) { statusEl.textContent = '🟡'; statusEl.style.background = '#fff9c4'; statusEl.style.color = '#f57f17'; } 
+            else { statusEl.textContent = '🟢'; statusEl.style.background = '#c8e6c9'; statusEl.style.color = '#1b5e20'; }
+        }
+
+        function atualizarResumoFaixasCompleto() {
+            const valores = [];
+            for (let i = 1; i <= 4; i++) {
+                const input = document.getElementById(`faixaF${i}`);
+                if (input) { const val = parseFloat(input.value) || 0; if (val > 0) valores.push(val); }
+            }
+
+            const mediaEl = document.getElementById('mediaFaixas');
+            const desgasteEl = document.getElementById('desgasteEstimado');
+            const statusEl = document.getElementById('statusGeral');
+            const vidaEl = document.getElementById('vidaRestante');
+            const analiseEl = document.getElementById('analiseDetalhada');
+
+            if (valores.length === 0) {
+                mediaEl.textContent = '0.0 mm';
+                desgasteEl.textContent = '0%';
+                statusEl.textContent = '⏳ Sem dados';
+                statusEl.style.background = '#e0e0e0';
+                statusEl.style.color = '#666';
+                vidaEl.textContent = '-';
+                analiseEl.textContent = '';
+                return;
+            }
+
+            const media = valores.reduce((a, b) => a + b, 0) / valores.length;
+            const mmRef = parseFloat(document.getElementById('mmReferencia')?.value) || 16;
+            const desgaste = ((mmRef - media) / mmRef) * 100;
+            const diff = Math.max(...valores) - Math.min(...valores);
+
+            mediaEl.textContent = `${media.toFixed(1)} mm`;
+            desgasteEl.textContent = `${Math.min(100, Math.max(0, desgaste)).toFixed(0)}%`;
+
+            const temCritico = valores.some(v => v < 5);
+            const temAtencao = valores.some(v => v >= 5 && v < 8);
+
+            if (temCritico) { statusEl.textContent = '🔴 CRÍTICO'; statusEl.style.background = '#ffcdd2'; statusEl.style.color = '#c62828'; } 
+            else if (temAtencao) { statusEl.textContent = '🟡 ATENÇÃO'; statusEl.style.background = '#fff9c4'; statusEl.style.color = '#f57f17'; } 
+            else if (media > 0) { statusEl.textContent = '🟢 Bom'; statusEl.style.background = '#c8e6c9'; statusEl.style.color = '#1b5e20'; }
+
+            if (media > 3.5) {
+                const mmPorKm = 0.0001;
+                const kmAte3_5 = (media - 3.5) / mmPorKm;
+                const diasAte3_5 = kmAte3_5 / 300;
+                vidaEl.textContent = `${Math.round(kmAte3_5).toLocaleString('pt-BR')}km\n${Math.round(diasAte3_5)}d`;
+            } else { vidaEl.textContent = '🔴 Crítico'; }
+
+            let analise = '';
+            if (diff > 1) { analise = '⚠️ <strong>Diferença > 1mm</strong> - Possível desgaste irregular ou problemas de alinhamento.'; } 
+            else if (temCritico) { analise = '🔴 <strong>Pneu em estado crítico</strong> - Troca imediata recomendada.'; } 
+            else if (temAtencao) { analise = '🟡 <strong>Monitorar pneu</strong> - Desgaste avançado, planejar substituição.'; } 
+            else if (media > 8) { analise = '🟢 <strong>Pneu em bom estado</strong> - Mantenha a manutenção preventiva.'; }
+            analiseEl.innerHTML = analise;
+        }
+
+        function fecharModalFaixas() { document.getElementById('modalFaixas').classList.remove('show'); veiculoFaixasId = null; slotFaixasId = null; }
+
+        async function salvarFaixas() {
+            let pneus = dadosCache.pneus || [];
+            const veiculos = dadosCache.veiculos || [];
+            const veiculo = veiculos.find(v => v.id === veiculoFaixasId);
+            if (!veiculo || !veiculo.pneus) return;
+
+            const pneuId = veiculo.pneus[slotFaixasId];
+            if (!pneuId) return;
+
+            const pneu = pneus.find(p => p.id === pneuId);
+            if (!pneu) return;
+
+            const f1 = parseFloat(document.getElementById('faixaF1').value) || 0;
+            const f2 = parseFloat(document.getElementById('faixaF2').value) || 0;
+            const f3 = parseFloat(document.getElementById('faixaF3').value) || 0;
+            const f4 = parseFloat(document.getElementById('faixaF4').value) || 0;
+
+            if (!pneu.faixas) pneu.faixas = {};
+            pneu.faixas.f1 = f1;
+            pneu.faixas.f2 = f2;
+            pneu.faixas.f3 = f3;
+            pneu.faixas.f4 = f4;
+
+            pneu.ultimaMedicaoKm = veiculo.km;
+            pneu.ultimaMedicaoData = new Date().toISOString();
+            pneu.historicoMedicoes = pneu.historicoMedicoes || [];
+            pneu.historicoMedicoes.push({ data: new Date().toLocaleString('pt-BR'), km: veiculo.km, faixas: { f1, f2, f3, f4 }, mmRef: parseFloat(document.getElementById('mmReferencia')?.value) || 16 });
+
+            pneu.historico = pneu.historico || [];
+            pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Medição de Desgaste', detalhes: `F1:${f1} F2:${f2} F3:${f3} F4:${f4} | KM:${veiculo.km}` });
+
+            dadosCache.pneus = pneus;
+            await setPneus(pneus);
+            fecharModalFaixas();
+            renderCaminhao(veiculo);
+            await renderVeiculos();
+            await renderEstoque();
+            await renderRelatorios();
+            alert('✅ Medições salvas com sucesso!');
+        }
+
+        // ============================================
+        //  MODAL VENDER VEÍCULO
+        // ============================================
+
+        function abrirModalVenderVeiculo() {
+            if (!verificarEAcessar()) return;
+            if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
+            if (veiculoAtual.status === 'vendido') { alert('Este veículo já foi vendido/sinistrado.'); return; }
+
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('venderData').value = hoje;
+            document.getElementById('venderTipo').value = '';
+            document.getElementById('venderValor').value = '';
+            document.getElementById('venderObs').value = '';
+            document.getElementById('modalVenderVeiculo').classList.add('show');
+        }
+
+        function fecharModalVenderVeiculo() { document.getElementById('modalVenderVeiculo').classList.remove('show'); }
+
+        async function confirmarVenderVeiculo() {
+            const tipo = document.getElementById('venderTipo').value;
+            const data = document.getElementById('venderData').value;
+            const valor = parseFloat(document.getElementById('venderValor').value) || 0;
+            const obs = document.getElementById('venderObs').value.trim();
+
+            if (!tipo) { alert('Selecione o tipo (Venda ou Sinistro).'); return; }
+            if (!data) { alert('Informe a data.'); return; }
+
+            let veiculos = dadosCache.veiculos || [];
+            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
+            if (idx === -1) { alert('Veículo não encontrado.'); return; }
+
+            veiculos[idx].status = 'vendido';
+            veiculos[idx].historicoVenda = { tipo, data, valor, obs: obs || 'Sem observações', dataRegistro: new Date().toLocaleString('pt-BR') };
+
+            dadosCache.veiculos = veiculos;
+            await setVeiculos(veiculos);
+            fecharModalVenderVeiculo();
+            await renderVeiculos();
+            await renderManutencao();
+            alert(`✅ Veículo marcado como ${tipo === 'venda' ? 'Vendido' : 'Sinistro'}!`);
         }
 
         // ============================================
@@ -3622,7 +4647,7 @@
         console.log('📋 VEÍCULOS: Carreta = 4 pneus por eixo numerados');
         console.log('📋 VEÍCULOS: Remoção de pneu mostra placa e eixo de origem');
         console.log('📋 VEÍCULOS: KM atualizada desconta da vida restante dos pneus');
-        console.log('📋 PNEUS: Filtro por DOT e Placa');
+        console.log('📋 PNEUS: Filtro por DOT e Placa com profundidade');
         console.log('📋 PEÇAS: Filtro por placa mostrando veículo');
         console.log('📋 RELATÓRIOS: Filtros integrados e PDF parcial');
         console.log('📋 EXTRA: Desfazer em batch');
