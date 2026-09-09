@@ -1226,246 +1226,129 @@
         //  CRUD COM TRANSAÇÕES - PNEUS
         // ============================================
 
-        async function getPneus() {
-            if (!currentUserId) return [];
-            try {
-                const snapshot = await db.collection('users').doc(currentUserId).collection('pneus').get();
-                const pneus = [];
-                snapshot.forEach(doc => {
-                    if (doc.id !== 'init') {
-                        const dados = doc.data();
-                        const item = converterItem(dados);
-                        pneus.push({ id: parseInt(doc.id), ...item });
-                    }
-                });
-                dadosCache.pneus = pneus;
-                return pneus;
-            } catch (error) {
-                console.error('Erro ao buscar pneus:', error);
-                return dadosCache.pneus || [];
-            }
-        }
+        // ============================================
+//  CRUD CORRIGIDO - PNEUS
+// ============================================
 
-        async function setPneusComTransacao(pneus) {
+async function setPneus(pneus) {
     if (!currentUserId) return;
     
     try {
-        await db.runTransaction(async (transaction) => {
-            const ref = db.collection('users').doc(currentUserId).collection('pneus');
-            const snapshot = await transaction.get(ref);
-            
-            const batch = db.batch();
-            snapshot.forEach(doc => {
-                if (doc.id !== 'init') batch.delete(doc.ref);
-            });
-            
-            pneus.forEach(pneu => {
-                const docRef = ref.doc(String(pneu.id));
-                // Adicionar timestamps corretamente
-                batch.set(docRef, {
-                    ...pneu,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            });
-            
-            await transaction.commit(batch);
+        const ref = db.collection('users').doc(currentUserId).collection('pneus');
+        
+        // Primeiro, limpar todos os documentos
+        const snapshot = await ref.get();
+        const batch = db.batch();
+        
+        snapshot.forEach(doc => {
+            if (doc.id !== 'init') {
+                batch.delete(doc.ref);
+            }
         });
         
+        // Depois, adicionar os novos com timestamps
+        pneus.forEach(pneu => {
+            const docRef = ref.doc(String(pneu.id));
+            // Criar uma cópia limpa sem timestamps
+            const dados = { ...pneu };
+            delete dados.createdAt;
+            delete dados.updatedAt;
+            
+            // Adicionar timestamps diretamente no set
+            batch.set(docRef, {
+                ...dados,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        });
+        
+        await batch.commit();
         dadosCache.pneus = pneus;
     } catch (error) {
-        console.error('Erro ao salvar pneus com transação:', error);
+        console.error('Erro ao salvar pneus:', error);
         throw error;
     }
 }
 
-        // Versão sem transação (fallback)
-        async function setPneus(pneus) {
-            if (!currentUserId) return;
-            try {
-                await setPneusComTransacao(pneus);
-            } catch (error) {
-                console.error('Erro no setPneus, tentando sem transação:', error);
-                // Fallback sem transação
-                const batch = db.batch();
-                const ref = db.collection('users').doc(currentUserId).collection('pneus');
-                const snapshot = await ref.get();
-                snapshot.forEach(doc => {
-                    if (doc.id !== 'init') batch.delete(doc.ref);
-                });
-                pneus.forEach(pneu => {
-                    pneu.updatedAt = getServerTimestamp();
-                    if (!pneu.createdAt) {
-                        pneu.createdAt = getServerTimestamp();
-                    }
-                    const docRef = ref.doc(String(pneu.id));
-                    batch.set(docRef, pneu);
-                });
-                await batch.commit();
-                dadosCache.pneus = pneus;
-            }
-        }
+// ============================================
+//  CRUD CORRIGIDO - VEÍCULOS
+// ============================================
 
-        // ============================================
-        //  CRUD COM TRANSAÇÕES - PEÇAS
-        // ============================================
-
-        async function getPecas() {
-            if (!currentUserId) return [];
-            try {
-                const snapshot = await db.collection('users').doc(currentUserId).collection('pecas').get();
-                const pecas = [];
-                snapshot.forEach(doc => {
-                    if (doc.id !== 'init') {
-                        const dados = doc.data();
-                        const item = converterItem(dados);
-                        pecas.push({ id: parseInt(doc.id), ...item });
-                    }
-                });
-                dadosCache.pecas = pecas;
-                return pecas;
-            } catch (error) {
-                console.error('Erro ao buscar peças:', error);
-                return dadosCache.pecas || [];
-            }
-        }
-
-        async function setPecasComTransacao(pecas) {
+async function setVeiculos(veiculos) {
     if (!currentUserId) return;
     
     try {
-        await db.runTransaction(async (transaction) => {
-            const ref = db.collection('users').doc(currentUserId).collection('pecas');
-            const snapshot = await transaction.get(ref);
-            
-            const batch = db.batch();
-            snapshot.forEach(doc => {
-                if (doc.id !== 'init') batch.delete(doc.ref);
-            });
-            
-            pecas.forEach(peca => {
-                const docRef = ref.doc(String(peca.id));
-                // Adicionar timestamps corretamente
-                batch.set(docRef, {
-                    ...peca,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            });
-            
-            await transaction.commit(batch);
+        const ref = db.collection('users').doc(currentUserId).collection('veiculos');
+        
+        const snapshot = await ref.get();
+        const batch = db.batch();
+        
+        snapshot.forEach(doc => {
+            if (doc.id !== 'init') {
+                batch.delete(doc.ref);
+            }
         });
         
-        dadosCache.pecas = pecas;
+        veiculos.forEach(veiculo => {
+            const docRef = ref.doc(String(veiculo.id));
+            const dados = { ...veiculo };
+            delete dados.createdAt;
+            delete dados.updatedAt;
+            
+            batch.set(docRef, {
+                ...dados,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        });
+        
+        await batch.commit();
+        dadosCache.veiculos = veiculos;
     } catch (error) {
-        console.error('Erro ao salvar peças com transação:', error);
+        console.error('Erro ao salvar veículos:', error);
         throw error;
     }
 }
 
-        async function setPecas(pecas) {
-            if (!currentUserId) return;
-            try {
-                await setPecasComTransacao(pecas);
-            } catch (error) {
-                console.error('Erro no setPecas, tentando sem transação:', error);
-                const batch = db.batch();
-                const ref = db.collection('users').doc(currentUserId).collection('pecas');
-                const snapshot = await ref.get();
-                snapshot.forEach(doc => {
-                    if (doc.id !== 'init') batch.delete(doc.ref);
-                });
-                pecas.forEach(peca => {
-                    peca.updatedAt = getServerTimestamp();
-                    if (!peca.createdAt) {
-                        peca.createdAt = getServerTimestamp();
-                    }
-                    const docRef = ref.doc(String(peca.id));
-                    batch.set(docRef, peca);
-                });
-                await batch.commit();
-                dadosCache.pecas = pecas;
+// ============================================
+//  CRUD CORRIGIDO - PEÇAS
+// ============================================
+
+async function setPecas(pecas) {
+    if (!currentUserId) return;
+    
+    try {
+        const ref = db.collection('users').doc(currentUserId).collection('pecas');
+        
+        const snapshot = await ref.get();
+        const batch = db.batch();
+        
+        snapshot.forEach(doc => {
+            if (doc.id !== 'init') {
+                batch.delete(doc.ref);
             }
-        }
-
-        // ============================================
-        //  CRUD COM TRANSAÇÕES - VEÍCULOS
-        // ============================================
-
-        async function getVeiculos() {
-            if (!currentUserId) return [];
-            try {
-                const snapshot = await db.collection('users').doc(currentUserId).collection('veiculos').get();
-                const veiculos = [];
-                snapshot.forEach(doc => {
-                    if (doc.id !== 'init') {
-                        const dados = doc.data();
-                        const item = converterItem(dados);
-                        veiculos.push({ id: parseInt(doc.id), ...item });
-                    }
-                });
-                dadosCache.veiculos = veiculos;
-                return veiculos;
-            } catch (error) {
-                console.error('Erro ao buscar veículos:', error);
-                return dadosCache.veiculos || [];
-            }
-        }
-
-        async function setVeiculosComTransacao(veiculos) {
-            if (!currentUserId) return;
+        });
+        
+        pecas.forEach(peca => {
+            const docRef = ref.doc(String(peca.id));
+            const dados = { ...peca };
+            delete dados.createdAt;
+            delete dados.updatedAt;
             
-            try {
-                await db.runTransaction(async (transaction) => {
-                    const ref = db.collection('users').doc(currentUserId).collection('veiculos');
-                    const snapshot = await transaction.get(ref);
-                    
-                    const batch = db.batch();
-                    snapshot.forEach(doc => {
-                        if (doc.id !== 'init') batch.delete(doc.ref);
-                    });
-                    
-                    veiculos.forEach(veiculo => {
-                        veiculo.updatedAt = getServerTimestamp();
-                        if (!veiculo.createdAt) {
-                            veiculo.createdAt = getServerTimestamp();
-                        }
-                        const docRef = ref.doc(String(veiculo.id));
-                        batch.set(docRef, veiculo);
-                    });
-                    
-                    await transaction.commit(batch);
-                });
-                
-                dadosCache.veiculos = veiculos;
-            } catch (error) {
-                console.error('Erro ao salvar veículos com transação:', error);
-                throw error;
-            }
-        }
-
-        async function setVeiculos(veiculos) {
-            if (!currentUserId) return;
-            try {
-                await setVeiculosComTransacao(veiculos);
-            } catch (error) {
-                console.error('Erro no setVeiculos, tentando sem transação:', error);
-                const batch = db.batch();
-                const ref = db.collection('users').doc(currentUserId).collection('veiculos');
-                const snapshot = await ref.get();
-                snapshot.forEach(doc => {
-                    if (doc.id !== 'init') batch.delete(doc.ref);
-                });
-                veiculos.forEach(veiculo => {
-                    veiculo.updatedAt = getServerTimestamp();
-                    if (!veiculo.createdAt) {
-                        veiculo.createdAt = getServerTimestamp();
-                    }
-                    const docRef = ref.doc(String(veiculo.id));
-                    batch.set(docRef, veiculo);
-                });
-                await batch.commit();
-                dadosCache.veiculos = veiculos;
-            }
-        }
+            batch.set(docRef, {
+                ...dados,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        });
+        
+        await batch.commit();
+        dadosCache.pecas = pecas;
+    } catch (error) {
+        console.error('Erro ao salvar peças:', error);
+        throw error;
+    }
+}
 
         // ============================================
         //  CRUD - DESCATADOS
@@ -2319,59 +2202,28 @@
     const quantidade = parseInt(document.getElementById('pneuQuantidade').value) || 1;
     const dataEntrada = document.getElementById('pneuDataEntrada').value || new Date().toISOString().split('T')[0];
 
-    try {
-        // Usar transação para garantir integridade
-        await db.runTransaction(async (transaction) => {
-            const ref = db.collection('users').doc(currentUserId).collection('pneus');
-            const snapshot = await transaction.get(ref);
-            
-            const pneus = [];
-            snapshot.forEach(doc => {
-                if (doc.id !== 'init') pneus.push({ id: parseInt(doc.id), ...doc.data() });
-            });
-            
-            const permissoes = getPermissoes(getCurrentUser());
-            if (!isMaster() && pneus.length + quantidade > permissoes.pneus.limite) {
-                throw new Error(`Limite de pneus excedido! Máximo ${permissoes.pneus.limite}. Atualmente: ${pneus.length}`);
-            }
-
-            const novosPneus = [];
-            for (let i = 0; i < quantidade; i++) {
-                const pneu = criarPneu(nome, dot, tamanho, tipo, situacao, valor, dataEntrada);
-                novosPneus.push(pneu);
-            }
-
-            // Salvar no Firestore - FORA da transação para evitar problemas de serialização
-            const batch = db.batch();
-            const allPneus = [...pneus, ...novosPneus];
-            
-            // Limpar documentos antigos
-            snapshot.forEach(doc => {
-                if (doc.id !== 'init') batch.delete(doc.ref);
-            });
-            
-            // Adicionar novos documentos com timestamps
-            allPneus.forEach(p => {
-                const docRef = ref.doc(String(p.id));
-                // Adicionar timestamps diretamente no batch
-                batch.set(docRef, {
-                    ...p,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            });
-            
-            await transaction.commit(batch);
-            dadosCache.pneus = allPneus;
-            
-            novosPneus.forEach(p => {
-                adicionarHistorico('cadastrar_pneu', { id: p.id });
-            });
-        });
-    } catch (error) {
-        alert(error.message || 'Erro ao cadastrar pneu.');
+    let pneus = dadosCache.pneus || [];
+    const permissoes = getPermissoes(getCurrentUser());
+    if (!isMaster() && pneus.length + quantidade > permissoes.pneus.limite) {
+        alert(`⚠️ Limite de pneus excedido! Máximo ${permissoes.pneus.limite}. Atualmente: ${pneus.length}`);
         return;
     }
+
+    const novosPneus = [];
+    const ids = [];
+    for (let i = 0; i < quantidade; i++) {
+        const pneu = criarPneu(nome, dot, tamanho, tipo, situacao, valor, dataEntrada);
+        novosPneus.push(pneu);
+        ids.push(pneu.id);
+    }
+
+    pneus = [...pneus, ...novosPneus];
+    dadosCache.pneus = pneus;
+    
+    // Salvar SEM timestamps no objeto
+    await setPneus(pneus);
+    
+    ids.forEach(id => adicionarHistorico('cadastrar_pneu', { id: id }));
 
     limparFormPneu();
     await renderEstoque();
@@ -2459,29 +2311,9 @@
         if (!confirmar) return;
     }
     
-    // Salvar com timestamps
-    const ref = db.collection('users').doc(currentUserId).collection('pneus');
-    const batch = db.batch();
-    
-    // Limpar documentos antigos
-    const snapshot = await ref.get();
-    snapshot.forEach(doc => {
-        if (doc.id !== 'init') batch.delete(doc.ref);
-    });
-    
-    // Adicionar novos com timestamps
-    pneus.forEach(p => {
-        const docRef = ref.doc(String(p.id));
-        batch.set(docRef, {
-            ...p,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-    });
-    
-    await batch.commit();
-    
     dadosCache.pneus = pneus;
+    await setPneus(pneus);
+    
     ids.forEach(id => adicionarHistorico('cadastrar_pneu', { id: id }, batchIdMultiplo));
     fecharModalCadastroMultiplo();
     limparFormPneu();
@@ -2489,6 +2321,7 @@
     await atualizarLimitesUI();
     switchTab('tab-estoque');
     alert(`✅ ${cadastrados} pneu(s) cadastrado(s)!`);
+}
 }
 
         // ============================================
@@ -3073,63 +2906,35 @@
         return;
     }
 
-    try {
-        await db.runTransaction(async (transaction) => {
-            const veiculosRef = db.collection('users').doc(currentUserId).collection('veiculos');
-            const snapshot = await transaction.get(veiculosRef);
-            
-            const veiculos = [];
-            snapshot.forEach(doc => {
-                if (doc.id !== 'init') veiculos.push({ id: parseInt(doc.id), ...doc.data() });
-            });
-            
-            if (veiculos.find(v => v.placa === placa)) {
-                throw new Error('Esta placa já está cadastrada.');
-            }
-
-            const estruturaEixos = getEstruturaEixos(tipo, eixos);
-
-            const veiculo = {
-                id: gerarIdUnico(),
-                marca, modelo, placa,
-                km: km,
-                tipo: tipo,
-                eixos: eixos,
-                status: status,
-                estruturaEixos: estruturaEixos,
-                pneus: {},
-                pecas: {},
-                combinadoCom: null,
-                combinadoTipo: null,
-                servicos: [],
-                dataCadastro: new Date().toLocaleDateString('pt-BR'),
-                historicoVenda: null
-            };
-
-            veiculos.push(veiculo);
-            
-            const batch = db.batch();
-            snapshot.forEach(doc => {
-                if (doc.id !== 'init') batch.delete(doc.ref);
-            });
-            veiculos.forEach(v => {
-                const docRef = veiculosRef.doc(String(v.id));
-                // Adicionar timestamps corretamente
-                batch.set(docRef, {
-                    ...v,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            });
-            await transaction.commit(batch);
-            
-            dadosCache.veiculos = veiculos;
-            await adicionarHistorico('cadastrar_veiculo', { id: veiculo.id });
-        });
-    } catch (error) {
-        alert(error.message || 'Erro ao cadastrar veículo.');
+    let veiculos = dadosCache.veiculos || [];
+    if (veiculos.find(v => v.placa === placa)) {
+        alert('Esta placa já está cadastrada.');
         return;
     }
+
+    const estruturaEixos = getEstruturaEixos(tipo, eixos);
+
+    const veiculo = {
+        id: gerarIdUnico(),
+        marca, modelo, placa,
+        km: km,
+        tipo: tipo,
+        eixos: eixos,
+        status: status,
+        estruturaEixos: estruturaEixos,
+        pneus: {},
+        pecas: {},
+        combinadoCom: null,
+        combinadoTipo: null,
+        servicos: [],
+        dataCadastro: new Date().toLocaleDateString('pt-BR'),
+        historicoVenda: null
+    };
+
+    veiculos.push(veiculo);
+    dadosCache.veiculos = veiculos;
+    await setVeiculos(veiculos);
+    await adicionarHistorico('cadastrar_veiculo', { id: veiculo.id });
 
     document.getElementById('veiculoForm').reset();
     document.getElementById('veiculoKm').value = '0';
