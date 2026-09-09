@@ -1124,6 +1124,88 @@
         const db = firebase.firestore();
 
         // ============================================
+        //  FUNÇÕES AUXILIARES DE ID E TIMESTAMP
+        // ============================================
+
+        // Gera ID único usando timestamp + random
+        function gerarIdUnico() {
+            return Date.now() + Math.random() * 1000000;
+        }
+
+        // Gera timestamp do servidor (para datas)
+        function getServerTimestamp() {
+            return firebase.firestore.FieldValue.serverTimestamp();
+        }
+
+        // Converte timestamp do Firestore para string
+        function formatarTimestamp(timestamp) {
+            if (!timestamp) return 'N/A';
+            if (timestamp.toDate) {
+                return timestamp.toDate().toLocaleString('pt-BR');
+            }
+            return new Date(timestamp).toLocaleString('pt-BR');
+        }
+
+        // Converte timestamp para data ISO
+        function timestampToISO(timestamp) {
+            if (!timestamp) return new Date().toISOString();
+            if (timestamp.toDate) {
+                return timestamp.toDate().toISOString();
+            }
+            return new Date(timestamp).toISOString();
+        }
+
+        // Converte timestamp do Firestore para string legível
+        function timestampToString(timestamp) {
+            if (!timestamp) return 'N/A';
+            if (timestamp.toDate) {
+                return timestamp.toDate().toLocaleString('pt-BR');
+            }
+            return new Date(timestamp).toLocaleString('pt-BR');
+        }
+
+        // Converte timestamp para data ISO
+        function timestampToDateISO(timestamp) {
+            if (!timestamp) return new Date().toISOString();
+            if (timestamp.toDate) {
+                return timestamp.toDate().toISOString();
+            }
+            return new Date(timestamp).toISOString();
+        }
+
+        // Verifica se um objeto tem timestamps válidos
+        function hasValidTimestamps(obj) {
+            return obj && (obj.createdAt || obj.updatedAt);
+        }
+
+        // Converte item para exibição
+        function converterItem(item) {
+            if (!item) return item;
+            const novoItem = { ...item };
+            
+            if (novoItem.createdAt) {
+                novoItem.createdAtStr = timestampToString(novoItem.createdAt);
+            }
+            if (novoItem.updatedAt) {
+                novoItem.updatedAtStr = timestampToString(novoItem.updatedAt);
+            }
+            return novoItem;
+        }
+
+        function converterDadosParaExibicao(dados) {
+            if (Array.isArray(dados)) {
+                return dados.map(item => converterItem(item));
+            }
+            return converterItem(dados);
+        }
+
+        // Atualiza o campo updatedAt de um documento
+        function atualizarTimestamp(documento) {
+            documento.updatedAt = getServerTimestamp();
+            return documento;
+        }
+
+        // ============================================
         //  BANCO DE DADOS - FIREBASE
         // ============================================
         let currentUserFirebase = null;
@@ -1140,111 +1222,273 @@
         }
         function clearCurrentUser() { currentUserFirebase = null; currentUserId = null; }
 
-        // CRUD Firebase - Cada empresa tem seu próprio estoque (usuário logado)
+        // ============================================
+        //  CRUD COM TRANSAÇÕES - PNEUS
+        // ============================================
+
         async function getPneus() {
             if (!currentUserId) return [];
             try {
                 const snapshot = await db.collection('users').doc(currentUserId).collection('pneus').get();
                 const pneus = [];
-                snapshot.forEach(doc => { 
-                    if (doc.id !== 'init') pneus.push({ id: parseInt(doc.id), ...doc.data() }); 
+                snapshot.forEach(doc => {
+                    if (doc.id !== 'init') {
+                        const dados = doc.data();
+                        const item = converterItem(dados);
+                        pneus.push({ id: parseInt(doc.id), ...item });
+                    }
                 });
                 dadosCache.pneus = pneus;
                 return pneus;
-            } catch (error) { console.error('Erro ao buscar pneus:', error); return dadosCache.pneus || []; }
+            } catch (error) {
+                console.error('Erro ao buscar pneus:', error);
+                return dadosCache.pneus || [];
+            }
         }
 
+        async function setPneusComTransacao(pneus) {
+            if (!currentUserId) return;
+            
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const ref = db.collection('users').doc(currentUserId).collection('pneus');
+                    const snapshot = await transaction.get(ref);
+                    
+                    const batch = db.batch();
+                    snapshot.forEach(doc => {
+                        if (doc.id !== 'init') batch.delete(doc.ref);
+                    });
+                    
+                    pneus.forEach(pneu => {
+                        pneu.updatedAt = getServerTimestamp();
+                        if (!pneu.createdAt) {
+                            pneu.createdAt = getServerTimestamp();
+                        }
+                        const docRef = ref.doc(String(pneu.id));
+                        batch.set(docRef, pneu);
+                    });
+                    
+                    await transaction.commit(batch);
+                });
+                
+                dadosCache.pneus = pneus;
+            } catch (error) {
+                console.error('Erro ao salvar pneus com transação:', error);
+                throw error;
+            }
+        }
+
+        // Versão sem transação (fallback)
         async function setPneus(pneus) {
             if (!currentUserId) return;
             try {
+                await setPneusComTransacao(pneus);
+            } catch (error) {
+                console.error('Erro no setPneus, tentando sem transação:', error);
+                // Fallback sem transação
                 const batch = db.batch();
                 const ref = db.collection('users').doc(currentUserId).collection('pneus');
                 const snapshot = await ref.get();
                 snapshot.forEach(doc => {
                     if (doc.id !== 'init') batch.delete(doc.ref);
                 });
-                pneus.forEach(pneu => { 
-                    const docRef = ref.doc(String(pneu.id)); 
-                    batch.set(docRef, pneu); 
+                pneus.forEach(pneu => {
+                    pneu.updatedAt = getServerTimestamp();
+                    if (!pneu.createdAt) {
+                        pneu.createdAt = getServerTimestamp();
+                    }
+                    const docRef = ref.doc(String(pneu.id));
+                    batch.set(docRef, pneu);
                 });
                 await batch.commit();
                 dadosCache.pneus = pneus;
-            } catch (error) { console.error('Erro ao salvar pneus:', error); }
+            }
         }
+
+        // ============================================
+        //  CRUD COM TRANSAÇÕES - PEÇAS
+        // ============================================
 
         async function getPecas() {
             if (!currentUserId) return [];
             try {
                 const snapshot = await db.collection('users').doc(currentUserId).collection('pecas').get();
                 const pecas = [];
-                snapshot.forEach(doc => { 
-                    if (doc.id !== 'init') pecas.push({ id: parseInt(doc.id), ...doc.data() }); 
+                snapshot.forEach(doc => {
+                    if (doc.id !== 'init') {
+                        const dados = doc.data();
+                        const item = converterItem(dados);
+                        pecas.push({ id: parseInt(doc.id), ...item });
+                    }
                 });
                 dadosCache.pecas = pecas;
                 return pecas;
-            } catch (error) { console.error('Erro ao buscar peças:', error); return dadosCache.pecas || []; }
+            } catch (error) {
+                console.error('Erro ao buscar peças:', error);
+                return dadosCache.pecas || [];
+            }
+        }
+
+        async function setPecasComTransacao(pecas) {
+            if (!currentUserId) return;
+            
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const ref = db.collection('users').doc(currentUserId).collection('pecas');
+                    const snapshot = await transaction.get(ref);
+                    
+                    const batch = db.batch();
+                    snapshot.forEach(doc => {
+                        if (doc.id !== 'init') batch.delete(doc.ref);
+                    });
+                    
+                    pecas.forEach(peca => {
+                        peca.updatedAt = getServerTimestamp();
+                        if (!peca.createdAt) {
+                            peca.createdAt = getServerTimestamp();
+                        }
+                        const docRef = ref.doc(String(peca.id));
+                        batch.set(docRef, peca);
+                    });
+                    
+                    await transaction.commit(batch);
+                });
+                
+                dadosCache.pecas = pecas;
+            } catch (error) {
+                console.error('Erro ao salvar peças com transação:', error);
+                throw error;
+            }
         }
 
         async function setPecas(pecas) {
             if (!currentUserId) return;
             try {
+                await setPecasComTransacao(pecas);
+            } catch (error) {
+                console.error('Erro no setPecas, tentando sem transação:', error);
                 const batch = db.batch();
                 const ref = db.collection('users').doc(currentUserId).collection('pecas');
                 const snapshot = await ref.get();
                 snapshot.forEach(doc => {
                     if (doc.id !== 'init') batch.delete(doc.ref);
                 });
-                pecas.forEach(peca => { 
-                    const docRef = ref.doc(String(peca.id)); 
-                    batch.set(docRef, peca); 
+                pecas.forEach(peca => {
+                    peca.updatedAt = getServerTimestamp();
+                    if (!peca.createdAt) {
+                        peca.createdAt = getServerTimestamp();
+                    }
+                    const docRef = ref.doc(String(peca.id));
+                    batch.set(docRef, peca);
                 });
                 await batch.commit();
                 dadosCache.pecas = pecas;
-            } catch (error) { console.error('Erro ao salvar peças:', error); }
+            }
         }
+
+        // ============================================
+        //  CRUD COM TRANSAÇÕES - VEÍCULOS
+        // ============================================
 
         async function getVeiculos() {
             if (!currentUserId) return [];
             try {
                 const snapshot = await db.collection('users').doc(currentUserId).collection('veiculos').get();
                 const veiculos = [];
-                snapshot.forEach(doc => { 
-                    if (doc.id !== 'init') veiculos.push({ id: parseInt(doc.id), ...doc.data() }); 
+                snapshot.forEach(doc => {
+                    if (doc.id !== 'init') {
+                        const dados = doc.data();
+                        const item = converterItem(dados);
+                        veiculos.push({ id: parseInt(doc.id), ...item });
+                    }
                 });
                 dadosCache.veiculos = veiculos;
                 return veiculos;
-            } catch (error) { console.error('Erro ao buscar veículos:', error); return dadosCache.veiculos || []; }
+            } catch (error) {
+                console.error('Erro ao buscar veículos:', error);
+                return dadosCache.veiculos || [];
+            }
+        }
+
+        async function setVeiculosComTransacao(veiculos) {
+            if (!currentUserId) return;
+            
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const ref = db.collection('users').doc(currentUserId).collection('veiculos');
+                    const snapshot = await transaction.get(ref);
+                    
+                    const batch = db.batch();
+                    snapshot.forEach(doc => {
+                        if (doc.id !== 'init') batch.delete(doc.ref);
+                    });
+                    
+                    veiculos.forEach(veiculo => {
+                        veiculo.updatedAt = getServerTimestamp();
+                        if (!veiculo.createdAt) {
+                            veiculo.createdAt = getServerTimestamp();
+                        }
+                        const docRef = ref.doc(String(veiculo.id));
+                        batch.set(docRef, veiculo);
+                    });
+                    
+                    await transaction.commit(batch);
+                });
+                
+                dadosCache.veiculos = veiculos;
+            } catch (error) {
+                console.error('Erro ao salvar veículos com transação:', error);
+                throw error;
+            }
         }
 
         async function setVeiculos(veiculos) {
             if (!currentUserId) return;
             try {
+                await setVeiculosComTransacao(veiculos);
+            } catch (error) {
+                console.error('Erro no setVeiculos, tentando sem transação:', error);
                 const batch = db.batch();
                 const ref = db.collection('users').doc(currentUserId).collection('veiculos');
                 const snapshot = await ref.get();
                 snapshot.forEach(doc => {
                     if (doc.id !== 'init') batch.delete(doc.ref);
                 });
-                veiculos.forEach(veiculo => { 
-                    const docRef = ref.doc(String(veiculo.id)); 
-                    batch.set(docRef, veiculo); 
+                veiculos.forEach(veiculo => {
+                    veiculo.updatedAt = getServerTimestamp();
+                    if (!veiculo.createdAt) {
+                        veiculo.createdAt = getServerTimestamp();
+                    }
+                    const docRef = ref.doc(String(veiculo.id));
+                    batch.set(docRef, veiculo);
                 });
                 await batch.commit();
                 dadosCache.veiculos = veiculos;
-            } catch (error) { console.error('Erro ao salvar veículos:', error); }
+            }
         }
+
+        // ============================================
+        //  CRUD - DESCATADOS
+        // ============================================
 
         async function getDescartados() {
             if (!currentUserId) return [];
             try {
                 const snapshot = await db.collection('users').doc(currentUserId).collection('descartados').get();
                 const descartados = [];
-                snapshot.forEach(doc => { 
-                    if (doc.id !== 'init') descartados.push({ id: parseInt(doc.id), ...doc.data() }); 
+                snapshot.forEach(doc => {
+                    if (doc.id !== 'init') {
+                        const dados = doc.data();
+                        const item = converterItem(dados);
+                        descartados.push({ id: parseInt(doc.id), ...item });
+                    }
                 });
                 dadosCache.descartados = descartados;
                 return descartados;
-            } catch (error) { console.error('Erro ao buscar descartados:', error); return dadosCache.descartados || []; }
+            } catch (error) {
+                console.error('Erro ao buscar descartados:', error);
+                return dadosCache.descartados || [];
+            }
         }
 
         async function setDescartados(descartados) {
@@ -1256,26 +1500,43 @@
                 snapshot.forEach(doc => {
                     if (doc.id !== 'init') batch.delete(doc.ref);
                 });
-                descartados.forEach(item => { 
-                    const docRef = ref.doc(String(item.id)); 
-                    batch.set(docRef, item); 
+                descartados.forEach(item => {
+                    item.updatedAt = getServerTimestamp();
+                    if (!item.createdAt) {
+                        item.createdAt = getServerTimestamp();
+                    }
+                    const docRef = ref.doc(String(item.id));
+                    batch.set(docRef, item);
                 });
                 await batch.commit();
                 dadosCache.descartados = descartados;
-            } catch (error) { console.error('Erro ao salvar descartados:', error); }
+            } catch (error) {
+                console.error('Erro ao salvar descartados:', error);
+            }
         }
+
+        // ============================================
+        //  CRUD - MANUTENÇÕES
+        // ============================================
 
         async function getManutencoes() {
             if (!currentUserId) return [];
             try {
                 const snapshot = await db.collection('users').doc(currentUserId).collection('manutencoes').get();
                 const manutencoes = [];
-                snapshot.forEach(doc => { 
-                    if (doc.id !== 'init') manutencoes.push({ id: parseInt(doc.id), ...doc.data() }); 
+                snapshot.forEach(doc => {
+                    if (doc.id !== 'init') {
+                        const dados = doc.data();
+                        const item = converterItem(dados);
+                        manutencoes.push({ id: parseInt(doc.id), ...item });
+                    }
                 });
                 dadosCache.manutencoes = manutencoes;
                 return manutencoes;
-            } catch (error) { console.error('Erro ao buscar manutenções:', error); return dadosCache.manutencoes || []; }
+            } catch (error) {
+                console.error('Erro ao buscar manutenções:', error);
+                return dadosCache.manutencoes || [];
+            }
         }
 
         async function setManutencoes(manutencoes) {
@@ -1287,26 +1548,43 @@
                 snapshot.forEach(doc => {
                     if (doc.id !== 'init') batch.delete(doc.ref);
                 });
-                manutencoes.forEach(item => { 
-                    const docRef = ref.doc(String(item.id)); 
-                    batch.set(docRef, item); 
+                manutencoes.forEach(item => {
+                    item.updatedAt = getServerTimestamp();
+                    if (!item.createdAt) {
+                        item.createdAt = getServerTimestamp();
+                    }
+                    const docRef = ref.doc(String(item.id));
+                    batch.set(docRef, item);
                 });
                 await batch.commit();
                 dadosCache.manutencoes = manutencoes;
-            } catch (error) { console.error('Erro ao salvar manutenções:', error); }
+            } catch (error) {
+                console.error('Erro ao salvar manutenções:', error);
+            }
         }
+
+        // ============================================
+        //  CRUD - MOTORISTAS
+        // ============================================
 
         async function getMotoristas() {
             if (!currentUserId) return [];
             try {
                 const snapshot = await db.collection('users').doc(currentUserId).collection('motoristas').get();
                 const motoristas = [];
-                snapshot.forEach(doc => { 
-                    if (doc.id !== 'init') motoristas.push({ id: parseInt(doc.id), ...doc.data() }); 
+                snapshot.forEach(doc => {
+                    if (doc.id !== 'init') {
+                        const dados = doc.data();
+                        const item = converterItem(dados);
+                        motoristas.push({ id: parseInt(doc.id), ...item });
+                    }
                 });
                 dadosCache.motoristas = motoristas;
                 return motoristas;
-            } catch (error) { console.error('Erro ao buscar motoristas:', error); return dadosCache.motoristas || []; }
+            } catch (error) {
+                console.error('Erro ao buscar motoristas:', error);
+                return dadosCache.motoristas || [];
+            }
         }
 
         async function setMotoristas(motoristas) {
@@ -1318,24 +1596,41 @@
                 snapshot.forEach(doc => {
                     if (doc.id !== 'init') batch.delete(doc.ref);
                 });
-                motoristas.forEach(item => { 
-                    const docRef = ref.doc(String(item.id)); 
-                    batch.set(docRef, item); 
+                motoristas.forEach(item => {
+                    item.updatedAt = getServerTimestamp();
+                    if (!item.createdAt) {
+                        item.createdAt = getServerTimestamp();
+                    }
+                    const docRef = ref.doc(String(item.id));
+                    batch.set(docRef, item);
                 });
                 await batch.commit();
                 dadosCache.motoristas = motoristas;
-            } catch (error) { console.error('Erro ao salvar motoristas:', error); }
+            } catch (error) {
+                console.error('Erro ao salvar motoristas:', error);
+            }
         }
+
+        // ============================================
+        //  CRUD - USUÁRIOS
+        // ============================================
 
         async function getUsers() {
             try {
                 const snapshot = await db.collection('users').get();
                 const users = [];
-                snapshot.forEach(doc => { 
-                    if (doc.id !== 'init') users.push({ id: parseInt(doc.id), ...doc.data() }); 
+                snapshot.forEach(doc => {
+                    if (doc.id !== 'init') {
+                        const dados = doc.data();
+                        const item = converterItem(dados);
+                        users.push({ id: parseInt(doc.id), ...item });
+                    }
                 });
                 return users;
-            } catch (error) { console.error('Erro ao buscar usuários:', error); return []; }
+            } catch (error) {
+                console.error('Erro ao buscar usuários:', error);
+                return [];
+            }
         }
 
         async function setUsers(users) {
@@ -1346,30 +1641,47 @@
                 snapshot.forEach(doc => {
                     if (doc.id !== 'init') batch.delete(doc.ref);
                 });
-                users.forEach(user => { 
-                    const docRef = ref.doc(String(user.id)); 
-                    batch.set(docRef, user); 
+                users.forEach(user => {
+                    user.updatedAt = getServerTimestamp();
+                    if (!user.createdAt) {
+                        user.createdAt = getServerTimestamp();
+                    }
+                    const docRef = ref.doc(String(user.id));
+                    batch.set(docRef, user);
                 });
                 await batch.commit();
-            } catch (error) { console.error('Erro ao salvar usuários:', error); }
+            } catch (error) {
+                console.error('Erro ao salvar usuários:', error);
+            }
         }
 
         // ============================================
         //  HISTÓRICO
         // ============================================
         async function adicionarHistorico(acao, dados, batchId) {
-            const item = { acao: acao, dados: JSON.parse(JSON.stringify(dados)), timestamp: Date.now(), batchId: batchId || null };
+            const item = { 
+                acao: acao, 
+                dados: JSON.parse(JSON.stringify(dados)), 
+                timestamp: Date.now() + Math.random() * 1000,
+                batchId: batchId || null 
+            };
             if (batchId) item.batchId = batchId;
             historicoAcoes.push(item);
             if (historicoAcoes.length > 50) historicoAcoes.shift();
             if (currentUserId) {
-                try { await db.collection('users').doc(currentUserId).collection('historico').doc(String(item.timestamp)).set(item); } 
-                catch (error) { console.error('Erro ao salvar histórico:', error); }
+                try { 
+                    await db.collection('users').doc(currentUserId).collection('historico').doc(String(item.timestamp)).set(item); 
+                } catch (error) { 
+                    console.error('Erro ao salvar histórico:', error); 
+                }
             }
             localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes));
         }
 
-        function iniciarBatch() { ultimoBatch = Date.now() + Math.random() * 1000; return ultimoBatch; }
+        function iniciarBatch() { 
+            ultimoBatch = Date.now() + Math.random() * 1000; 
+            return ultimoBatch; 
+        }
 
         async function carregarHistorico() {
             const data = localStorage.getItem(`historico_${getCurrentUserId()}`);
@@ -1379,8 +1691,13 @@
                     const snapshot = await db.collection('users').doc(currentUserId).collection('historico').orderBy('timestamp', 'desc').limit(50).get();
                     const historicoFirestore = [];
                     snapshot.forEach(doc => historicoFirestore.push(doc.data()));
-                    if (historicoFirestore.length > 0) { historicoAcoes = historicoFirestore; localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes)); }
-                } catch (error) { console.error('Erro ao carregar histórico do Firestore:', error); }
+                    if (historicoFirestore.length > 0) { 
+                        historicoAcoes = historicoFirestore; 
+                        localStorage.setItem(`historico_${getCurrentUserId()}`, JSON.stringify(historicoAcoes)); 
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar histórico do Firestore:', error);
+                }
             }
         }
 
@@ -1617,7 +1934,7 @@
                 const firebaseUser = userCredential.user;
 
                 const newUser = {
-                    id: Date.now(),
+                    id: gerarIdUnico(),
                     name, company, email, password,
                     companyName: company,
                     isMaster: false,
@@ -1625,7 +1942,9 @@
                     permissoes: { pneusLimite: 10, pecas: false, manutencao: false, motoristas: false, descartados: false, relatorios: false },
                     status: 'pendente',
                     dataCadastro: new Date().toISOString(),
-                    firebaseUid: firebaseUser.uid
+                    firebaseUid: firebaseUser.uid,
+                    createdAt: getServerTimestamp(),
+                    updatedAt: getServerTimestamp()
                 };
                 
                 if (email.toLowerCase() === "henrique_iijima@hotmail.com") {
@@ -1672,7 +1991,7 @@
 
                 if (!user) {
                     user = {
-                        id: Date.now(),
+                        id: gerarIdUnico(),
                         name: firebaseUser.displayName || email.split('@')[0],
                         company: 'Minha Empresa',
                         email: email,
@@ -1683,7 +2002,9 @@
                         permissoes: { pneusLimite: 10, pecas: false, manutencao: false, motoristas: false, descartados: false, relatorios: false },
                         status: 'aprovado',
                         dataCadastro: new Date().toISOString(),
-                        firebaseUid: firebaseUser.uid
+                        firebaseUid: firebaseUser.uid,
+                        createdAt: getServerTimestamp(),
+                        updatedAt: getServerTimestamp()
                     };
                     if (email.toLowerCase() === "henrique_iijima@hotmail.com") {
                         user.isMaster = true;
@@ -1730,6 +2051,36 @@
         }
 
         // ============================================
+        //  RECUPERAÇÃO DE SENHA
+        // ============================================
+        function toggleRecuperacao() {
+            const container = document.getElementById('recuperacaoContainer');
+            container.classList.toggle('show');
+            if (!container.classList.contains('show')) document.getElementById('recuperacaoMsg').style.display = 'none';
+        }
+
+        async function recuperarSenha() {
+            const email = document.getElementById('recuperacaoEmail').value.trim();
+            const msg = document.getElementById('recuperacaoMsg');
+            if (!email) {
+                msg.style.color = '#c62828';
+                msg.textContent = 'Por favor, digite seu e-mail.';
+                msg.style.display = 'block';
+                return;
+            }
+            try {
+                await auth.sendPasswordResetEmail(email);
+                msg.style.color = '#2e7d32';
+                msg.innerHTML = `✅ Link de recuperação enviado para <strong>${email}</strong>.<br><span style="font-size:12px; color:#666;">Verifique sua caixa de entrada e spam.</span>`;
+                msg.style.display = 'block';
+            } catch (error) {
+                msg.style.color = '#c62828';
+                msg.textContent = '❌ ' + (error.message || 'Erro ao enviar link de recuperação.');
+                msg.style.display = 'block';
+            }
+        }
+
+        // ============================================
         //  ENTRAR NO APP
         // ============================================
         async function enterApp() {
@@ -1743,7 +2094,9 @@
                 dadosCache.descartados = await getDescartados();
                 dadosCache.manutencoes = await getManutencoes();
                 dadosCache.motoristas = await getMotoristas();
-            } catch (error) { console.error('Erro ao carregar dados:', error); }
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+            }
 
             document.getElementById('authContainer').style.display = 'none';
             document.getElementById('mainHeader').style.display = 'flex';
@@ -1777,36 +2130,6 @@
         }
 
         // ============================================
-        //  RECUPERAÇÃO DE SENHA
-        // ============================================
-        function toggleRecuperacao() {
-            const container = document.getElementById('recuperacaoContainer');
-            container.classList.toggle('show');
-            if (!container.classList.contains('show')) document.getElementById('recuperacaoMsg').style.display = 'none';
-        }
-
-        async function recuperarSenha() {
-            const email = document.getElementById('recuperacaoEmail').value.trim();
-            const msg = document.getElementById('recuperacaoMsg');
-            if (!email) {
-                msg.style.color = '#c62828';
-                msg.textContent = 'Por favor, digite seu e-mail.';
-                msg.style.display = 'block';
-                return;
-            }
-            try {
-                await auth.sendPasswordResetEmail(email);
-                msg.style.color = '#2e7d32';
-                msg.innerHTML = `✅ Link de recuperação enviado para <strong>${email}</strong>.<br><span style="font-size:12px; color:#666;">Verifique sua caixa de entrada e spam.</span>`;
-                msg.style.display = 'block';
-            } catch (error) {
-                msg.style.color = '#c62828';
-                msg.textContent = '❌ ' + (error.message || 'Erro ao enviar link de recuperação.');
-                msg.style.display = 'block';
-            }
-        }
-
-        // ============================================
         //  MASTER CONTROL
         // ============================================
         function isMaster() {
@@ -1823,6 +2146,7 @@
                 users[idx].isMaster = true;
                 users[idx].plano = null;
                 users[idx].permissoes = { pneusLimite: Infinity, pecas: true, manutencao: true, motoristas: true, descartados: true, relatorios: true };
+                users[idx].updatedAt = getServerTimestamp();
                 await setUsers(users);
                 if (getCurrentUser() && getCurrentUser().id === userId) setCurrentUser(users[idx]);
                 return true;
@@ -1840,6 +2164,7 @@
                 } else {
                     users[idx].permissoes = { pneusLimite: 10, pecas: false, manutencao: false, motoristas: false, descartados: false, relatorios: false };
                 }
+                users[idx].updatedAt = getServerTimestamp();
                 await setUsers(users);
                 if (getCurrentUser() && getCurrentUser().id === userId) {
                     setCurrentUser(users[idx]);
@@ -1923,71 +2248,13 @@
         }
 
         // ============================================
-        //  CADASTRAR PNEU
+        //  CADASTRAR PNEU - COM TRANSAÇÃO
         // ============================================
         let pneusParaCadastrar = [];
 
-        async function cadastrarPneu(e) {
-            e.preventDefault();
-            if (!verificarEAcessar()) return;
-            if (!verificarLimitePneus()) { alert('⚠️ Limite de pneus atingido!'); return; }
-
-            let nome = document.getElementById('pneuNomeSelect').value;
-            if (nome === 'outros') nome = document.getElementById('pneuNomeOutros').value.trim();
-            if (!nome) { alert('Por favor, selecione ou digite o nome do pneu.'); return; }
-
-            let tamanho = document.getElementById('pneuTamanhoSelect').value;
-            if (tamanho === 'outros') tamanho = document.getElementById('pneuTamanhoOutros').value.trim();
-            if (!tamanho) { alert('Por favor, selecione ou digite o tamanho do pneu.'); return; }
-
-            const dot = document.getElementById('pneuDot').value.trim();
-            const tipo = document.getElementById('pneuTipo').value;
-            const situacao = document.getElementById('pneuSituacao').value;
-            const valor = parseFloat(document.getElementById('pneuValor').value) || 0;
-            const quantidade = parseInt(document.getElementById('pneuQuantidade').value) || 1;
-            const dataEntrada = document.getElementById('pneuDataEntrada').value || new Date().toISOString().split('T')[0];
-
-            let pneus = dadosCache.pneus || [];
-            const permissoes = getPermissoes(getCurrentUser());
-            if (!isMaster() && pneus.length + quantidade > permissoes.pneus.limite) {
-                alert(`⚠️ Limite de pneus excedido! Máximo ${permissoes.pneus.limite}. Atualmente: ${pneus.length}`);
-                return;
-            }
-
-            if (quantidade === 1) {
-                const pneu = criarPneu(nome, dot, tamanho, tipo, situacao, valor, dataEntrada);
-                pneus.push(pneu);
-                dadosCache.pneus = pneus;
-                await setPneus(pneus);
-                await adicionarHistorico('cadastrar_pneu', { id: pneu.id });
-                limparFormPneu();
-                await renderEstoque();
-                await atualizarLimitesUI();
-                switchTab('tab-estoque');
-                alert('✅ 1 pneu cadastrado com sucesso!');
-                return;
-            }
-
-            const batchId = iniciarBatch();
-            pneusParaCadastrar = [];
-            for (let i = 0; i < quantidade; i++) {
-                pneusParaCadastrar.push({
-                    index: i + 1,
-                    nome: nome,
-                    dot: i === 0 ? dot : '',
-                    tamanho: tamanho,
-                    tipo: tipo,
-                    situacao: situacao,
-                    valor: valor,
-                    dataEntrada: dataEntrada
-                });
-            }
-            abrirModalCadastroMultiplo(batchId);
-        }
-
         function criarPneu(nome, dot, tamanho, tipo, situacao, valor, dataEntrada) {
             return {
-                id: Date.now() + Math.random() * 1000,
+                id: gerarIdUnico(),
                 nome: nome,
                 dot: dot || 'Não informado',
                 tamanho: tamanho,
@@ -2006,17 +2273,107 @@
                 kmInstalacao: null,
                 kmRemocao: null,
                 dataEntrada: dataEntrada || new Date().toISOString().split('T')[0],
-                dataCadastro: new Date().toLocaleDateString('pt-BR'),
                 faixas: { f1: 0, f2: 0, f3: 0, f4: 0 },
                 contadorRecapagens: 0,
                 contadorVulcanizacoes: 0,
                 tipoRecapagem: null,
                 veiculoOrigem: null,
-                historico: [{ data: new Date().toLocaleString('pt-BR'), acao: 'Cadastro', detalhes: `Pneu cadastrado como ${situacao}` }],
+                historico: [{ 
+                    data: new Date().toLocaleString('pt-BR'), 
+                    acao: 'Cadastro', 
+                    detalhes: `Pneu cadastrado como ${situacao}` 
+                }],
                 ultimaMedicaoKm: 0,
                 ultimaMedicaoData: null,
-                historicoMedicoes: []
+                historicoMedicoes: [],
+                createdAt: getServerTimestamp(),
+                updatedAt: getServerTimestamp()
             };
+        }
+
+        async function cadastrarPneu(e) {
+            e.preventDefault();
+            if (!verificarEAcessar()) return;
+            if (!verificarLimitePneus()) {
+                alert('⚠️ Limite de pneus atingido!');
+                return;
+            }
+
+            let nome = document.getElementById('pneuNomeSelect').value;
+            if (nome === 'outros') nome = document.getElementById('pneuNomeOutros').value.trim();
+            if (!nome) {
+                alert('Por favor, selecione ou digite o nome do pneu.');
+                return;
+            }
+
+            let tamanho = document.getElementById('pneuTamanhoSelect').value;
+            if (tamanho === 'outros') tamanho = document.getElementById('pneuTamanhoOutros').value.trim();
+            if (!tamanho) {
+                alert('Por favor, selecione ou digite o tamanho do pneu.');
+                return;
+            }
+
+            const dot = document.getElementById('pneuDot').value.trim();
+            const tipo = document.getElementById('pneuTipo').value;
+            const situacao = document.getElementById('pneuSituacao').value;
+            const valor = parseFloat(document.getElementById('pneuValor').value) || 0;
+            const quantidade = parseInt(document.getElementById('pneuQuantidade').value) || 1;
+            const dataEntrada = document.getElementById('pneuDataEntrada').value || new Date().toISOString().split('T')[0];
+
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const ref = db.collection('users').doc(currentUserId).collection('pneus');
+                    const snapshot = await transaction.get(ref);
+                    
+                    const pneus = [];
+                    snapshot.forEach(doc => {
+                        if (doc.id !== 'init') pneus.push({ id: parseInt(doc.id), ...doc.data() });
+                    });
+                    
+                    const permissoes = getPermissoes(getCurrentUser());
+                    if (!isMaster() && pneus.length + quantidade > permissoes.pneus.limite) {
+                        throw new Error(`Limite de pneus excedido! Máximo ${permissoes.pneus.limite}. Atualmente: ${pneus.length}`);
+                    }
+
+                    const novosPneus = [];
+                    for (let i = 0; i < quantidade; i++) {
+                        const pneu = criarPneu(nome, dot, tamanho, tipo, situacao, valor, dataEntrada);
+                        novosPneus.push(pneu);
+                    }
+
+                    const batch = db.batch();
+                    const allPneus = [...pneus, ...novosPneus];
+                    
+                    snapshot.forEach(doc => {
+                        if (doc.id !== 'init') batch.delete(doc.ref);
+                    });
+                    
+                    allPneus.forEach(p => {
+                        p.updatedAt = getServerTimestamp();
+                        if (!p.createdAt) {
+                            p.createdAt = getServerTimestamp();
+                        }
+                        const docRef = ref.doc(String(p.id));
+                        batch.set(docRef, p);
+                    });
+                    
+                    await transaction.commit(batch);
+                    dadosCache.pneus = allPneus;
+                    
+                    novosPneus.forEach(p => {
+                        adicionarHistorico('cadastrar_pneu', { id: p.id });
+                    });
+                });
+            } catch (error) {
+                alert(error.message || 'Erro ao cadastrar pneu.');
+                return;
+            }
+
+            limparFormPneu();
+            await renderEstoque();
+            await atualizarLimitesUI();
+            switchTab('tab-estoque');
+            alert(`✅ ${quantidade} pneu(s) cadastrado(s) com sucesso!`);
         }
 
         function limparFormPneu() {
@@ -2136,9 +2493,14 @@
                 try {
                     const ref = db.collection('users').doc(currentUserId).collection('historico');
                     const batch = db.batch();
-                    itensBatch.forEach(item => batch.delete(ref.doc(String(item.timestamp))));
+                    itensBatch.forEach(item => {
+                        const docId = item.timestamp || Date.now() + Math.random() * 1000;
+                        batch.delete(ref.doc(String(docId)));
+                    });
                     await batch.commit();
-                } catch (error) { console.error('Erro ao remover histórico do Firestore:', error); }
+                } catch (error) {
+                    console.error('Erro ao remover histórico do Firestore:', error);
+                }
             }
 
             let mensagens = [];
@@ -2249,7 +2611,6 @@
                 let posicaoLabel = p.posicao || '-';
                 if (p.veiculoTipo) posicaoLabel += ` (${p.veiculoTipo})`;
 
-                // Profundidade
                 let profundidadeHtml = 'N/A';
                 if (p.faixas) {
                     const vals = [p.faixas.f1 || 0, p.faixas.f2 || 0, p.faixas.f3 || 0, p.faixas.f4 || 0];
@@ -2425,6 +2786,7 @@
                     pneu.veiculoTipo = null;
                     pneu.historico = pneu.historico || [];
                     pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Recapagem', detalhes: `Pneu recapado com R$ ${valorRecapagem.toFixed(2)}${tipoRecapagem ? `, Tipo: ${tipoRecapagem === 'outros' ? tipoRecapagemOutros : tipoRecapagem}` : ''}` });
+                    pneu.updatedAt = getServerTimestamp();
                     pneusAtualizados++;
                 } else if (acao === 'vulcanizacao') {
                     if (valorVulcanizacao === 0) pneu.contadorVulcanizacoes = (pneu.contadorVulcanizacoes || 0) + 1;
@@ -2437,11 +2799,13 @@
                     pneu.veiculoTipo = null;
                     pneu.historico = pneu.historico || [];
                     pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Vulcanização', detalhes: `Pneu vulcanizado com R$ ${valorVulcanizacao.toFixed(2)}` });
+                    pneu.updatedAt = getServerTimestamp();
                     pneusAtualizados++;
                 } else if (acao === 'descarte') {
                     let descartados = dadosCache.descartados || [];
                     pneu.motivoDescarte = 'Descartado via edição';
                     pneu.dataDescarte = new Date().toLocaleDateString('pt-BR');
+                    pneu.updatedAt = getServerTimestamp();
                     descartados.push({...pneu});
                     dadosCache.descartados = descartados;
                     setDescartados(descartados);
@@ -2602,7 +2966,7 @@
             const batchId = iniciarBatch();
             for (let i = 0; i < quantidade; i++) {
                 const peca = {
-                    id: Date.now() + i + Math.random() * 1000,
+                    id: gerarIdUnico(),
                     nome, valor, categoria,
                     fornecedor: fornecedor || 'Não informado',
                     quantidade: 1,
@@ -2613,7 +2977,9 @@
                     dataInstalacao: null,
                     kmInstalacao: null,
                     dataCadastro: new Date().toLocaleDateString('pt-BR'),
-                    historico: [{ data: new Date().toLocaleString('pt-BR'), acao: 'Cadastro', detalhes: `Peça cadastrada como ${categoria}` }]
+                    historico: [{ data: new Date().toLocaleString('pt-BR'), acao: 'Cadastro', detalhes: `Peça cadastrada como ${categoria}` }],
+                    createdAt: getServerTimestamp(),
+                    updatedAt: getServerTimestamp()
                 };
                 pecas.push(peca);
                 ids.push(peca.id);
@@ -2634,7 +3000,7 @@
         }
 
         // ============================================
-        //  CADASTRAR VEÍCULO
+        //  CADASTRAR VEÍCULO - COM TRANSAÇÃO
         // ============================================
         function atualizarEixosPorTipo() {
             const tipo = document.getElementById('veiculoTipo').value;
@@ -2642,6 +3008,23 @@
             const qtdEixos = document.getElementById('veiculoQtdEixos');
             if (tipo === 'carreta') { grupoCarreta.style.display = 'block'; qtdEixos.required = true; } 
             else { grupoCarreta.style.display = 'none'; qtdEixos.required = false; }
+        }
+
+        function getEstruturaEixos(tipo, eixos) {
+            const estrutura = [];
+            if (tipo === 'cavalo_3_eixos') {
+                estrutura.push({ nome: 'Dianteiro', qtd: 2, tipo: 'dianteiro' });
+                estrutura.push({ nome: 'Tração', qtd: 4, tipo: 'traseiro' });
+                estrutura.push({ nome: 'Truck', qtd: 4, tipo: 'traseiro' });
+            } else if (tipo === '4_eixos') {
+                estrutura.push({ nome: 'Dianteiro', qtd: 2, tipo: 'dianteiro' });
+                estrutura.push({ nome: '4° Eixo', qtd: 2, tipo: 'traseiro' });
+                estrutura.push({ nome: '1° Eixo Traseiro', qtd: 4, tipo: 'traseiro' });
+                estrutura.push({ nome: '2° Eixo Traseiro', qtd: 4, tipo: 'traseiro' });
+            } else if (tipo === 'carreta') {
+                for (let i = 1; i <= eixos; i++) estrutura.push({ nome: `${i}° Eixo`, qtd: 4, tipo: i === 1 ? 'dianteiro' : 'traseiro' });
+            }
+            return estrutura;
         }
 
         async function cadastrarVeiculo(e) {
@@ -2666,34 +3049,69 @@
             else if (tipo === '4_eixos') eixos = 4;
             else if (tipo === 'carreta') eixos = parseInt(document.getElementById('veiculoQtdEixos').value) || 2;
 
-            if (!marca || !modelo || !placa) { alert('Por favor, preencha todos os campos obrigatórios.'); return; }
+            if (!marca || !modelo || !placa) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
 
-            let veiculos = dadosCache.veiculos || [];
-            if (veiculos.find(v => v.placa === placa)) { alert('Esta placa já está cadastrada.'); return; }
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const veiculosRef = db.collection('users').doc(currentUserId).collection('veiculos');
+                    const snapshot = await transaction.get(veiculosRef);
+                    
+                    const veiculos = [];
+                    snapshot.forEach(doc => {
+                        if (doc.id !== 'init') veiculos.push({ id: parseInt(doc.id), ...doc.data() });
+                    });
+                    
+                    if (veiculos.find(v => v.placa === placa)) {
+                        throw new Error('Esta placa já está cadastrada.');
+                    }
 
-            const estruturaEixos = getEstruturaEixos(tipo, eixos);
+                    const estruturaEixos = getEstruturaEixos(tipo, eixos);
 
-            const veiculo = {
-                id: Date.now(),
-                marca, modelo, placa,
-                km: km,
-                tipo: tipo,
-                eixos: eixos,
-                status: status,
-                estruturaEixos: estruturaEixos,
-                pneus: {},
-                pecas: {},
-                combinadoCom: null,
-                combinadoTipo: null,
-                servicos: [],
-                dataCadastro: new Date().toLocaleDateString('pt-BR'),
-                historicoVenda: null
-            };
+                    const veiculo = {
+                        id: gerarIdUnico(),
+                        marca, modelo, placa,
+                        km: km,
+                        tipo: tipo,
+                        eixos: eixos,
+                        status: status,
+                        estruturaEixos: estruturaEixos,
+                        pneus: {},
+                        pecas: {},
+                        combinadoCom: null,
+                        combinadoTipo: null,
+                        servicos: [],
+                        dataCadastro: new Date().toLocaleDateString('pt-BR'),
+                        historicoVenda: null,
+                        createdAt: getServerTimestamp(),
+                        updatedAt: getServerTimestamp()
+                    };
 
-            veiculos.push(veiculo);
-            dadosCache.veiculos = veiculos;
-            await setVeiculos(veiculos);
-            await adicionarHistorico('cadastrar_veiculo', { id: veiculo.id });
+                    veiculos.push(veiculo);
+                    
+                    const batch = db.batch();
+                    snapshot.forEach(doc => {
+                        if (doc.id !== 'init') batch.delete(doc.ref);
+                    });
+                    veiculos.forEach(v => {
+                        v.updatedAt = getServerTimestamp();
+                        if (!v.createdAt) {
+                            v.createdAt = getServerTimestamp();
+                        }
+                        const docRef = veiculosRef.doc(String(v.id));
+                        batch.set(docRef, v);
+                    });
+                    await transaction.commit(batch);
+                    
+                    dadosCache.veiculos = veiculos;
+                    await adicionarHistorico('cadastrar_veiculo', { id: veiculo.id });
+                });
+            } catch (error) {
+                alert(error.message || 'Erro ao cadastrar veículo.');
+                return;
+            }
 
             document.getElementById('veiculoForm').reset();
             document.getElementById('veiculoKm').value = '0';
@@ -2704,23 +3122,6 @@
             await renderRelatorios();
             await atualizarLimitesUI();
             alert('✅ Veículo cadastrado com sucesso!');
-        }
-
-        function getEstruturaEixos(tipo, eixos) {
-            const estrutura = [];
-            if (tipo === 'cavalo_3_eixos') {
-                estrutura.push({ nome: 'Dianteiro', qtd: 2, tipo: 'dianteiro' });
-                estrutura.push({ nome: 'Tração', qtd: 4, tipo: 'traseiro' });
-                estrutura.push({ nome: 'Truck', qtd: 4, tipo: 'traseiro' });
-            } else if (tipo === '4_eixos') {
-                estrutura.push({ nome: 'Dianteiro', qtd: 2, tipo: 'dianteiro' });
-                estrutura.push({ nome: '4° Eixo', qtd: 2, tipo: 'traseiro' });
-                estrutura.push({ nome: '1° Eixo Traseiro', qtd: 4, tipo: 'traseiro' });
-                estrutura.push({ nome: '2° Eixo Traseiro', qtd: 4, tipo: 'traseiro' });
-            } else if (tipo === 'carreta') {
-                for (let i = 1; i <= eixos; i++) estrutura.push({ nome: `${i}° Eixo`, qtd: 4, tipo: i === 1 ? 'dianteiro' : 'traseiro' });
-            }
-            return estrutura;
         }
 
         // ============================================
@@ -2844,6 +3245,7 @@
                             pneu.veiculoTipo = null;
                             pneu.historico = pneu.historico || [];
                             pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Remoção (Exclusão Veículo)', detalhes: `Removido do veículo ${veiculo.placa}` });
+                            pneu.updatedAt = getServerTimestamp();
                         }
                     });
                     dadosCache.pneus = pneus;
@@ -2862,6 +3264,7 @@
                             peca.kmInstalacao = null;
                             peca.historico = peca.historico || [];
                             peca.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Remoção (Exclusão Veículo)', detalhes: `Removido do veículo ${veiculo.placa}` });
+                            peca.updatedAt = getServerTimestamp();
                         }
                     });
                     dadosCache.pecas = pecas;
@@ -2887,7 +3290,14 @@
         function toggleStatusVeiculo(id) {
             let veiculos = dadosCache.veiculos || [];
             const idx = veiculos.findIndex(v => v.id === id);
-            if (idx !== -1) { veiculos[idx].status = veiculos[idx].status === 'ativo' ? 'inativo' : 'ativo'; dadosCache.veiculos = veiculos; setVeiculos(veiculos); renderVeiculos(); renderManutencao(); }
+            if (idx !== -1) { 
+                veiculos[idx].status = veiculos[idx].status === 'ativo' ? 'inativo' : 'ativo'; 
+                veiculos[idx].updatedAt = getServerTimestamp();
+                dadosCache.veiculos = veiculos; 
+                setVeiculos(veiculos); 
+                renderVeiculos(); 
+                renderManutencao(); 
+            }
         }
 
         // ============================================
@@ -3042,12 +3452,14 @@
             }
 
             const motorista = {
-                id: Date.now() + Math.random() * 1000,
+                id: gerarIdUnico(),
                 nome, cpf: cpf || 'Não informado', sangue: sangue || 'Não informado',
                 celular: celular || 'Não informado', emergencia: emergencia || 'Não informado',
                 obs: obs || '',
                 dataCadastro: new Date().toLocaleDateString('pt-BR'),
-                dataCadastroCompleta: new Date().toISOString()
+                dataCadastroCompleta: new Date().toISOString(),
+                createdAt: getServerTimestamp(),
+                updatedAt: getServerTimestamp()
             };
 
             let motoristas = dadosCache.motoristas || [];
@@ -3146,7 +3558,7 @@
         }
 
         // ============================================
-        //  RENDER CAMINHÃO - FUNÇÃO CORRIGIDA
+        //  RENDER CAMINHÃO
         // ============================================
         let veiculoAtual = null;
         let slotSelecionado = null;
@@ -3266,6 +3678,7 @@
                 const kmAntigo = veiculoOriginal.km || 0;
                 const pneusAtualizados = [];
                 veiculoOriginal.km = novaKm;
+                veiculoOriginal.updatedAt = getServerTimestamp();
                 if (veiculoOriginal.pneus) {
                     let pneus = dadosCache.pneus || [];
                     Object.values(veiculoOriginal.pneus).forEach(pneuId => {
@@ -3277,6 +3690,7 @@
                             pneusAtualizados.push({ id: pneu.id, kmAntigo: kmAntigoPneu });
                             pneu.historico = pneu.historico || [];
                             pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Atualização KM', detalhes: `KM do veículo atualizada de ${kmAntigo} para ${novaKm}. KM Total do pneu: ${pneu.kmTotal}` });
+                            pneu.updatedAt = getServerTimestamp();
                         }
                     });
                     dadosCache.pneus = pneus;
@@ -3288,7 +3702,12 @@
                 await adicionarHistorico('editar_km', { veiculoId: veiculoOriginal.id, kmAntigo: kmAntigo, pneusAtualizados: pneusAtualizados });
                 if (veiculoAtual._combinadoOriginal) {
                     const combinadoOriginal = veiculos.find(v => v.id === veiculoAtual._combinadoOriginal.id);
-                    if (combinadoOriginal) { combinadoOriginal.km = novaKm; dadosCache.veiculos = veiculos; await setVeiculos(veiculos); }
+                    if (combinadoOriginal) { 
+                        combinadoOriginal.km = novaKm; 
+                        combinadoOriginal.updatedAt = getServerTimestamp();
+                        dadosCache.veiculos = veiculos; 
+                        await setVeiculos(veiculos); 
+                    }
                 }
             }
 
@@ -3334,7 +3753,7 @@
         }
 
         // ============================================
-        //  RENDER CAMINHÃO
+        //  RENDER CAMINHÃO - ESTRUTURA DE EIXOS
         // ============================================
         function renderCaminhao(veiculo) {
             const container = document.getElementById('caminhaoContainer');
@@ -3367,9 +3786,8 @@
                 }
                 
                 const isDianteiro = tipo === 'dianteiro';
-                const eixoClass = isDianteiro ? 'eixo-dianteiro' : '';
                 
-                html += `<div class="eixos-row"><div class="eixo ${eixoClass}">`;
+                html += `<div class="eixos-row"><div class="eixo">`;
                 html += `<div class="eixo-label">${isDianteiro ? '🚛 ' : ''}${eixoNome}</div>`;
                 html += `<div class="eixo-pneus">`;
                 
@@ -3455,9 +3873,8 @@
         }
 
         // ============================================
-        //  SELEÇÃO DE PNEU PARA INSTALAÇÃO - CORRIGIDO
+        //  SELEÇÃO DE PNEU PARA INSTALAÇÃO
         // ============================================
-
         function abrirModalSelecao(veiculoId, slotId) {
             if (!verificarEAcessar()) return;
             const veiculos = dadosCache.veiculos || [];
@@ -3528,91 +3945,140 @@
             pneuSelecionadoId = null; 
         }
 
+        // ============================================
+        //  INSTALAÇÃO DE PNEU - COM TRANSAÇÃO
+        // ============================================
         async function confirmarInstalacao() {
-            if (!veiculoAtual || !slotSelecionado || !pneuSelecionadoId) { 
-                alert('Erro: Dados incompletos.'); 
-                fecharModalInstalacao(); 
-                return; 
-            }
-
-            const km = parseInt(document.getElementById('kmInstalacao').value);
-            if (!km || km < 0) { alert('Por favor, informe uma quilometragem válida.'); return; }
-            if (km < veiculoAtual.km) { alert('A KM não pode ser menor que a atual do veículo.'); return; }
-
-            let veiculos = dadosCache.veiculos || [];
-            const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
-            if (idx !== -1) { 
-                veiculos[idx].km = km; 
-                veiculoAtual.km = km; 
-                dadosCache.veiculos = veiculos; 
-                await setVeiculos(veiculos); 
-            }
-
-            let pneus = dadosCache.pneus || [];
-            const pneu = pneus.find(p => p.id === pneuSelecionadoId);
-            if (!pneu) { alert('Pneu não encontrado.'); fecharModalInstalacao(); return; }
-
-            const emUso = veiculos.some(v => {
-                if (v.pneus) {
-                    return Object.values(v.pneus).some(id => id === pneuSelecionadoId);
-                }
-                return false;
-            });
-
-            if (emUso) {
-                alert('❌ Este pneu já está instalado em outro veículo!');
+            if (!veiculoAtual || !slotSelecionado || !pneuSelecionadoId) {
+                alert('Erro: Dados incompletos.');
                 fecharModalInstalacao();
                 return;
             }
 
-            const veiculoOrigem = pneu.veiculoInstalado || null;
-            pneu.kmTotal = pneu.kmTotal || 0;
-            pneu.status = 'instalado';
-            pneu.veiculoInstalado = veiculoAtual.placa;
-            pneu.veiculoId = veiculoAtual.id;
-            pneu.posicao = slotSelecionado.replace(/-/g, ' ');
-            pneu.veiculoTipo = veiculoAtual.tipo === 'cavalo_3_eixos' ? 'Cavalo' : veiculoAtual.tipo === 'carreta' ? 'Carreta' : 'Veículo';
-            pneu.kmInstalacao = km;
-            pneu.veiculoOrigem = veiculoOrigem;
-
-            if (!veiculoAtual.pneus) veiculoAtual.pneus = {};
-            veiculoAtual.pneus[slotSelecionado] = pneuSelecionadoId;
-
-            pneu.historico = pneu.historico || [];
-            pneu.historico.push({ 
-                data: new Date().toLocaleString('pt-BR'), 
-                acao: 'Instalação', 
-                detalhes: `Instalado no veículo ${veiculoAtual.placa} na posição ${slotSelecionado} com KM ${km}` 
-            });
-
-            dadosCache.pneus = pneus;
-            await setPneus(pneus);
-
-            const idxVeiculo = veiculos.findIndex(v => v.id === veiculoAtual.id);
-            if (idxVeiculo !== -1) { 
-                veiculos[idxVeiculo] = veiculoAtual; 
-                dadosCache.veiculos = veiculos; 
-                await setVeiculos(veiculos); 
+            const km = parseInt(document.getElementById('kmInstalacao').value);
+            if (!km || km < 0) {
+                alert('Por favor, informe uma quilometragem válida.');
+                return;
+            }
+            if (km < veiculoAtual.km) {
+                alert('A KM não pode ser menor que a atual do veículo.');
+                return;
             }
 
-            await adicionarHistorico('instalar_pneu', { 
-                pneuId: pneuSelecionadoId, 
-                veiculoId: veiculoAtual.id, 
-                slot: slotSelecionado 
-            });
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const veiculosRef = db.collection('users').doc(currentUserId).collection('veiculos');
+                    const pneusRef = db.collection('users').doc(currentUserId).collection('pneus');
+                    
+                    const [veiculosSnap, pneusSnap] = await Promise.all([
+                        transaction.get(veiculosRef),
+                        transaction.get(pneusRef)
+                    ]);
+                    
+                    const veiculos = [];
+                    veiculosSnap.forEach(doc => {
+                        if (doc.id !== 'init') veiculos.push({ id: parseInt(doc.id), ...doc.data() });
+                    });
+                    
+                    const pneus = [];
+                    pneusSnap.forEach(doc => {
+                        if (doc.id !== 'init') pneus.push({ id: parseInt(doc.id), ...doc.data() });
+                    });
+                    
+                    const veiculo = veiculos.find(v => v.id === veiculoAtual.id);
+                    if (!veiculo) throw new Error('Veículo não encontrado.');
+                    
+                    const pneu = pneus.find(p => p.id === pneuSelecionadoId);
+                    if (!pneu) throw new Error('Pneu não encontrado.');
+                    
+                    const emUso = veiculos.some(v => {
+                        if (v.pneus) {
+                            return Object.values(v.pneus).some(id => id === pneuSelecionadoId);
+                        }
+                        return false;
+                    });
+                    
+                    if (emUso) throw new Error('Este pneu já está instalado em outro veículo.');
+                    
+                    const veiculoOrigem = pneu.veiculoInstalado || null;
+                    pneu.kmTotal = pneu.kmTotal || 0;
+                    pneu.status = 'instalado';
+                    pneu.veiculoInstalado = veiculo.placa;
+                    pneu.veiculoId = veiculo.id;
+                    pneu.posicao = slotSelecionado.replace(/-/g, ' ');
+                    pneu.veiculoTipo = veiculo.tipo === 'cavalo_3_eixos' ? 'Cavalo' : veiculo.tipo === 'carreta' ? 'Carreta' : 'Veículo';
+                    pneu.kmInstalacao = km;
+                    pneu.veiculoOrigem = veiculoOrigem;
+                    pneu.updatedAt = getServerTimestamp();
+                    
+                    if (!veiculo.pneus) veiculo.pneus = {};
+                    veiculo.pneus[slotSelecionado] = pneuSelecionadoId;
+                    veiculo.updatedAt = getServerTimestamp();
+                    
+                    pneu.historico = pneu.historico || [];
+                    pneu.historico.push({
+                        data: new Date().toLocaleString('pt-BR'),
+                        acao: 'Instalação',
+                        detalhes: `Instalado no veículo ${veiculo.placa} na posição ${slotSelecionado} com KM ${km}`
+                    });
+                    
+                    const batch = db.batch();
+                    
+                    const pneusSnapAtual = await transaction.get(pneusRef);
+                    pneusSnapAtual.forEach(doc => {
+                        if (doc.id !== 'init') batch.delete(doc.ref);
+                    });
+                    pneus.forEach(p => {
+                        p.updatedAt = getServerTimestamp();
+                        if (!p.createdAt) {
+                            p.createdAt = getServerTimestamp();
+                        }
+                        const docRef = pneusRef.doc(String(p.id));
+                        batch.set(docRef, p);
+                    });
+                    
+                    const veiculosSnapAtual = await transaction.get(veiculosRef);
+                    veiculosSnapAtual.forEach(doc => {
+                        if (doc.id !== 'init') batch.delete(doc.ref);
+                    });
+                    veiculos.forEach(v => {
+                        v.updatedAt = getServerTimestamp();
+                        if (!v.createdAt) {
+                            v.createdAt = getServerTimestamp();
+                        }
+                        const docRef = veiculosRef.doc(String(v.id));
+                        batch.set(docRef, v);
+                    });
+                    
+                    await transaction.commit(batch);
+                    
+                    dadosCache.pneus = pneus;
+                    dadosCache.veiculos = veiculos;
+                    veiculoAtual = veiculo;
+                    
+                    await adicionarHistorico('instalar_pneu', {
+                        pneuId: pneuSelecionadoId,
+                        veiculoId: veiculo.id,
+                        slot: slotSelecionado
+                    });
+                });
+            } catch (error) {
+                alert(error.message || 'Erro ao instalar pneu.');
+                fecharModalInstalacao();
+                return;
+            }
 
             fecharModalInstalacao();
             renderCaminhao(veiculoAtual);
             await renderVeiculos();
             await renderEstoque();
             await renderRelatorios();
-            alert(`✅ Pneu ${pneu.nome} instalado com sucesso!`);
+            alert(`✅ Pneu instalado com sucesso!`);
         }
 
         // ============================================
-        //  REMOÇÃO DE PNEU - CORRIGIDO
+        //  REMOÇÃO DE PNEU
         // ============================================
-
         let slotRemocao = null;
 
         function abrirModalRemocao(veiculoId, slotId) {
@@ -3671,6 +4137,7 @@
             const idx = veiculos.findIndex(v => v.id === veiculoAtual.id);
             if (idx !== -1) { 
                 veiculos[idx].km = km; 
+                veiculos[idx].updatedAt = getServerTimestamp();
                 veiculoAtual.km = km; 
                 dadosCache.veiculos = veiculos; 
                 await setVeiculos(veiculos); 
@@ -3690,6 +4157,7 @@
                 pneu.kmRemocao = km;
                 const veiculoOrigem = veiculoAtual.placa;
                 pneu.veiculoOrigem = veiculoOrigem;
+                pneu.updatedAt = getServerTimestamp();
                 
                 pneu.historico = pneu.historico || [];
                 pneu.historico.push({ 
@@ -3769,6 +4237,7 @@
                 pneu.dataDescarte = new Date().toLocaleDateString('pt-BR');
                 pneu.veiculoOrigem = veiculoAtual.placa;
                 pneu.status = 'descartado';
+                pneu.updatedAt = getServerTimestamp();
                 descartados.push({...pneu});
                 dadosCache.descartados = descartados;
                 await setDescartados(descartados);
@@ -3803,9 +4272,8 @@
         }
 
         // ============================================
-        //  MANUTENÇÃO SIMPLIFICADA - CORRIGIDO
+        //  MANUTENÇÃO SIMPLIFICADA
         // ============================================
-
         function abrirModalManutencaoSimplificada() {
             if (!verificarEAcessar()) return;
             if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
@@ -3850,6 +4318,7 @@
             
             if (idx !== -1) {
                 veiculos[idx].km = km;
+                veiculos[idx].updatedAt = getServerTimestamp();
                 if (!veiculos[idx].servicos) veiculos[idx].servicos = [];
                 veiculos[idx].servicos.push({ 
                     tipo, 
@@ -3867,7 +4336,7 @@
                 
                 let manutencoes = dadosCache.manutencoes || [];
                 manutencoes.push({
-                    id: Date.now() + Math.random() * 1000,
+                    id: gerarIdUnico(),
                     veiculoId: veiculoAtual.id,
                     veiculoPlaca: veiculoAtual.placa,
                     veiculoMarca: veiculoAtual.marca,
@@ -3878,7 +4347,9 @@
                     local: local,
                     valor: valor,
                     obs: obs,
-                    dataRegistro: new Date().toLocaleString('pt-BR')
+                    dataRegistro: new Date().toLocaleString('pt-BR'),
+                    createdAt: getServerTimestamp(),
+                    updatedAt: getServerTimestamp()
                 });
                 dadosCache.manutencoes = manutencoes;
                 await setManutencoes(manutencoes);
@@ -3896,9 +4367,8 @@
         }
 
         // ============================================
-        //  INSTALAR PEÇAS - CORRIGIDO
+        //  INSTALAR PEÇAS
         // ============================================
-
         let veiculoPecaId = null;
         let pecaSelecionadoId = null;
 
@@ -4016,9 +4486,10 @@
             peca.veiculoId = veiculoAtual.id;
             peca.posicao = posicao;
             peca.dataInstalacao = dataInstalacao;
+            peca.updatedAt = getServerTimestamp();
 
             if (!veiculoAtual.pecas) veiculoAtual.pecas = {};
-            veiculoAtual.pecas[Date.now()] = pecaSelecionadoId;
+            veiculoAtual.pecas[gerarIdUnico()] = pecaSelecionadoId;
 
             peca.historico = peca.historico || [];
             peca.historico.push({ 
@@ -4059,6 +4530,7 @@
             if (veiculo && veiculo.pecas) {
                 const chave = Object.keys(veiculo.pecas).find(k => veiculo.pecas[k] === pecaId);
                 if (chave) delete veiculo.pecas[chave];
+                veiculo.updatedAt = getServerTimestamp();
                 dadosCache.veiculos = veiculos;
                 await setVeiculos(veiculos);
             }
@@ -4068,6 +4540,7 @@
             peca.veiculoId = null;
             peca.posicao = null;
             peca.dataInstalacao = null;
+            peca.updatedAt = getServerTimestamp();
             peca.historico = peca.historico || [];
             peca.historico.push({ 
                 data: new Date().toLocaleString('pt-BR'), 
@@ -4085,9 +4558,8 @@
         }
 
         // ============================================
-        //  COMBINAR VEÍCULOS - CORRIGIDO
+        //  COMBINAR VEÍCULOS
         // ============================================
-
         function abrirModalCombinar() {
             if (!verificarEAcessar()) return;
             if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
@@ -4154,8 +4626,10 @@
 
             cavalo.combinadoCom = carreta.id;
             cavalo.combinadoTipo = 'cavalo';
+            cavalo.updatedAt = getServerTimestamp();
             carreta.combinadoCom = cavalo.id;
             carreta.combinadoTipo = 'carreta';
+            carreta.updatedAt = getServerTimestamp();
 
             dadosCache.veiculos = veiculos;
             await setVeiculos(veiculos);
@@ -4178,9 +4652,11 @@
             if (combinado) { 
                 combinado.combinadoCom = null; 
                 combinado.combinadoTipo = null; 
+                combinado.updatedAt = getServerTimestamp();
             }
             veiculo.combinadoCom = null;
             veiculo.combinadoTipo = null;
+            veiculo.updatedAt = getServerTimestamp();
 
             dadosCache.veiculos = veiculos;
             await setVeiculos(veiculos);
@@ -4231,6 +4707,7 @@
                 pneu.posicao = slotDestino.replace(/-/g, ' ');
                 pneu.historico = pneu.historico || [];
                 pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Movimentação', detalhes: `Movido de ${dragData.slotOrigem} para ${slotDestino}` });
+                pneu.updatedAt = getServerTimestamp();
                 dadosCache.pneus = pneus;
                 await setPneus(pneus);
             }
@@ -4238,6 +4715,7 @@
             delete veiculo.pneus[dragData.slotOrigem];
             if (pneuDestinoId) { veiculo.pneus[dragData.slotOrigem] = pneuDestinoId; }
             veiculo.pneus[slotDestino] = pneuOrigemId;
+            veiculo.updatedAt = getServerTimestamp();
 
             const idx = veiculos.findIndex(v => v.id === veiculoId);
             if (idx !== -1) { veiculos[idx] = veiculo; dadosCache.veiculos = veiculos; await setVeiculos(veiculos); }
@@ -4413,6 +4891,7 @@
 
             pneu.historico = pneu.historico || [];
             pneu.historico.push({ data: new Date().toLocaleString('pt-BR'), acao: 'Medição de Desgaste', detalhes: `F1:${f1} F2:${f2} F3:${f3} F4:${f4} | KM:${veiculo.km}` });
+            pneu.updatedAt = getServerTimestamp();
 
             dadosCache.pneus = pneus;
             await setPneus(pneus);
@@ -4427,7 +4906,6 @@
         // ============================================
         //  MODAL VENDER VEÍCULO
         // ============================================
-
         function abrirModalVenderVeiculo() {
             if (!verificarEAcessar()) return;
             if (!veiculoAtual) { alert('Selecione um veículo primeiro.'); return; }
@@ -4458,6 +4936,7 @@
 
             veiculos[idx].status = 'vendido';
             veiculos[idx].historicoVenda = { tipo, data, valor, obs: obs || 'Sem observações', dataRegistro: new Date().toLocaleString('pt-BR') };
+            veiculos[idx].updatedAt = getServerTimestamp();
 
             dadosCache.veiculos = veiculos;
             await setVeiculos(veiculos);
@@ -4543,14 +5022,26 @@
             if (!confirm('Confirmar aprovação?')) return;
             const users = await getUsers();
             const idx = users.findIndex(u => u.id === userId);
-            if (idx !== -1) { users[idx].status = 'aprovado'; await setUsers(users); await renderMaster(); alert('✅ Empresa aprovada!'); }
+            if (idx !== -1) { 
+                users[idx].status = 'aprovado'; 
+                users[idx].updatedAt = getServerTimestamp();
+                await setUsers(users); 
+                await renderMaster(); 
+                alert('✅ Empresa aprovada!'); 
+            }
         }
 
         async function bloquearEmpresa(userId) {
             if (!confirm('Bloquear esta empresa?')) return;
             const users = await getUsers();
             const idx = users.findIndex(u => u.id === userId);
-            if (idx !== -1) { users[idx].status = 'bloqueado'; await setUsers(users); await renderMaster(); alert('🚫 Empresa bloqueada!'); }
+            if (idx !== -1) { 
+                users[idx].status = 'bloqueado'; 
+                users[idx].updatedAt = getServerTimestamp();
+                await setUsers(users); 
+                await renderMaster(); 
+                alert('🚫 Empresa bloqueada!'); 
+            }
         }
 
         async function editarPlano(userId, planoAtual) {
@@ -4642,6 +5133,8 @@
         console.log('✅ Sistema atualizado com sucesso!');
         console.log('🔥 Integrado com Firebase!');
         console.log('📋 Cada empresa tem seu próprio estoque separado!');
+        console.log('📋 Timestamps do servidor implementados!');
+        console.log('📋 Transações do Firestore para evitar concorrência!');
         console.log('📋 VEÍCULOS: Estrutura de eixos corrigida para cada tipo de veículo');
         console.log('📋 VEÍCULOS: Dianteiro = 2 pneus (E/D), Tração/Truck = 4 pneus (EE/EI/DI/DE)');
         console.log('📋 VEÍCULOS: Carreta = 4 pneus por eixo numerados');
